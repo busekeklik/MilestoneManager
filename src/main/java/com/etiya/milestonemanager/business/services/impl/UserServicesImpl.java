@@ -1,20 +1,34 @@
 package com.etiya.milestonemanager.business.services.impl;
 
+import com.etiya.milestonemanager.bean.ModelMapperBean;
 import com.etiya.milestonemanager.business.dto.UserDto;
 import com.etiya.milestonemanager.business.services.IUserServices;
 import com.etiya.milestonemanager.data.entity.UserEntity;
+import com.etiya.milestonemanager.data.repository.IUserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+//lombok
+@RequiredArgsConstructor
+@Log4j2
+
+@Service
 public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
+
+    private final ModelMapperBean modelMapperBean;
+    private final IUserRepository iUserRepository;
     @Override
     public UserDto entityToDto(UserEntity userEntity) {
-        return null;
+        return modelMapperBean.getModelMapperMethod().map(userEntity, UserDto.class);
+
     }
 
     @Override
     public UserEntity dtoToEntity(UserDto userDto) {
-        return null;
+        return modelMapperBean.getModelMapperMethod().map(userDto, UserEntity.class);
     }
 
     @Override
