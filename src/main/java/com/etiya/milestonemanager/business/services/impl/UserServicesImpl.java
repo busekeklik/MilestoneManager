@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //lombok
@@ -33,17 +34,31 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
 
     @Override
     public String userServiceDeleteAllData() {
-        return null;
+        iUserRepository.deleteAll();
+
     }
 
     @Override
     public UserDto userServiceCreate(UserDto userDto) {
+        if(userDto != null){
+            UserEntity userEntity = dtoToEntity(userDto);
+            userDto.setUserName(userEntity.getUserName());
+            userDto.setPassword(userEntity.getPassword());
+            userDto.setEmail(userEntity.getEmail());
+            return userDto;
+        }
         return null;
     }
 
     @Override
     public List<UserDto> userServiceList() {
-        return null;
+        Iterable<UserEntity> userEntities = iUserRepository.findAll();
+        List<UserDto> userDtoList = new ArrayList<>();
+        for(UserEntity e: userEntities){
+            UserDto userDto = entityToDto(e);
+            userDtoList.add(userDto);
+        }
+        return userDtoList;
     }
 
     @Override
