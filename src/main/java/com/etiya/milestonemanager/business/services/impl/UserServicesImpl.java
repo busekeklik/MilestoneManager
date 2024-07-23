@@ -5,6 +5,9 @@ import com.etiya.milestonemanager.business.dto.UserDto;
 import com.etiya.milestonemanager.business.services.IUserServices;
 import com.etiya.milestonemanager.data.entity.UserEntity;
 import com.etiya.milestonemanager.data.repository.IUserRepository;
+import com.etiya.milestonemanager.exception.Auth404Exception;
+import com.etiya.milestonemanager.exception.GeneralException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -39,12 +42,14 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
     }
 
     @Override
+    @Transactional
     public UserDto userServiceCreate(UserDto userDto) {
         if(userDto != null){
             UserEntity userEntity = dtoToEntity(userDto);
             userDto.setUserName(userEntity.getUserName());
             userDto.setPassword(userEntity.getPassword());
             userDto.setEmail(userEntity.getEmail());
+            userDto.setActive(userEntity.isActive());
             return userDto;
         }
         return null;
@@ -63,16 +68,41 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
 
     @Override
     public UserDto userServiceFindById(Long id) {
-        return null;
+        UserEntity userEntity = null;
+        if(id != null){
+            userEntity = iUserRepository.findById(id).
+                    orElseThrow(()->new Auth404Exception(id + "nolu veri yoktur"));
+        }
+        else if(id == null){
+            throw new GeneralException("user id null");
+        }
+        return entityToDto(userEntity);
     }
 
     @Override
+    @Transactional
     public UserDto userServiceUpdateById(Long id, UserDto userDto) {
+        UserDto updateUserDto = userServiceFindById(id);
+        if(updateUserDto != null){
+            UserEntity userEntity = dtoToEntity(updateUserDto);
+            userEntity.setUserName(userDto.getUserName());
+            userEntity.setEmail(userDto.getEmail());
+            userEntity.setPassword(userDto.getPassword());
+            userEntity.setActive(userDto.isActive());
+            iUserRepository.save(userEntity);
+            return updateUserDto;
+        }
         return null;
     }
 
     @Override
+    @Transactional
     public UserDto userServiceDeleteById(Long id) {
+        UserDto userDto = userServiceFindById(id);
+        if(userDto != null){
+            iUserRepository.deleteById(id);
+            return userDto;
+        }
         return null;
     }
 }
