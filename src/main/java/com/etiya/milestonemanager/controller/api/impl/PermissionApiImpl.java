@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = " http://localhost:3000")
 @RequestMapping("/permission/api/v1")
-public class PermissionImpl implements IPermissionApi<PermissionDto> {
+public class PermissionApiImpl implements IPermissionApi<PermissionDto> {
 
     private final IPermissionServices iPermissionServices;
 

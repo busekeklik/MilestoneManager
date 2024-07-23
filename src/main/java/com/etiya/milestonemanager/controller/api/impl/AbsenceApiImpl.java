@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = " http://localhost:3000")
 @RequestMapping("/absence/api/v1")
-public class AbsenceImpl implements IAbsenceApi<AbsenceDto> {
+public class AbsenceApiImpl implements IAbsenceApi<AbsenceDto> {
 
     private final IAbsenceServices iAbsenceServices;
     @Override
