@@ -33,7 +33,7 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
     }
 
     @Override
-    public String userServiceDeleteAllData() {
+    public void userServiceDeleteAllData() {
         iUserRepository.deleteAll();
 
     }

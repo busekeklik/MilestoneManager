@@ -7,7 +7,7 @@ public interface IUserServices<D,E>{
     public D entityToDto(E e);
     public E dtoToEntity(D d);
 
-    public String userServiceDeleteAllData();
+    public void userServiceDeleteAllData();
 
     // CRUD
     // CREATE

@@ -32,8 +32,8 @@ public class ProjectServicesImpl implements IProjectServices<ProjectDto, Project
     }
 
     @Override
-    public String projectServiceDeleteAllData() {
-        return null;
+    public void projectServiceDeleteAllData() {
+        iProjectRepository.deleteAll();
     }
 
     @Override
