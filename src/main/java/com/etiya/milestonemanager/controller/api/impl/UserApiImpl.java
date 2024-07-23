@@ -19,8 +19,7 @@ import java.util.List;
 // API
 @RestController
 @CrossOrigin(origins = " http://localhost:3000")
-@RequestMapping("/blog/api/v1")
-
+@RequestMapping("/user/api/v1")
 public class UserApiImpl implements IUserApi<UserDto> {
 
     private final IUserServices iUserServices;
