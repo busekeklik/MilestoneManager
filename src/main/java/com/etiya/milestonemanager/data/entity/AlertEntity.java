@@ -30,4 +30,8 @@ public class AlertEntity implements Serializable {
 
     @Column(name = "message", nullable = false)
     private String message;
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name="task_id",nullable = false)
+    private TaskEntity relationTaskEntity;
 }

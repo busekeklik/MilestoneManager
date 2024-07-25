@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 //lombok
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "users")
 public class UserEntity implements Serializable {
+
     public static final Long serialVersionUID=1L;
 
     @Id
@@ -34,4 +36,15 @@ public class UserEntity implements Serializable {
 
     @Column(name = "isActive",nullable = false)
     private boolean isActive;
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name="team_id",nullable = false)
+    private TeamEntity relationTeamEntity;
+
+    @OneToMany(mappedBy = "relationUserEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<AbsenceEntity> relationAbsenceEntityList;
+
+    @OneToMany(mappedBy = "relationUserEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<AbsenceEntity> relationRoleEntityList;
+
 }

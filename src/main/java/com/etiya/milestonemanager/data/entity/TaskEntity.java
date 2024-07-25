@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 //lombok
@@ -46,4 +47,11 @@ public class TaskEntity implements Serializable {
 
     @Column(name = "progress",nullable = false)
     private double progress;
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name="project_id",nullable = false)
+    private ProjectEntity relationProjectEntity;
+
+    @OneToMany(mappedBy = "relationTaskEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<AlertEntity> relationAlertEntityList;
 }

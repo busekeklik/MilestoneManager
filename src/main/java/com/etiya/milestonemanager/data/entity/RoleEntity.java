@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.Serializable;
+import java.util.List;
 
 //lombok
 @Getter
@@ -29,4 +30,13 @@ public class RoleEntity implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @OneToMany(mappedBy = "relationRoleEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<RoleEntity> relationRoleEntityList;
+
+    @OneToMany(mappedBy = "relationRoleEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<ProjectEntity> relationPermissionEntityList;
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name="user_id",nullable = false)
+    private TeamEntity relationUserEntity;
 }

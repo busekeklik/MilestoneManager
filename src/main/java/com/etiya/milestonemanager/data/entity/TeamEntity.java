@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,4 +30,11 @@ public class TeamEntity implements Serializable {
 
     @Column(name = "project_id",nullable = false)
     private Long projectID;
+
+    @OneToMany(mappedBy = "relationTeamEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<UserEntity> relationUserEntityList;
+
+    @OneToMany(mappedBy = "relationTeamEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<ProjectEntity> relationProjectEntityList;
+
 }

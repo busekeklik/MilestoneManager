@@ -35,4 +35,8 @@ public class AbsenceEntity implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = true)
+    @JoinColumn(name="user_id",nullable = false)
+    private UserEntity relationUserEntity;
 }
