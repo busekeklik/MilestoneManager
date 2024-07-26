@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,5 +23,5 @@ public class TeamDto implements Serializable {
 
     private String description;
 
-    private Long projectID;
+    private List<Long> projectIds;
 }

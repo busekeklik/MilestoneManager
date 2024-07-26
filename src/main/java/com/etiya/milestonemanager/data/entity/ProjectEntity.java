@@ -30,17 +30,13 @@ public class ProjectEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date startDate;
 
-    @Column(name = "end_date", nullable = true)
+    @Column(name = "end_date")
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
     @Column(name = "status", nullable = false)
     private String status;
 
-    @OneToMany(mappedBy = "relationProjectEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<TaskEntity> relationTaskEntityList;
-
-    @ManyToMany(mappedBy = "projects", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "projects")
     private List<TeamEntity> teams;
-
 }

@@ -15,32 +15,24 @@ import java.util.List;
 @Entity
 @Table(name = "teams")
 public class TeamEntity implements Serializable {
-    public static final Long serialVersionUID=1L;
+    public static final Long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_id", unique = true, nullable = false, updatable = false)
     private Long teamID;
 
-    @Column(name = "team_name",nullable = false)
+    @Column(name = "team_name", nullable = false)
     private String teamName;
 
-    @Column(name = "description",nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
-
-    @Column(name = "project_id",nullable = false)
-    private Long projectID;
-
-    @OneToMany(mappedBy = "relationTeamEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<UserEntity> relationUserEntityList;
-
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "team_project",
-            joinColumns = @JoinColumn(name = "team_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id")
+            name = "team_project", // Name of the join table
+            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     )
     private List<ProjectEntity> projects;
-
 }

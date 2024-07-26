@@ -1,8 +1,9 @@
 package com.etiya.milestonemanager.runner;
 
 import com.etiya.milestonemanager.data.entity.ProjectEntity;
-import com.etiya.milestonemanager.data.entity.TaskEntity;
-import com.etiya.milestonemanager.data.entity.UserEntity;
+import com.etiya.milestonemanager.data.entity.TeamEntity;
+import com.etiya.milestonemanager.data.repository.IProjectRepository;
+import com.etiya.milestonemanager.data.repository.ITeamRepository;
 import com.etiya.milestonemanager.data.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 // LOMBOK
@@ -22,6 +24,8 @@ import java.util.Date;
 public class MainRunner {
 
     private final IUserRepository iUserRepository;
+    private final IProjectRepository iProjectRepository;
+    private final ITeamRepository iTeamRepository;
 
     // START
     public void start(){
@@ -35,7 +39,7 @@ public class MainRunner {
             log.info("projects");
             System.out.println("users");
 
-            /* PROJECT */
+            //Project
 
             //Calendar
             Calendar calendar = Calendar.getInstance();
@@ -53,22 +57,13 @@ public class MainRunner {
             project1.setEndDate(endDate);
             project1.setStatus("in progress");
 
-            /* TASK */
+            TeamEntity team1 = new TeamEntity();
+            team1.setDescription("Beelzebub");
+            team1.setTeamName("Pulsar");
+            team1.setProjects(Collections.singletonList(project1));
 
-            TaskEntity task1 = new TaskEntity();
-            task1.setTaskName("Repository");
-            task1.setStartDate(startDate);
-            task1.setEndDate(endDate);
-            task1.setProgress(45.6);
-            task1.setSeverity("high");
-            task1.setManDays(3);
-
-            /* USER */
-            UserEntity user1 = new UserEntity();
-            user1.setUserName("Buse");
-            user1.setEmail("busekeklik23@gmail.com");
-            user1.setPassword("busesu");
-            user1.setActive(true);
+            iProjectRepository.save(project1);
+            iTeamRepository.save(team1);
         };
     }
 }
