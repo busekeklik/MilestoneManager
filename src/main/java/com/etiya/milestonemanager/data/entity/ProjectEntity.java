@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,4 +36,12 @@ public class ProjectEntity implements Serializable {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    @OneToMany(mappedBy = "relationProjectEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<TaskEntity> relationTaskEntityList;
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name="team_id",nullable = false)
+    private TeamEntity relationTeamEntity;
+
 }

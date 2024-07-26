@@ -22,12 +22,13 @@ public class AlertEntity implements Serializable {
     @Column(name = "alert_id", unique = true, nullable = false, updatable = false)
     private Long alertID;
 
-    @Column(name = "task_id", nullable = false)
-    private Long taskID;
-
     @Column(name = "alert_date", nullable = false)
     private Date alertDate;
 
     @Column(name = "message", nullable = false)
     private String message;
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name="task_id",nullable = false)
+    private TaskEntity relationTaskEntity;
 }

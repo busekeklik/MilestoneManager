@@ -44,7 +44,6 @@ public class AlertServicesImpl implements IAlertServices<AlertDto, AlertEntity> 
     public AlertDto alertServiceCreate(AlertDto alertDto) {
         if(alertDto != null){
             AlertEntity alertEntity = dtoToEntity(alertDto);
-            alertDto.setTaskID(alertEntity.getTaskID());
             alertDto.setAlertDate(alertEntity.getAlertDate());
             alertDto.setMessage(alertEntity.getMessage());
             return alertDto;
@@ -81,7 +80,6 @@ public class AlertServicesImpl implements IAlertServices<AlertDto, AlertEntity> 
         AlertDto updateAlertDto = alertServiceFindById(id);
         if(updateAlertDto != null){
             AlertEntity alertEntity = dtoToEntity(updateAlertDto);
-            alertEntity.setTaskID(alertDto.getTaskID());
             alertEntity.setAlertDate(alertDto.getAlertDate());
             alertEntity.setMessage(alertDto.getMessage());
             iAlertRepository.save(alertEntity);
