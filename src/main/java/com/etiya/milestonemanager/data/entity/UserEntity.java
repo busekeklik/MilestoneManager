@@ -47,4 +47,11 @@ public class UserEntity implements Serializable {
     @OneToMany(mappedBy = "relationUserEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<AbsenceEntity> relationRoleEntityList;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_task",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private List<TaskEntity> tasks;
 }

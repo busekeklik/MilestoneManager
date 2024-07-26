@@ -31,12 +31,9 @@ public class RoleEntity implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "relationRoleEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<RoleEntity> relationRoleEntityList;
-
-    @OneToMany(mappedBy = "relationRoleEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<ProjectEntity> relationPermissionEntityList;
+    private List<PermissionEntity> relationPermissionEntityList;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name="user_id",nullable = false)
-    private TeamEntity relationUserEntity;
+    private UserEntity relationUserEntity;
 }

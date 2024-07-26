@@ -54,4 +54,7 @@ public class TaskEntity implements Serializable {
 
     @OneToMany(mappedBy = "relationTaskEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<AlertEntity> relationAlertEntityList;
+
+    @ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
+    private List<UserEntity> users;
 }
