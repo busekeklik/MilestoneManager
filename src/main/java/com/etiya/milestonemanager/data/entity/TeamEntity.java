@@ -30,7 +30,7 @@ public class TeamEntity implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "team_project", // Name of the join table
+            name = "team_project",
             joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     )

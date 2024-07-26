@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MilestoneManagerApplication {
 
     public static void main(String[] args) {
-
         SpringApplication.run(MilestoneManagerApplication.class, args);
     }
 

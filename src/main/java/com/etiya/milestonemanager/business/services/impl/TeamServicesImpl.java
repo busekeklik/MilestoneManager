@@ -98,24 +98,18 @@ public class TeamServicesImpl implements ITeamServices<TeamDto, TeamEntity> {
     public TeamDto teamServiceUpdateById(Long id, TeamDto teamDto) {
         TeamDto updateTeamDto = teamServiceFindById(id);
         if (updateTeamDto != null && teamDto != null) {
-            // Fetch the existing team entity
             TeamEntity teamEntity = iTeamRepository.findById(id).orElse(null);
             if (teamEntity != null) {
-                // Update simple fields
                 teamEntity.setTeamName(teamDto.getTeamName());
                 teamEntity.setDescription(teamDto.getDescription());
 
-                // Handle associated projects
                 if (teamDto.getProjectIds() != null) {
-                    // Fetch corresponding projects from the database
                     List<ProjectEntity> projects = (List<ProjectEntity>) iProjectRepository.findAllById(teamDto.getProjectIds());
-                    teamEntity.setProjects(projects); // Set the new list of projects
+                    teamEntity.setProjects(projects);
                 }
 
-                // Save the updated entity
                 teamEntity = iTeamRepository.save(teamEntity);
 
-                // Update DTO to return
                 updateTeamDto.setTeamName(teamEntity.getTeamName());
                 updateTeamDto.setDescription(teamEntity.getDescription());
                 updateTeamDto.setProjectIds(teamEntity.getProjects().stream()
