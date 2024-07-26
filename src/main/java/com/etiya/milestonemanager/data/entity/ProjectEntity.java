@@ -40,8 +40,7 @@ public class ProjectEntity implements Serializable {
     @OneToMany(mappedBy = "relationProjectEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<TaskEntity> relationTaskEntityList;
 
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name="team_id",nullable = false)
-    private TeamEntity relationTeamEntity;
+    @ManyToMany(mappedBy = "projects", fetch = FetchType.LAZY)
+    private List<TeamEntity> teams;
 
 }
