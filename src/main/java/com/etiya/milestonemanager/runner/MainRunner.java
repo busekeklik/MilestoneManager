@@ -1,6 +1,8 @@
 package com.etiya.milestonemanager.runner;
 
 import com.etiya.milestonemanager.data.entity.ProjectEntity;
+import com.etiya.milestonemanager.data.entity.TaskEntity;
+import com.etiya.milestonemanager.data.entity.UserEntity;
 import com.etiya.milestonemanager.data.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,7 +35,7 @@ public class MainRunner {
             log.info("projects");
             System.out.println("users");
 
-            //Project
+            /* PROJECT */
 
             //Calendar
             Calendar calendar = Calendar.getInstance();
@@ -51,6 +53,22 @@ public class MainRunner {
             project1.setEndDate(endDate);
             project1.setStatus("in progress");
 
+            /* TASK */
+
+            TaskEntity task1 = new TaskEntity();
+            task1.setTaskName("Repository");
+            task1.setStartDate(startDate);
+            task1.setEndDate(endDate);
+            task1.setProgress(45.6);
+            task1.setSeverity("high");
+            task1.setManDays(3);
+
+            /* USER */
+            UserEntity user1 = new UserEntity();
+            user1.setUserName("Buse");
+            user1.setEmail("busekeklik23@gmail.com");
+            user1.setPassword("busesu");
+            user1.setActive(true);
         };
     }
 }
