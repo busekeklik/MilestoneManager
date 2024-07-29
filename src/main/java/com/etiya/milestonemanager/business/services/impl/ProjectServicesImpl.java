@@ -93,6 +93,7 @@ public class ProjectServicesImpl implements IProjectServices<ProjectDto, Project
     }
 
     @Override
+    @Transactional
     public ProjectDto projectServiceDeleteById(Long id) {
         ProjectDto projectDto = projectServiceFindById(id);
         if(projectDto != null){

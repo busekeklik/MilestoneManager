@@ -101,6 +101,7 @@ public class TaskServicesImpl implements ITaskServices<TaskDto, TaskEntity> {
     }
 
     @Override
+    @Transactional
     public TaskDto taskServiceDeleteById(Long id) {
         TaskDto taskDto = taskServiceFindById(id);
         if(taskDto != null){
