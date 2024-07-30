@@ -57,13 +57,7 @@ public class MainRunner {
             project1.setEndDate(endDate);
             project1.setStatus("in progress");
 
-            TeamEntity team1 = new TeamEntity();
-            team1.setDescription("Beelzebub");
-            team1.setTeamName("Pulsar");
-            team1.setProjects(Collections.singletonList(project1));
 
-            iProjectRepository.save(project1);
-            iTeamRepository.save(team1);
         };
     }
 }
