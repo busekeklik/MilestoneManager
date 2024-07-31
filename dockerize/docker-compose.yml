@@ -1,0 +1,21 @@
+# Version
+version: 'latest'
+
+# Services
+services:
+  backend:
+    container_name: milestonemanager
+    image: milestonemanager
+    restart: always
+    build: h2db
+    ports:
+      - "4444:4444"
+    networks:
+      - milestone_network
+
+# Networks
+networks:
+  milestone_network:
+    name: milestone_network
+    driver: bridge
+
