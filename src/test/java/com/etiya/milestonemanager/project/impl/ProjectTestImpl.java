@@ -80,7 +80,7 @@ public class ProjectTestImpl implements IProjectTest {
     @Tag("list")
     @Override
     public void ProjectListTest() {
-        System.out.println("Blog Categories List");
+        System.out.println("Projects List");
         Iterable<ProjectEntity> list=iProjectRepository.findAll();
         assertThat(list).size().isGreaterThan(0);
 
@@ -94,7 +94,6 @@ public class ProjectTestImpl implements IProjectTest {
         projectEntity = iProjectRepository.findById(1L).get();
         projectEntity.setProjectName("frontend");
         iProjectRepository.save(projectEntity);
-        // Önceki bilgisayar ile şimdiki laptop
         assertNotEquals("Backend",iProjectRepository.findById(1L).get().getProjectName());
     }
 
