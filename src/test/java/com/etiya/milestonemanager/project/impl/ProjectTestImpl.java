@@ -44,18 +44,11 @@ public class ProjectTestImpl implements IProjectTest {
 
     }
 
-    @RepeatedTest(1) // Bu Create testini 3 defa çalıştır
+    @RepeatedTest(1)
     @Order(1)
     @Tag("create")
     @Override
     public void ProjectCreateTest() {
-
-        /*
-        System.out.println("Blog Categories Create");
-        blogCategoryEntity.setCategoryName("bilgisayar");
-        iBlogCategoryRepository.save(blogCategoryEntity);
-        assertNotNull(iBlogCategoryRepository.findById(1L).get()); // kaydedilmesi
-         */
 
         System.out.println("Projects Create");
         projectEntity.setProjectName("Backend");
@@ -69,7 +62,7 @@ public class ProjectTestImpl implements IProjectTest {
     @Tag("find")
     @Override
     public void ProjectFindTest() {
-        System.out.println("Blog Categories Find");
+        System.out.println("Project Find");
         // Bulma
         projectEntity=iProjectRepository.findById(1L).get();
         assertEquals("Backend",projectEntity.getProjectName());
