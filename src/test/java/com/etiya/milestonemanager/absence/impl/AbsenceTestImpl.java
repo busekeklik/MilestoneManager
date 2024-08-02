@@ -24,6 +24,20 @@ public class AbsenceTestImpl implements IAbsenceTest {
         this.iAbsenceRepository = iAbsenceRepository;
     }
 
+    @BeforeAll
+    static void getBeforeAllAbsenceAllMethod() {
+        System.out.println("******Absence Methodlarından hepsinden Önce********");
+        log.info("******Absence Methodlarından hepsinden Önce********");
+    }
+
+    @BeforeEach
+    void getAbsenceAllMethod() {
+        System.out.println("Absence Methodlarından Hemen Önce");
+        log.info("Absence Methodlarından hepsinden Önce");
+
+        absenceEntity = new AbsenceEntity();
+    }
+
     @Test
     @Override
     public void getFail() {
