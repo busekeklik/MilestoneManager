@@ -1,0 +1,134 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar-open .main-content {
+    margin-left: 250px;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px 10px;
+    background: none;
+    border-radius: 0;
+    margin: 10px;
+    height: auto;
+    box-shadow: none;
+    z-index: 500;
+    position: fixed;
+    top: 10px;
+    width: calc(100% - 40px);
+}
+
+.left-section {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to right, #FFEADA, #BC6D33);
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.menu-btn {
+    display: flex;
+    color: #282c34;
+    align-items: center;
+    justify-content: center;
+    background: #F6DCCA;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+    margin-top: -3px;
+    position: relative;
+    z-index: 1;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    background: #FFFAF6;
+    padding: 5px 10px;
+    border-radius: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
+}
+
+.user-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #FFFAF6;
+    color: #102660;
+    border: 1px solid black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.notifications {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to right, #FFEADA, #BC6D33);
+    padding: 10px 10px;
+    border-radius: 20px;
+    top:14px;
+    height: 54px;
+    display: flex;
+    position: fixed;
+    right: 30px;
+    align-items: center;
+    z-index: 1000;
+    margin: 10px;
+}
+
+.notifications .notification-text {
+    position: relative;
+    z-index: 1;
+    background: #FFFAF6;
+    padding: 5px 10px;
+    border-radius: 20px;
+
+}
+
+.dropdown-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F6DCCA;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    margin-left: 55px;
+    position: relative;
+    z-index: 1;
+}
+
+.notifications-popup {
+    position: absolute;
+    top: 80px;
+    right: 0;
+    background: #FFFAF6;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 1000;
+    margin-right: 20px;
+}

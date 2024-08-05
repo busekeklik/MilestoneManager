@@ -1,0 +1,111 @@
+.sidebar {
+    width: 250px;
+    height: 100%;
+    background: linear-gradient(to right, rgba(16, 38, 96, 0.74), rgba(16, 38, 96, 0.85));
+    color: white;
+    position: fixed;
+    left: -250px;
+    transition: left 0.3s;
+    padding-top: 20px;
+    z-index: 10;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background: linear-gradient(to right, #FFEADA, #BC6D33);
+    border-radius: 25px;
+    margin: 10px;
+    height: auto;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    background-color: #FFFAF6;
+}
+
+.user-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #FFFAF6;
+    color: #102660;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.sidebar-header span {
+    font-size: 16px;
+    color: black;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0 20px;
+}
+
+.nav-item {
+    margin: 10px 0;
+}
+
+.nav-link {
+    background: linear-gradient(to right, #FFEADA, #BC6D33);
+    border: none;
+    color: #102660;
+    text-align: left;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    border-radius: 20px;
+    margin: 5px 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #102660;
+}
+
+.sidebar .close-btn {
+    background: #F6DCCA;
+    border-radius: 50%;
+    color: #102660;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+    margin-top: -3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-item.logout {
+    display: flex;
+    justify-content: center;
+}
+
+.nav-item.logout .nav-link {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 10px;
+    width: 100px;
+    text-align: center;
+}
