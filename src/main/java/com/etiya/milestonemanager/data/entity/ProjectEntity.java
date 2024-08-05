@@ -12,11 +12,10 @@ import java.util.List;
 @Getter
 @Setter
 @Log4j2
-
 @Entity
 @Table(name = "projects")
 public class ProjectEntity implements Serializable {
-    public static final Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +36,14 @@ public class ProjectEntity implements Serializable {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @ManyToMany(mappedBy = "projects")
+    @OneToMany(mappedBy = "project")
+    private List<TaskEntity> tasks;
+
+    @ManyToMany
+    @JoinTable(
+            name = "team_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id")
+    )
     private List<TeamEntity> teams;
 }

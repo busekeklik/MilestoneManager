@@ -48,12 +48,11 @@ public class AlertTestImpl implements IAlertTest {
         taskRepository.save(taskEntity);
 
         alertEntity = new AlertEntity();
-        alertEntity.setRelationTaskEntity(taskEntity);
+        alertEntity.setTask(taskEntity);
         alertEntity.setAlertDate(new Date());
         alertEntity.setMessage("Reminder: Update status");
         alertRepository.save(alertEntity);
     }
-
 
     @Test
     @Order(1)

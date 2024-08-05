@@ -11,11 +11,10 @@ import java.util.List;
 @Getter
 @Setter
 @Log4j2
-
 @Entity
 @Table(name = "teams")
 public class TeamEntity implements Serializable {
-    public static final Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +27,14 @@ public class TeamEntity implements Serializable {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "team_project",
-            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "team_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id")
+            joinColumns = @JoinColumn(name = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
     )
     private List<ProjectEntity> projects;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<UserEntity> users;
 }

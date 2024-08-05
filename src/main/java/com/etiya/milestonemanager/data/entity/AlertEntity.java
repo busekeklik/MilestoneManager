@@ -11,11 +11,10 @@ import java.util.Date;
 @Getter
 @Setter
 @Log4j2
-
 @Entity
 @Table(name = "alerts")
 public class AlertEntity implements Serializable {
-    public static final Long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +27,7 @@ public class AlertEntity implements Serializable {
     @Column(name = "message", nullable = false)
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name="task_id",nullable = false)
-    private TaskEntity relationTaskEntity;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "task_id", nullable = false)
+    private TaskEntity task;
 }
