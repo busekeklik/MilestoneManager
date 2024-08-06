@@ -1,37 +1,41 @@
 import React, { useState } from 'react';
 import './LoginPage.css';
 import etiyaLogo from './etiyaLogo.png';
+import axios from 'axios';
+import {useNavigate} from "react-router-dom";
 
-const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const LoginPage = ({ setUser }) => {
+    const [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    });
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    const handleLogin = async () => {
-        console.log('Logging in with:', { email, password });
-
-        // API endpoint URL'inizi buraya yazın
-        const loginUrl = 'http://localhost:3307/authenticate';
-
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+    const handleLogin = async (event) => {
+        event.preventDefault();
         try {
-            const response = await fetch(loginUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username: email, password: password })
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                console.log('Login successful:', data);
-                // Burada başarılı giriş sonrası işlemler yapabilirsiniz (Örneğin: sayfa yönlendirme)
+            const response = await axios.post('http://localhost:3307/api/1.0/authenticate', formData);
+            console.log('Server response:', response.data);
+            if (response.status === 200 && response.data.user) {
+                const { token, user } = response.data;
+                console.log('User data:', user);
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+                setUser(user);
+                navigate('/');
             } else {
-                console.log('Login failed:', data.message);
-                // Burada başarısız giriş sonrası işlemler yapabilirsiniz (Örneğin: hata mesajı gösterme)
+                setError('Login failed: No user data returned');
             }
         } catch (error) {
-            console.error('Login error:', error);
-            // Burada ağ hataları için işlemler yapabilirsiniz
+            setError(error.response ? error.response.data.message : error.message);
         }
     };
 
@@ -39,20 +43,16 @@ const LoginPage = () => {
         <div className="login-form-wrapper">
             <div className="login-form-container">
                 <img src={etiyaLogo} alt="Etiya Logo" className="logo" />
-                <form className="login-form">
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <input
-                        type="password"
-                        placeholder="Şifre"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type="button" onClick={handleLogin}>Giriş</button>
+                <form onSubmit={handleLogin}>
+                    <div className="input-group">
+                        <label htmlFor="username">Username</label>
+                        <input type="text" id="username" name="username" required onChange={handleInputChange} value={formData.username} />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="password">Password</label>
+                        <input type="password" id="password" name="password" required onChange={handleInputChange} value={formData.password} />
+                    </div>
+                    <button type="submit">Login</button>
                 </form>
             </div>
         </div>
