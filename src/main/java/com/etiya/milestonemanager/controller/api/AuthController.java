@@ -28,7 +28,7 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest request) {
-        Optional<UserEntity> userOptional = userRepository.findByUserName(request.getUsername());
+        Optional<UserEntity> userOptional = userRepository.findFirstByEmail(request.getUsername());
         if (userOptional.isPresent()) {
             UserEntity user = userOptional.get();
             if (user.getPassword().equals(request.getPassword())) {
