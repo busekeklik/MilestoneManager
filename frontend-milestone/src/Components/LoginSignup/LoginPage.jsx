@@ -29,8 +29,10 @@ const LoginPage = ({ setUser }) => {
                 console.log('User data:', user);
                 localStorage.setItem('token', token);
                 localStorage.setItem('user', JSON.stringify(user));
+                console.log("aaaaaaaaaa");
+
                 setUser(user);
-                navigate('/');
+                navigate('/dashboard');
             } else {
                 setError('Login failed: No user data returned');
             }
