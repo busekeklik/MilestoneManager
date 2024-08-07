@@ -59,9 +59,14 @@ body, html {
 }
 
 .error {
-    color: black;
+    color: #f42f0c;
     margin-top: 20px;
     font-size: 16px;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
+    background-color: #f4f1f0;
+    border: 1px solid #f42f0c;
+    border-radius: 10px;
+    padding: 10px;
+    width: 80%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: inline-block;
 }

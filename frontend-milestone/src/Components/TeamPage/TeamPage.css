@@ -1,0 +1,116 @@
+.team-page {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.team-page-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: #102660;
+}
+
+.team-page-header h1 {
+    font-size: 24px;
+    background: linear-gradient(to right, #F4BC93, #FFE7D6);
+    padding: 10px 80px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.navigation-buttons button {
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 5px;
+    width: 50px;
+    margin: 0 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.navigation-buttons button:hover {
+    background-color: #314B8E;
+}
+
+.team-table-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 20px;
+    overflow-x: auto;
+}
+
+.team-table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+    background-color: #FFD5B6;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    table-layout: fixed;
+}
+
+.team-table th, .team-table td {
+    border: 1px solid #fff;
+    padding: 5px;
+    text-align: left;
+    height: 80px;
+}
+
+.team-table th {
+    background-color: #314B8E;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.team-table th:nth-child(1),
+.team-table td:nth-child(1) {
+    width: 150px;
+}
+
+.team-table th:nth-child(2),
+.team-table td:nth-child(2) {
+    width: 100px;
+}
+
+.team-table th:nth-child(3),
+.team-table td:nth-child(3) {
+    width: 200px;
+}
+
+.team-table th:nth-child(4),
+.team-table td:nth-child(4) {
+    width: 80px;
+}
+.weekend {
+    background-color:#D38E60;
+}
+@media (max-width: 768px) {
+    .team-page {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .team-table {
+        width: 100%;
+        min-width: 1200px;
+    }
+
+    .team-table-container {
+        width: 100%;
+        overflow-x: auto;
+        padding: 0 10px;
+        margin-bottom: 20px;
+    }
+}
