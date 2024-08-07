@@ -8,7 +8,10 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -19,30 +22,42 @@ public class AuthController {
 
     private final IUserServices userService;
     private final IUserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
-    public AuthController(IUserServices userService, IUserRepository userRepository) {
+    public AuthController(IUserServices userService, IUserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest request) {
-        Optional<UserEntity> userOptional = userRepository.findFirstByEmail(request.getUsername());
+        logger.info("Authentication request received for email: {}", request.getEmail());
+
+        Optional<UserEntity> userOptional = userRepository.findFirstByEmail(request.getEmail());
         if (userOptional.isPresent()) {
             UserEntity user = userOptional.get();
-            if (user.getPassword().equals(request.getPassword())) {
+            logger.info("User found with email: {}", request.getEmail());
+
+            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                logger.info("Password matches for email: {}", request.getEmail());
                 return ResponseEntity.ok(new AuthResponse("success", "User authenticated successfully", user));
+            } else {
+                logger.warn("Password does not match for email: {}", request.getEmail());
             }
+        } else {
+            logger.warn("No user found with email: {}", request.getEmail());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse("error", "Invalid username or password", null));
     }
 
-
     @Setter
     @Getter
     public static class AuthRequest {
-        private String username;
+        private String email;
         private String password;
     }
 
