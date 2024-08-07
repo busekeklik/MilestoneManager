@@ -7,15 +7,14 @@ import lombok.extern.log4j.Log4j2;
 
 import java.io.Serializable;
 
-//lombok
+// lombok
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Log4j2
-
 public class UserDto implements Serializable {
 
-    public static final Long serialVersionUID=1L;
+    public static final Long serialVersionUID = 1L;
 
     private Long userID;
 

@@ -57,3 +57,11 @@ body, html {
 .login-form button:hover {
     background-color: #062d59;
 }
+
+.error {
+    color: black;
+    margin-top: 20px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}

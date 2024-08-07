@@ -68,7 +68,7 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
         UserEntity userEntity = null;
         if (id != null) {
             userEntity = iUserRepository.findById(id)
-                    .orElseThrow(() -> new Auth404Exception(id + "nolu veri yoktur"));
+                    .orElseThrow(() -> new Auth404Exception(id + " nolu veri yoktur"));
         } else if (id == null) {
             throw new GeneralException("user id null");
         }

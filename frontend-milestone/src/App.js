@@ -8,6 +8,7 @@ import TaskForm from "./Components/TaskForm/TaskForm";
 const App = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [user, setUser] = useState(null); // Add user state
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -20,7 +21,7 @@ const App = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/login" element={<LoginPage />} />
+                <Route path="/login" element={<LoginPage setUser={setUser} />} /> {/* Pass setUser */}
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/*" element={
                     <Layout
@@ -32,7 +33,7 @@ const App = () => {
                 }>
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="taskform" element={<TaskForm />} />
-                    {/* diger sayfalar  */}
+                    {/* other pages */}
                 </Route>
                 <Route path="*" element={<Navigate to="/login" />} />
             </Routes>

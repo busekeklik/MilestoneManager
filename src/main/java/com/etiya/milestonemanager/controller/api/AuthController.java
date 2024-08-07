@@ -1,5 +1,6 @@
 package com.etiya.milestonemanager.controller.api;
 
+import com.etiya.milestonemanager.business.dto.UserDto;
 import com.etiya.milestonemanager.business.services.IUserServices;
 import com.etiya.milestonemanager.data.entity.UserEntity;
 import com.etiya.milestonemanager.data.repository.IUserRepository;
@@ -20,14 +21,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthController {
 
-    private final IUserServices userService;
+    private final IUserServices<UserDto, UserEntity> userService;
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
-    public AuthController(IUserServices userService, IUserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(IUserServices<UserDto, UserEntity> userService, IUserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -44,14 +45,15 @@ public class AuthController {
 
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 logger.info("Password matches for email: {}", request.getEmail());
-                return ResponseEntity.ok(new AuthResponse("success", "User authenticated successfully", user));
+                UserDto userDto = userService.entityToDto(user);
+                return ResponseEntity.ok(new AuthResponse("success", "User authenticated successfully", userDto));
             } else {
                 logger.warn("Password does not match for email: {}", request.getEmail());
             }
         } else {
             logger.warn("No user found with email: {}", request.getEmail());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse("error", "Invalid username or password", null));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse("error", "Geçersiz kullanıcı adı ya da şifre :(", null));
     }
 
     @Setter
@@ -66,9 +68,9 @@ public class AuthController {
     public static class AuthResponse {
         private String status;
         private String message;
-        private UserEntity user;
+        private UserDto user;
 
-        public AuthResponse(String status, String message, UserEntity user) {
+        public AuthResponse(String status, String message, UserDto user) {
             this.status = status;
             this.message = message;
             this.user = user;
