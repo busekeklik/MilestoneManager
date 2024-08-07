@@ -1,9 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
     const [projelerDropdownOpen, setProjelerDropdownOpen] = useState(false);
     const [ekiplerDropdownOpen, setEkiplerDropdownOpen] = useState(false);
+    const [username, setUsername] = useState('');
+    const [initials, setInitials] = useState('');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const storedUsername = localStorage.getItem('username');
+        if (storedUsername) {
+            setUsername(storedUsername);
+            setInitials(getInitials(storedUsername));
+        } else {
+            console.log("Username not found in local storage");
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        navigate('/login');
+    };
 
     const toggleDropdown = (dropdown) => {
         if (dropdown === 'projeler-dropdown') {
@@ -13,12 +33,21 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         }
     };
 
+    const getInitials = (name) => {
+        const nameParts = name.split(' ');
+        if (nameParts.length === 1) {
+            return nameParts[0].charAt(0).toUpperCase();
+        } else {
+            return nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+        }
+    };
+
     return (
         <div className={`sidebar ${isOpen ? 'open' : ''}`} id="sidebar">
             <div className="sidebar-header">
                 <div className="user-info">
-                    <div className="user-icon">BK</div>
-                    <span>Buse Keklik</span>
+                    <div className="user-icon">{initials}</div>
+                    <span>{username}</span>
                 </div>
                 <button className="close-btn" onClick={toggleSidebar}>×</button>
             </div>
@@ -46,7 +75,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     )}
                 </li>
                 <li className="nav-item logout">
-                    <a className="nav-link" href="#">Çıkış</a>
+                    <button className="nav-link" onClick={handleLogout}>Çıkış</button>
                 </li>
             </ul>
         </div>
