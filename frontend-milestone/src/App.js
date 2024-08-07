@@ -4,11 +4,12 @@ import DashboardPage from './Components/Dashboard/DashboardPage';
 import LoginPage from './Components/LoginSignup/LoginPage';
 import Layout from './Components/Layout/Layout';
 import TaskForm from "./Components/TaskForm/TaskForm";
+import RequireAuth from './Components/RequireAuth'; // Ensure this component is properly set up for authentication
 
 const App = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
-    const [user, setUser] = useState(null); // Add user state
+    const [user, setUser] = useState(null); // User state for authentication status
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -21,19 +22,23 @@ const App = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/login" element={<LoginPage setUser={setUser} />} /> {/* Pass setUser */}
+                <Route path="/login" element={<LoginPage setUser={setUser} />} />
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/*" element={
-                    <Layout
-                        isSidebarOpen={isSidebarOpen}
-                        toggleSidebar={toggleSidebar}
-                        toggleNotifications={toggleNotifications}
-                        showNotifications={showNotifications}
-                    />
+                    <RequireAuth user={user}>
+                        <Layout
+                            isSidebarOpen={isSidebarOpen}
+                            toggleSidebar={toggleSidebar}
+                            toggleNotifications={toggleNotifications}
+                            showNotifications={showNotifications}
+                        >
+                            <Routes>
+                                <Route path="dashboard" element={<DashboardPage />} />
+                                <Route path="taskform" element={<TaskForm />} />
+                            </Routes>
+                        </Layout>
+                    </RequireAuth>
                 }>
-                    <Route path="dashboard" element={<DashboardPage />} />
-                    <Route path="taskform" element={<TaskForm />} />
-                    {/* other pages */}
                 </Route>
                 <Route path="*" element={<Navigate to="/login" />} />
             </Routes>

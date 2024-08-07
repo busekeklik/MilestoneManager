@@ -18,30 +18,32 @@ const LoginPage = ({ setUser }) => {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log('Server response:', response);
+
+            console.log('Server response status:', response.status);
             console.log('Raw response data:', response.data);
 
-            let data;
-            try {
-                data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
-            } catch (parseError) {
-                console.error('Error parsing JSON:', parseError);
-                setError('Failed to parse server response: ' + parseError.message);
-                return; // Stop further execution if parsing fails
-            }
+            const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
 
             if (data && data.user) {
                 console.log('Extracted user:', data.user);
                 localStorage.setItem('user', JSON.stringify(data.user));
+                const token = generateRandomToken();
+                localStorage.setItem('token', token);
+                localStorage.setItem('username', data.user.userName); // Store userName for Sidebar
+                console.log('Generated token:', token);
                 setUser(data.user);
                 navigate('/dashboard');
             } else {
-                throw new Error('Bu kullanıcı kayıtlı değil !');
+                throw new Error('User not registered!');
             }
         } catch (error) {
             console.error('Login error:', error);
-            setError(error.response ? error.response.data.message : 'Giriş başarısız : serverdan data alınamadı ! :/');
+            setError(error.response ? error.response.data.message : 'Login failed: Could not retrieve data from server.');
         }
+    };
+
+    const generateRandomToken = () => {
+        return Math.random().toString(36).substr(2);
     };
 
     return (
