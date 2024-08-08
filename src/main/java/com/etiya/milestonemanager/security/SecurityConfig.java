@@ -25,6 +25,10 @@ public class SecurityConfig {
                         .requestMatchers("/user/api/v1/**").permitAll()
                         .requestMatchers("/user_task/api/v1/**").permitAll()
                         .requestMatchers("/api/1.0/authenticate").permitAll()
+                        .requestMatchers("/project/api/v1/projects/list").permitAll()
+                        .requestMatchers("/team_project/api/v1/project/**").permitAll()
+                        .requestMatchers("/team/api/v1/find/{id}").permitAll()
+                        .requestMatchers("/team/api/v1/list").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e -> e

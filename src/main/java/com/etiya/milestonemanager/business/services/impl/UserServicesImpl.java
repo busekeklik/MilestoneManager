@@ -3,6 +3,7 @@ package com.etiya.milestonemanager.business.services.impl;
 import com.etiya.milestonemanager.bean.ModelMapperBean;
 import com.etiya.milestonemanager.business.dto.UserDto;
 import com.etiya.milestonemanager.business.services.IUserServices;
+import com.etiya.milestonemanager.data.entity.RoleType;
 import com.etiya.milestonemanager.data.entity.UserEntity;
 import com.etiya.milestonemanager.data.repository.IUserRepository;
 import com.etiya.milestonemanager.exception.Auth404Exception;
@@ -16,9 +17,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 @Log4j2
-@Service
 public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
 
     private final ModelMapperBean modelMapperBean;
@@ -46,11 +47,6 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
         if (userDto != null) {
             UserEntity userEntity = dtoToEntity(userDto);
             userEntity.setPassword(passwordEncoder.encode(userDto.getPassword())); // Hash the password
-            userEntity.setUserName(userDto.getUserName());
-            userEntity.setPassword(userDto.getPassword());
-            userEntity.setRole(userDto.getRole());
-            iUserRepository.save(userEntity);
-            userDto.setUserID(userEntity.getUserID());
             iUserRepository.save(userEntity);
             return entityToDto(userEntity);
         }
@@ -63,6 +59,17 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
         List<UserDto> userDtoList = new ArrayList<>();
         for (UserEntity e : userEntities) {
             UserDto userDto = entityToDto(e);
+            userDtoList.add(userDto);
+        }
+        return userDtoList;
+    }
+
+    @Override
+    public List<UserDto> userServiceFindByRole(RoleType role) {
+        List<UserEntity> userEntities = iUserRepository.findByRole(role);
+        List<UserDto> userDtoList = new ArrayList<>();
+        for (UserEntity userEntity : userEntities) {
+            UserDto userDto = entityToDto(userEntity);
             userDtoList.add(userDto);
         }
         return userDtoList;
@@ -90,7 +97,6 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
             userEntity.setEmail(userDto.getEmail());
             userEntity.setPassword(passwordEncoder.encode(userDto.getPassword())); // Hash the password
             userEntity.setActive(userDto.isActive());
-            userEntity.setRole(userDto.getRole());
             iUserRepository.save(userEntity);
             return entityToDto(userEntity);
         }

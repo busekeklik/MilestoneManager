@@ -17,23 +17,20 @@ const TaskForm = () => {
     const [softwareArchitectOptions, setSoftwareArchitectOptions] = useState([]);
 
     useEffect(() => {
-        // Fetch analyst options
-        fetch('https://your-api-endpoint.com/analysts')
-            .then(response => response.json())
-            .then(data => setAnalystOptions(data))
-            .catch(error => console.error('Error fetching analysts:', error));
+        const fetchRoleUsers = async (role) => {
+            try {
+                const response = await fetch(`http://localhost:3307/user/api/v1/role/${role}`);
+                const data = await response.json();
+                return data.map(user => ({ value: user.userID, label: user.userName }));
+            } catch (error) {
+                console.error(`Error fetching ${role} users:`, error);
+                return [];
+            }
+        };
 
-        // Fetch solution architect options
-        fetch('https://your-api-endpoint.com/solution-architects')
-            .then(response => response.json())
-            .then(data => setSolutionArchitectOptions(data))
-            .catch(error => console.error('Error fetching solution architects:', error));
-
-        // Fetch software architect options
-        fetch('https://your-api-endpoint.com/software-architects')
-            .then(response => response.json())
-            .then(data => setSoftwareArchitectOptions(data))
-            .catch(error => console.error('Error fetching software architects:', error));
+        fetchRoleUsers('ANALYST').then(data => setAnalystOptions(data));
+        fetchRoleUsers('SOLUTION_ARCHITECT').then(data => setSolutionArchitectOptions(data));
+        fetchRoleUsers('SOFTWARE_ARCHITECT').then(data => setSoftwareArchitectOptions(data));
     }, []);
 
     const handleSave = async () => {
@@ -49,7 +46,7 @@ const TaskForm = () => {
         };
 
         try {
-            const response = await fetch('https://your-api-endpoint.com/tasks', {
+            const response = await fetch('http://localhost:3307/task/api/v1/create/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

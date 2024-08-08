@@ -31,12 +31,24 @@ public class TeamServicesImpl implements ITeamServices<TeamDto, TeamEntity> {
 
     @Override
     public TeamDto entityToDto(TeamEntity teamEntity) {
-        return modelMapperBean.getModelMapperMethod().map(teamEntity, TeamDto.class);
+        TeamDto teamDto = modelMapperBean.getModelMapperMethod().map(teamEntity, TeamDto.class);
+        if (teamEntity.getProjects() != null) {
+            List<Long> projectIds = teamEntity.getProjects().stream()
+                    .map(ProjectEntity::getProjectId)
+                    .collect(Collectors.toList());
+            teamDto.setProjectIds(projectIds);
+        }
+        return teamDto;
     }
 
     @Override
     public TeamEntity dtoToEntity(TeamDto teamDto) {
-        return modelMapperBean.getModelMapperMethod().map(teamDto, TeamEntity.class);
+        TeamEntity teamEntity = modelMapperBean.getModelMapperMethod().map(teamDto, TeamEntity.class);
+        if (teamDto.getProjectIds() != null) {
+            List<ProjectEntity> projects = (List<ProjectEntity>) iProjectRepository.findAllById(teamDto.getProjectIds());
+            teamEntity.setProjects(projects);
+        }
+        return teamEntity;
     }
 
     @Override
@@ -48,32 +60,18 @@ public class TeamServicesImpl implements ITeamServices<TeamDto, TeamEntity> {
     @Transactional
     public TeamDto teamServiceCreate(TeamDto teamDto) {
         if (teamDto != null) {
-            // Convert DTO to Entity
             TeamEntity teamEntity = dtoToEntity(teamDto);
-
-            // Update DTO with the entity's data
-            teamDto.setTeamName(teamEntity.getTeamName());
-            teamDto.setDescription(teamEntity.getDescription());
-
-            // Assuming dtoToEntity properly maps the associated projects
-            if (teamEntity.getProjects() != null) {
-                List<Long> projectIds = teamEntity.getProjects().stream()
-                        .map(ProjectEntity::getProjectId)
-                        .collect(Collectors.toList());
-                teamDto.setProjectIds(projectIds);
-            }
-
-            return teamDto;
+            teamEntity = iTeamRepository.save(teamEntity); // Save entity to DB
+            return entityToDto(teamEntity);
         }
         return null;
     }
-
 
     @Override
     public List<TeamDto> teamServiceList() {
         Iterable<TeamEntity> teamEntities = iTeamRepository.findAll();
         List<TeamDto> teamDtoList = new ArrayList<>();
-        for(TeamEntity e: teamEntities){
+        for (TeamEntity e : teamEntities) {
             TeamDto teamDto = entityToDto(e);
             teamDtoList.add(teamDto);
         }
@@ -82,14 +80,11 @@ public class TeamServicesImpl implements ITeamServices<TeamDto, TeamEntity> {
 
     @Override
     public TeamDto teamServiceFindById(Long id) {
-        TeamEntity teamEntity = null;
-        if(id != null){
-            teamEntity = iTeamRepository.findById(id)
-                    .orElseThrow(() -> new Auth404Exception(id + " bulunamadı!"));
-        }
-        else if(id == null){
+        if (id == null) {
             throw new GeneralException("team id is null");
         }
+        TeamEntity teamEntity = iTeamRepository.findById(id)
+                .orElseThrow(() -> new Auth404Exception(id + " bulunamadı!"));
         return entityToDto(teamEntity);
     }
 
@@ -121,12 +116,11 @@ public class TeamServicesImpl implements ITeamServices<TeamDto, TeamEntity> {
         return null;
     }
 
-
     @Override
     @Transactional
     public TeamDto teamServiceDeleteById(Long id) {
         TeamDto teamDto = teamServiceFindById(id);
-        if(teamDto != null){
+        if (teamDto != null) {
             iTeamRepository.deleteById(id);
             return teamDto;
         }

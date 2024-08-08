@@ -1,6 +1,5 @@
 package com.etiya.milestonemanager.controller.api.impl;
 
-
 import com.etiya.milestonemanager.business.dto.TeamDto;
 import com.etiya.milestonemanager.business.services.ITeamServices;
 import com.etiya.milestonemanager.controller.api.ITeamApi;
@@ -18,13 +17,14 @@ import java.util.List;
 @Log4j2
 
 @RestController
-@CrossOrigin(origins = " http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/team/api/v1")
 public class TeamApiImpl implements ITeamApi<TeamDto> {
 
     private final ITeamServices iTeamServices;
+
     @Override
-    @DeleteMapping(value="/delete/all")
+    @DeleteMapping(value = "/delete/all")
     public ResponseEntity<String> teamApiAllDelete() {
         iTeamServices.teamServiceDeleteAllData();
         return ResponseEntity.noContent().build();
@@ -32,24 +32,24 @@ public class TeamApiImpl implements ITeamApi<TeamDto> {
 
     @Override
     @PostMapping("/create")
-    public ResponseEntity<?> teamApiCreate(TeamDto teamDto) {
+    public ResponseEntity<?> teamApiCreate(@Valid @RequestBody TeamDto teamDto) {
         return ResponseEntity.ok(iTeamServices.teamServiceCreate(teamDto));
     }
 
     @Override
-    @GetMapping(value ="/list")
+    @GetMapping(value = "/list")
     public ResponseEntity<List<TeamDto>> teamApiList() {
         return ResponseEntity.status(HttpStatus.OK).body(iTeamServices.teamServiceList());
     }
 
     @Override
-    @GetMapping(value="/find/{id}")
+    @GetMapping(value = "/find/{id}")
     public ResponseEntity<?> teamApiFindById(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.status(200).body(iTeamServices.teamServiceFindById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(iTeamServices.teamServiceFindById(id));
     }
 
     @Override
-    @PutMapping(value="/update/{id}")
+    @PutMapping(value = "/update/{id}")
     public ResponseEntity<?> teamApiUpdate(@PathVariable(name = "id") Long id, @Valid @RequestBody TeamDto teamDto) {
         return ResponseEntity.ok().body(iTeamServices.teamServiceUpdateById(id, teamDto));
     }

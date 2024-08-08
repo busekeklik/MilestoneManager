@@ -1,5 +1,6 @@
 package com.etiya.milestonemanager.controller.api;
 
+import com.etiya.milestonemanager.data.entity.RoleType;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -26,4 +27,5 @@ public interface IUserApi<D> {
     // DELETE
     public ResponseEntity<?>  userApiDeleteById(Long id);
 
+    ResponseEntity<List<D>> userApiFindByRole(String role);
 }
