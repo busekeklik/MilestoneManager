@@ -5,6 +5,8 @@ import LoginPage from './Components/LoginSignup/LoginPage';
 import Layout from './Components/Layout/Layout';
 import TaskForm from "./Components/TaskForm/TaskForm";
 import TeamPage from "./Components/TeamPage/TeamPage";
+import TeamsPage from "./Components/TeamsPage/TeamsPage";
+import ProjectsPage from "./Components/ProjectsPage/ProjectsPage";
 import RequireAuth from './Components/RequireAuth';
 
 const App = () => {
@@ -53,6 +55,8 @@ const App = () => {
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="taskform" element={<TaskForm />} />
                     <Route path="teampage" element={<TeamPage />} />
+                    <Route path="teamspage" element={<TeamsPage />} />
+                    <Route path="projects" element={<ProjectsPage />} />
                 </Route>
 
             </Routes>
