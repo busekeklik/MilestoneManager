@@ -4,6 +4,7 @@ import DashboardPage from './Components/Dashboard/DashboardPage';
 import LoginPage from './Components/LoginSignup/LoginPage';
 import Layout from './Components/Layout/Layout';
 import TaskForm from "./Components/TaskForm/TaskForm";
+import TeamPage from "./Components/TeamPage/TeamPage";
 import RequireAuth from './Components/RequireAuth';
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
         setShowNotifications(!showNotifications);
     };
 
+
     return (
         <Router>
             <Routes>
@@ -50,10 +52,12 @@ const App = () => {
                 }>
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="taskform" element={<TaskForm />} />
+                    <Route path="teampage" element={<TeamPage />} />
                 </Route>
+
             </Routes>
         </Router>
     );
-};
+}
 
 export default App;

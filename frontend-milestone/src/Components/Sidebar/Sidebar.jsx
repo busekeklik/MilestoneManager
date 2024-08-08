@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Sidebar.css';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
@@ -59,8 +59,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     </button>
                     {projelerDropdownOpen && (
                         <ul className="dropdown" id="projeler-dropdown">
-                            <li>Proje A</li>
-                            <li>Proje B</li>
+                            <li>Projeler</li>
+                            <li><Link to="/dashboard" className="nav-link" onClick={toggleSidebar}>Ana Sayfa</Link></li>
                         </ul>
                     )}
                 </li>
@@ -70,8 +70,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     </button>
                     {ekiplerDropdownOpen && (
                         <ul className="dropdown" id="ekipler-dropdown">
-                            <li>Ekip A</li>
-                            <li>Ekip B</li>
+                            <li>Ekipler</li>
+                            <li><Link to="/teampage" className="nav-link" onClick={toggleSidebar}>Ekibim</Link></li>
                         </ul>
                     )}
                 </li>
@@ -79,8 +79,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     <button className="nav-link" onClick={handleLogout}>Çıkış</button>
                 </li>
             </ul>
+
+
         </div>
     );
 };
 
 export default Sidebar;
+
