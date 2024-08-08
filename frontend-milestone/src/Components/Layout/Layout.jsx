@@ -4,7 +4,10 @@ import Sidebar from '../Sidebar/Sidebar';
 import './Layout.css';
 
 const Layout = ({ isSidebarOpen, toggleSidebar, toggleNotifications, showNotifications, user, setUser }) => {
-    const userInitials = user ? user.name.split(" ").map((n) => n[0]).join("") : "BK"; // Get user initials
+    const userInitials = user && user.userName ? user.userName.split(" ").map((n) => n[0]).join("") : "BK";
+
+    console.log('Rendering Layout'); // Debugging log
+    console.log('User:', user); // Debugging log
 
     return (
         <div className={`layout ${isSidebarOpen ? 'sidebar-open' : ''}`}>
@@ -14,7 +17,7 @@ const Layout = ({ isSidebarOpen, toggleSidebar, toggleNotifications, showNotific
                     <div className="left-section">
                         <div className="user-info">
                             <div className="user-icon">{userInitials}</div>
-                            <span>{user ? user.name : "Buse Keklik"}</span>
+                            <span>{user && user.userName ? user.userName : "Buse Keklik"}</span>
                         </div>
                         <button className="menu-btn" onClick={toggleSidebar} aria-label="Toggle sidebar">☰</button>
                     </div>
