@@ -1,36 +1,72 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
+import axios from 'axios';
 import './DashboardPage.css';
-
-const mockData = {
-    tasks: [
-        { id: 1, name: 'Task 1', member: 'Wade Warren', priority: 'Düşük' },
-        { id: 2, name: 'Task 2', member: 'Jane Cooper', priority: 'Orta' },
-        { id: 3, name: 'Task 3', member: 'Lesslie Alexander', priority: 'Yüksek' },
-    ],
-    members: [
-        { name: 'Wade Warren', taskCount: 12 },
-        { name: 'Jane Cooper', taskCount: 10 },
-    ],
-};
 
 const DashboardPage = () => {
     const [tasks, setTasks] = useState([]);
     const [members, setMembers] = useState([]);
+    const [userTasks, setUserTasks] = useState([]);
 
     useEffect(() => {
-        setTasks(mockData.tasks);
-        setMembers(mockData.members);
+        // Fetch tasks from the API
+        axios.get('http://localhost:3307/task/api/v1/list')
+            .then(response => {
+                console.log("Tasks:", response.data);  // Log the API response
+                setTasks(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching tasks:', error);
+            });
+
+        // Fetch team members from the API
+        axios.get('http://localhost:3307/user/api/v1/list')
+            .then(response => {
+                console.log("Members:", response.data);  // Log the API response
+                setMembers(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching members:', error);
+            });
+
+        // Fetch user-task mappings from the API
+        axios.get('http://localhost:3307/user_task/api/v1/list')
+            .then(response => {
+                console.log("UserTasks:", response.data);  // Log the API response
+                setUserTasks(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching user-task mappings:', error);
+            });
     }, []);
 
-    const data = [
-        ['Task', 'Hours per Day'],
-        ['Buse', 10],
-        ['Sude', 2],
-        ['Mehmet', 2],
-        ['Erdem', 2],
-        ['Etiya', 7],
-        ['Proje', 2]
+    const getMemberName = (taskId) => {
+        const userTask = userTasks.find(ut => ut.taskID === taskId);
+        if (userTask) {
+            const member = members.find(member => member.userID === userTask.userID);
+            return member ? member.userName : 'Unknown';
+        }
+        return 'Unknown';
+    };
+
+    const calculateTaskCounts = () => {
+        const taskCounts = {};
+        tasks.forEach(task => {
+            const memberName = getMemberName(task.taskID);
+            if (taskCounts[memberName]) {
+                taskCounts[memberName]++;
+            } else {
+                taskCounts[memberName] = 1;
+            }
+        });
+        return taskCounts;
+    };
+
+    const taskCounts = calculateTaskCounts();
+
+    const chartData = [
+        ['Ekip Üyesi', 'Görev Sayısı'],
+        ...Object.entries(taskCounts)
     ];
 
     const options = {
@@ -51,10 +87,10 @@ const DashboardPage = () => {
                     </thead>
                     <tbody>
                     {tasks.map(task => (
-                        <tr key={task.id}>
-                            <td>{task.name}</td>
-                            <td>{task.member}</td>
-                            <td>{task.priority}</td>
+                        <tr key={task.taskID}>
+                            <td>{task.taskName}</td>
+                            <td>{getMemberName(task.taskID)}</td>
+                            <td>{task.severity}</td>
                         </tr>
                     ))}
                     </tbody>
@@ -66,7 +102,7 @@ const DashboardPage = () => {
                         chartType="PieChart"
                         width="600px"
                         height="500px"
-                        data={data}
+                        data={chartData}
                         options={options}
                     />
                     <div className="member-task-titles">
@@ -74,10 +110,10 @@ const DashboardPage = () => {
                         <span>Görev Sayısı</span>
                     </div>
                     <ul className="member-task-list">
-                        {members.map(member => (
-                            <li key={member.name}>
-                                <span>{member.name}</span>
-                                <span>{member.taskCount}</span>
+                        {Object.entries(taskCounts).map(([memberName, taskCount]) => (
+                            <li key={memberName}>
+                                <span>{memberName}</span>
+                                <span>{taskCount}</span>
                             </li>
                         ))}
                     </ul>

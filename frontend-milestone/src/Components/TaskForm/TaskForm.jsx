@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import './TaskForm.css';
 
@@ -12,25 +12,62 @@ const TaskForm = () => {
     const [startDate, setStartDate] = useState('');
     const [deliveryDate, setDeliveryDate] = useState('');
 
-    const handleSave = () => {
-        console.log('Task kaydedildi:', { taskName, analysts, solutionArchitects, softwareArchitects, analysisDuration, developmentDuration, startDate, deliveryDate });
+    const [analystOptions, setAnalystOptions] = useState([]);
+    const [solutionArchitectOptions, setSolutionArchitectOptions] = useState([]);
+    const [softwareArchitectOptions, setSoftwareArchitectOptions] = useState([]);
+
+    useEffect(() => {
+        // Fetch analyst options
+        fetch('https://your-api-endpoint.com/analysts')
+            .then(response => response.json())
+            .then(data => setAnalystOptions(data))
+            .catch(error => console.error('Error fetching analysts:', error));
+
+        // Fetch solution architect options
+        fetch('https://your-api-endpoint.com/solution-architects')
+            .then(response => response.json())
+            .then(data => setSolutionArchitectOptions(data))
+            .catch(error => console.error('Error fetching solution architects:', error));
+
+        // Fetch software architect options
+        fetch('https://your-api-endpoint.com/software-architects')
+            .then(response => response.json())
+            .then(data => setSoftwareArchitectOptions(data))
+            .catch(error => console.error('Error fetching software architects:', error));
+    }, []);
+
+    const handleSave = async () => {
+        const taskData = {
+            taskName,
+            analysts: analysts.map(a => a.value),
+            solutionArchitects: solutionArchitects.map(sa => sa.value),
+            softwareArchitects: softwareArchitects.map(sa => sa.value),
+            analysisDuration,
+            developmentDuration,
+            startDate,
+            deliveryDate
+        };
+
+        try {
+            const response = await fetch('https://your-api-endpoint.com/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(taskData)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Task successfully saved:', result);
+                // Optionally, you can reset the form or show a success message here
+            } else {
+                console.error('Failed to save task:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error saving task:', error);
+        }
     };
-
-    const analystOptions = [
-        { value: 'Analyst 1', label: 'Analist 1' },
-        { value: 'Analyst 2', label: 'Analist 2' },
-        { value: 'Analyst 3', label: 'Analist 3' }
-    ];
-
-    const solutionArchitectOptions = [
-        { value: 'Solution Architect 1', label: 'Çözüm Mimarı 1' },
-        { value: 'Solution Architect 2', label: 'Çözüm Mimarı 2' }
-    ];
-
-    const softwareArchitectOptions = [
-        { value: 'Software Architect 1', label: 'Yazılım Mimarı 1' },
-        { value: 'Software Architect 2', label: 'Yazılım Mimarı 2' }
-    ];
 
     return (
         <div className="task-form-container">
