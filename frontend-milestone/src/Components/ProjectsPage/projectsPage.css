@@ -1,0 +1,13 @@
+.desktop-title {
+    height: 94px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+}
