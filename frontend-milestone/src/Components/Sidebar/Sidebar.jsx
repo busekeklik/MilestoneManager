@@ -22,6 +22,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('username');
+        localStorage.removeItem('user'); // Ensure all user-related data is removed
         navigate('/login');
     };
 
