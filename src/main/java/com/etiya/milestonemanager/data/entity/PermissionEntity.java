@@ -26,7 +26,7 @@ public class PermissionEntity implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
-    private RoleEntity role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private RoleType role;
 }

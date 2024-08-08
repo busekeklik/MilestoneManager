@@ -1,5 +1,6 @@
 package com.etiya.milestonemanager.business.dto;
 
+import com.etiya.milestonemanager.data.entity.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,6 @@ public class UserDto implements Serializable {
     private String email;
 
     private boolean isActive;
+
+    private RoleType role;
 }

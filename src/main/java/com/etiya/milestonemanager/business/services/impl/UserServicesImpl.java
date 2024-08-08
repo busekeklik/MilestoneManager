@@ -46,6 +46,11 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
         if (userDto != null) {
             UserEntity userEntity = dtoToEntity(userDto);
             userEntity.setPassword(passwordEncoder.encode(userDto.getPassword())); // Hash the password
+            userEntity.setUserName(userDto.getUserName());
+            userEntity.setPassword(userDto.getPassword());
+            userEntity.setRole(userDto.getRole());
+            iUserRepository.save(userEntity);
+            userDto.setUserID(userEntity.getUserID());
             iUserRepository.save(userEntity);
             return entityToDto(userEntity);
         }
@@ -85,6 +90,7 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
             userEntity.setEmail(userDto.getEmail());
             userEntity.setPassword(passwordEncoder.encode(userDto.getPassword())); // Hash the password
             userEntity.setActive(userDto.isActive());
+            userEntity.setRole(userDto.getRole());
             iUserRepository.save(userEntity);
             return entityToDto(userEntity);
         }

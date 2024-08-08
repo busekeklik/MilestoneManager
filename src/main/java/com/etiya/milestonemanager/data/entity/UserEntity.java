@@ -40,6 +40,10 @@
         @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
         private List<AbsenceEntity> absences;
 
+
+        @Enumerated(EnumType.STRING)
+        private RoleType role;
+
         @ManyToMany
         @JoinTable(
                 name = "user_task",
