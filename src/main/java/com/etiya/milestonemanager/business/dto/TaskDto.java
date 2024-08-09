@@ -28,4 +28,5 @@ public class TaskDto implements Serializable {
     private long cost;
     private String severity;
     private double progress;
+    private Long projectId;
 }

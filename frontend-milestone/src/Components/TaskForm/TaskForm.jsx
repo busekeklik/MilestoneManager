@@ -39,11 +39,13 @@ const TaskForm = () => {
             analysts: analysts.map(a => a.value),
             solutionArchitects: solutionArchitects.map(sa => sa.value),
             softwareArchitects: softwareArchitects.map(sa => sa.value),
-            analysisDuration,
-            developmentDuration,
+            analysisDuration: parseInt(analysisDuration, 10),
+            developmentDuration: parseInt(developmentDuration, 10),
             startDate,
             deliveryDate
         };
+
+        console.log('Sending task data:', taskData);
 
         try {
             const response = await fetch('http://localhost:3307/task/api/v1/create', {
@@ -58,7 +60,9 @@ const TaskForm = () => {
                 const result = await response.json();
                 console.log('Task successfully saved:', result);
             } else {
-                console.error('Failed to save task:', response.statusText);
+                console.error('Failed to save task:', response.status, response.statusText);
+                const errorText = await response.text(); // to capture the server error message
+                console.error('Server error:', errorText);
             }
         } catch (error) {
             console.error('Error saving task:', error);

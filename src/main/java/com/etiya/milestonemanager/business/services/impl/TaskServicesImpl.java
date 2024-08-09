@@ -3,8 +3,10 @@ package com.etiya.milestonemanager.business.services.impl;
 import com.etiya.milestonemanager.bean.ModelMapperBean;
 import com.etiya.milestonemanager.business.dto.TaskDto;
 import com.etiya.milestonemanager.business.services.ITaskServices;
+import com.etiya.milestonemanager.data.entity.ProjectEntity;
 import com.etiya.milestonemanager.data.entity.TaskEntity;
 import com.etiya.milestonemanager.data.repository.ITaskRepository;
+import com.etiya.milestonemanager.data.repository.IProjectRepository;
 import com.etiya.milestonemanager.exception.Auth404Exception;
 import com.etiya.milestonemanager.exception.GeneralException;
 import jakarta.transaction.Transactional;
@@ -21,6 +23,7 @@ import java.util.List;
 public class TaskServicesImpl implements ITaskServices<TaskDto, TaskEntity> {
     private final ModelMapperBean modelMapperBean;
     private final ITaskRepository iTaskRepository;
+    private final IProjectRepository projectRepository;  // Inject the ProjectRepository
 
     @Override
     public TaskDto entityToDto(TaskEntity taskEntity) {
@@ -29,7 +32,18 @@ public class TaskServicesImpl implements ITaskServices<TaskDto, TaskEntity> {
 
     @Override
     public TaskEntity dtoToEntity(TaskDto taskDto) {
-        return modelMapperBean.getModelMapperMethod().map(taskDto, TaskEntity.class);
+        TaskEntity taskEntity = modelMapperBean.getModelMapperMethod().map(taskDto, TaskEntity.class);
+
+        // Fetch the ProjectEntity using projectId and set it to the taskEntity
+        if (taskDto.getProjectId() != null) {
+            ProjectEntity projectEntity = projectRepository.findById(taskDto.getProjectId())
+                    .orElseThrow(() -> new GeneralException("Project not found with ID: " + taskDto.getProjectId()));
+            taskEntity.setProject(projectEntity);
+        } else {
+            throw new GeneralException("Project ID cannot be null");
+        }
+
+        return taskEntity;
     }
 
     @Override

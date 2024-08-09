@@ -1,54 +1,57 @@
-    package com.etiya.milestonemanager.data.entity;
+package com.etiya.milestonemanager.data.entity;
 
-    import jakarta.persistence.*;
-    import lombok.Getter;
-    import lombok.Setter;
-    import lombok.extern.log4j.Log4j2;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
-    import java.io.Serializable;
-    import java.util.List;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
-    @Getter
-    @Setter
-    @Log4j2
-    @Entity
-    @Table(name = "users")
-    public class UserEntity implements Serializable {
-        private static final long serialVersionUID = 1L;
+@Getter
+@Setter
+@Log4j2
+@Entity
+@Table(name = "users")
+public class UserEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "user_id", unique = true, nullable = false, updatable = false)
-        private Long userID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", unique = true, nullable = false, updatable = false)
+    private Long userID;
 
-        @Column(name = "user_name", nullable = false)
-        private String userName;
+    @Column(name = "user_name", nullable = false)
+    private String userName;
 
-        @Column(name = "password", nullable = false)
-        private String password;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-        @Column(name = "email", nullable = false)
-        private String email;
+    @Column(name = "email", nullable = false)
+    private String email;
 
-        @Column(name = "is_active", nullable = false)
-        private boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
-        @ManyToOne(fetch = FetchType.LAZY, optional = false)
-        @JoinColumn(name = "team_id", nullable = false)
-        private TeamEntity team;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "team_id", nullable = false)
+    private TeamEntity team;
 
-        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-        private List<AbsenceEntity> absences;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<AbsenceEntity> absences;
 
+    @ElementCollection(targetClass = RoleType.class)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Set<RoleType> roles;
 
-        @Enumerated(EnumType.STRING)
-        private RoleType role;
-
-        @ManyToMany
-        @JoinTable(
-                name = "user_task",
-                joinColumns = @JoinColumn(name = "user_id"),
-                inverseJoinColumns = @JoinColumn(name = "task_id")
-        )
-        private List<TaskEntity> tasks;
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "user_task",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private List<TaskEntity> tasks;
+}
