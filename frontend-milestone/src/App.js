@@ -5,6 +5,7 @@ import LoginPage from './Components/LoginSignup/LoginPage';
 import Layout from './Components/Layout/Layout';
 import TaskForm from "./Components/TaskForm/TaskForm";
 import TeamPage from "./Components/TeamPage/TeamPage";
+import PopupModal from './Components/PopupModal/PopupModal';
 import TeamsPage from "./Components/TeamsPage/TeamsPage";
 import ProjectsPage from "./Components/ProjectsPage/ProjectsPage";
 import RequireAuth from './Components/RequireAuth';
@@ -50,6 +51,7 @@ const App = () => {
                             user={user}
                             setUser={setUser}
                         />
+                        {isLoggedIn && <PopupModal isOpen={showModal} onClose={handleCloseModal} />}
                     </RequireAuth>
                 }>
                     <Route path="dashboard" element={<DashboardPage />} />
