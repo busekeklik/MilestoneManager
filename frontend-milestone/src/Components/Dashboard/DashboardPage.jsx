@@ -100,8 +100,8 @@ const DashboardPage = () => {
                 <div className="chart-container">
                     <Chart
                         chartType="PieChart"
-                        width="600px"
-                        height="500px"
+                        width="730px"
+                        height="630px"
                         data={chartData}
                         options={options}
                     />
