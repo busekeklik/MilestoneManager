@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import java.util.Set;
+
+
 import java.io.Serializable;
 
 // lombok
@@ -27,5 +30,6 @@ public class UserDto implements Serializable {
 
     private boolean isActive;
 
-    private RoleType role;
+    private Set<RoleType> roles;
+
 }

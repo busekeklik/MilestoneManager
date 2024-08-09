@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/task/api/v1/**").permitAll()
                         .requestMatchers("/task/api/v1/create").permitAll()
                         .requestMatchers("/user/api/v1/**").permitAll()

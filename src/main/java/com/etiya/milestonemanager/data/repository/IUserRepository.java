@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface IUserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findFirstByEmail(String email);
-    List<UserEntity> findByRole(RoleType role);
+    List<UserEntity> findByRolesContaining(RoleType role);
+
 }

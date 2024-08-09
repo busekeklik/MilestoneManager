@@ -15,7 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +49,11 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
         if (userDto != null) {
             UserEntity userEntity = dtoToEntity(userDto);
             userEntity.setPassword(passwordEncoder.encode(userDto.getPassword())); // Hash the password
+
+            // Handle multiple roles
+            Set<RoleType> roles = new HashSet<>(userDto.getRoles());
+            userEntity.setRoles(roles);
+
             iUserRepository.save(userEntity);
             return entityToDto(userEntity);
         }
@@ -66,7 +73,7 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
 
     @Override
     public List<UserDto> userServiceFindByRole(RoleType role) {
-        List<UserEntity> userEntities = iUserRepository.findByRole(role);
+        List<UserEntity> userEntities = iUserRepository.findByRolesContaining(role);
         List<UserDto> userDtoList = new ArrayList<>();
         for (UserEntity userEntity : userEntities) {
             UserDto userDto = entityToDto(userEntity);
@@ -81,7 +88,7 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
         if (id != null) {
             userEntity = iUserRepository.findById(id)
                     .orElseThrow(() -> new Auth404Exception(id + " nolu veri yoktur"));
-        } else if (id == null) {
+        } else {
             throw new GeneralException("user id null");
         }
         return entityToDto(userEntity);
@@ -97,6 +104,11 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
             userEntity.setEmail(userDto.getEmail());
             userEntity.setPassword(passwordEncoder.encode(userDto.getPassword())); // Hash the password
             userEntity.setActive(userDto.isActive());
+
+            // Update roles
+            Set<RoleType> roles = new HashSet<>(userDto.getRoles());
+            userEntity.setRoles(roles);
+
             iUserRepository.save(userEntity);
             return entityToDto(userEntity);
         }
