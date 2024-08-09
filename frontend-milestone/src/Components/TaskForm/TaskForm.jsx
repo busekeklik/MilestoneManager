@@ -11,10 +11,13 @@ const TaskForm = () => {
     const [developmentDuration, setDevelopmentDuration] = useState('');
     const [startDate, setStartDate] = useState('');
     const [deliveryDate, setDeliveryDate] = useState('');
+    const [severity, setSeverity] = useState('');
 
     const [analystOptions, setAnalystOptions] = useState([]);
     const [solutionArchitectOptions, setSolutionArchitectOptions] = useState([]);
     const [softwareArchitectOptions, setSoftwareArchitectOptions] = useState([]);
+
+    const defaultProjectId = 1; // Set default project ID
 
     useEffect(() => {
         const fetchRoleUsers = async (role) => {
@@ -36,16 +39,17 @@ const TaskForm = () => {
     const handleSave = async () => {
         const taskData = {
             taskName,
+            startDate,
+            endDate: deliveryDate,
+            manDays: parseInt(analysisDuration) + parseInt(developmentDuration),
+            cost: 0, // Default or calculated cost
+            severity,
+            progress: 0, // Assuming the task starts with 0% progress
+            projectId: defaultProjectId, // Use the default project ID
             analysts: analysts.map(a => a.value),
             solutionArchitects: solutionArchitects.map(sa => sa.value),
             softwareArchitects: softwareArchitects.map(sa => sa.value),
-            analysisDuration: parseInt(analysisDuration, 10),
-            developmentDuration: parseInt(developmentDuration, 10),
-            startDate,
-            deliveryDate
         };
-
-        console.log('Sending task data:', taskData);
 
         try {
             const response = await fetch('http://localhost:3307/task/api/v1/create', {
@@ -60,9 +64,7 @@ const TaskForm = () => {
                 const result = await response.json();
                 console.log('Task successfully saved:', result);
             } else {
-                console.error('Failed to save task:', response.status, response.statusText);
-                const errorText = await response.text(); // to capture the server error message
-                console.error('Server error:', errorText);
+                console.error('Failed to save task:', response.statusText);
             }
         } catch (error) {
             console.error('Error saving task:', error);
@@ -141,7 +143,7 @@ const TaskForm = () => {
                     <div className="form-group">
                         <label>Analiz Süresi:</label>
                         <input
-                            type="text"
+                            type="number"
                             value={analysisDuration}
                             onChange={(e) => setAnalysisDuration(e.target.value)}
                         />
@@ -157,9 +159,17 @@ const TaskForm = () => {
                     <div className="form-group">
                         <label>Geliştirme Süresi:</label>
                         <input
-                            type="text"
+                            type="number"
                             value={developmentDuration}
                             onChange={(e) => setDevelopmentDuration(e.target.value)}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Severity:</label>
+                        <input
+                            type="text"
+                            value={severity}
+                            onChange={(e) => setSeverity(e.target.value)}
                         />
                     </div>
                     <div className="form-group">
@@ -168,7 +178,6 @@ const TaskForm = () => {
                             type="date"
                             value={deliveryDate}
                             onChange={(e) => setDeliveryDate(e.target.value)}
-
                         />
                     </div>
                     <button type="button" onClick={handleSave}>Kaydet</button>
