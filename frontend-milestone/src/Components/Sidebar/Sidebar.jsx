@@ -59,8 +59,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     </button>
                     {projelerDropdownOpen && (
                         <ul className="dropdown" id="projeler-dropdown">
-                            <li>Projeler</li>
                             <li><Link to="/dashboard" className="nav-link" onClick={toggleSidebar}>Ana Sayfa</Link></li>
+                            <li><Link to="/projects" className="nav-link" onClick={toggleSidebar}>Projeler</Link></li>
                         </ul>
                     )}
                 </li>
@@ -70,7 +70,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     </button>
                     {ekiplerDropdownOpen && (
                         <ul className="dropdown" id="ekipler-dropdown">
-                            <li>Ekipler</li>
+                            <li><Link to="/teamspage" className="nav-link" onClick={toggleSidebar}>Ekipler</Link></li>
                             <li><Link to="/teampage" className="nav-link" onClick={toggleSidebar}>Ekibim</Link></li>
                         </ul>
                     )}
@@ -86,4 +86,3 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 };
 
 export default Sidebar;
-
