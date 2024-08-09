@@ -36,3 +36,16 @@ export const getStartEndDateForProject = (tasks, projectId) => {
     }
     return [start, end];
 };
+
+export const initTasks = () => {
+    return [
+        {
+            start: new Date(),
+            end: new Date(),
+            name: "Initial Task",
+            id: "Task 1",
+            progress: 50,
+            type: "task",
+        },
+    ];
+};

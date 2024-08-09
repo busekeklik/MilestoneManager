@@ -87,25 +87,29 @@ body, html {
     display: flex;
     align-items: center;
     background: linear-gradient(to right, #FFEADA, #BC6D33);
-    padding: 10px 10px;
-    border-radius: 20px;
-    top:14px;
-    height: 54px;
-    display: flex;
+    border-radius: 20px; /* Smaller border radius */
+    top: 14px;
+    height: 50px; /* Reduced height */
     position: fixed;
     right: 30px;
-    align-items: center;
     z-index: 1000;
     margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.notifications:hover {
+    background-color: #D4A15C;
 }
 
 .notifications .notification-text {
+    font-size: 16px; /* Slightly smaller text */
+    font-weight: bold;
     position: relative;
     z-index: 1;
-    background: #FFFAF6;
-    padding: 5px 10px;
-    border-radius: 20px;
-
+    color: #102660;
+    margin-right: 10px; /* Reduced margin */
 }
 
 .dropdown-icon {
@@ -114,21 +118,64 @@ body, html {
     justify-content: center;
     background: #F6DCCA;
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    margin-left: 55px;
+    width: 25px; /* Reduced size */
+    height: 25px; /* Reduced size */
+    font-size: 16px; /* Slightly smaller icon */
     position: relative;
     z-index: 1;
+    transition: transform 0.3s ease;
+    margin-left: auto; /* Align dropdown icon to the right */
+    box-shadow: none; /* Remove any extra shadow or artifact */
 }
 
 .notifications-popup {
     position: absolute;
-    top: 80px;
+    top: 65px; /* Adjusted for the smaller notification button */
     right: 0;
     background: #FFFAF6;
-    padding: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    padding: 15px; /* Reduced padding */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 10px; /* Smaller border radius */
     z-index: 1000;
     margin-right: 20px;
+    width: 300px; /* Reduced width */
+    max-height: 400px; /* Reduced height */
+    overflow-y: auto;
+}
+
+.notifications-popup::before {
+    content: '';
+    position: absolute;
+    top: -15px; /* Adjusted for smaller size */
+    right: 30px;
+    border-width: 15px; /* Adjusted triangle size */
+    border-style: solid;
+    border-color: transparent transparent #FFFAF6 transparent;
+}
+
+.notification-item {
+    padding: 10px 0; /* Reduced padding */
+    border-bottom: 1px solid #ddd;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item .notification-date {
+    font-size: 0.8em; /* Slightly smaller text */
+    color: #666;
+    margin-top: 5px;
+    display: block;
+}
+
+.related-task {
+    margin-top: 8px; /* Slightly reduced margin */
+    font-size: 0.85em; /* Slightly smaller text */
+    color: #444;
+}
+
+/* Rotate the dropdown icon when the popup is open */
+.show-notifications .dropdown-icon {
+    transform: rotate(180deg);
 }

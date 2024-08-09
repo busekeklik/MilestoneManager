@@ -1,39 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import './projecttask.css';
 import { Gantt, ViewMode } from "gantt-task-react";
-import { fetchTasks, getStartEndDateForProject } from "./Data/Data";
+import { initTasks, getStartEndDateForProject } from "./Data/Data";
 import { ViewSwitcher } from "./ViewSwitcher/ViewSwitcher";
 import Button from "./Button/Button";
 import TaskFormModal from "./TaskFormModal/TaskFormModal";
 import Modal from "react-modal";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
 const ProjectTask = () => {
     const [view, setView] = useState(ViewMode.Day);
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState(initTasks());
     const [isChecked, setIsChecked] = useState(true);
-
     const [newTaskName, setNewTaskName] = useState("");
     const [newTaskStart, setNewTaskStart] = useState("");
     const [newTaskEnd, setNewTaskEnd] = useState("");
     const [isFormVisible, setIsFormVisible] = useState(false);
 
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const loadTasks = async () => {
-            const taskData = await fetchTasks();
-            if (taskData.every(task => task.start && task.end)) {
-                setTasks(taskData);
-            } else {
-                console.error("Some tasks are missing start or end dates", taskData);
-            }
-        };
-
-        loadTasks();
-    }, []);
+    const navigate = useNavigate();  // Correctly use the useNavigate hook
 
     let columnWidth = 60;
     if (view === ViewMode.Month) {
@@ -43,24 +29,20 @@ const ProjectTask = () => {
     }
 
     const handleTaskChange = (task) => {
-        if (!task || !task.start || !task.end) {
-            console.error("Task is missing start or end dates:", task);
-            return;
-        }
-
         let newTasks = tasks.map((t) => (t.id === task.id ? task : t));
-
         if (task.project) {
             const [start, end] = getStartEndDateForProject(newTasks, task.project);
-            const projectIndex = newTasks.findIndex((t) => t.id === task.project);
-            const project = newTasks[projectIndex];
-
-            if (project && (project.start.getTime() !== start.getTime() || project.end.getTime() !== end.getTime())) {
+            const project = newTasks.find((t) => t.id === task.project);
+            if (
+                project.start.getTime() !== start.getTime() ||
+                project.end.getTime() !== end.getTime()
+            ) {
                 const changedProject = { ...project, start, end };
-                newTasks[projectIndex] = changedProject;
+                newTasks = newTasks.map((t) =>
+                    t.id === task.project ? changedProject : t
+                );
             }
         }
-
         setTasks(newTasks);
     };
 
@@ -89,11 +71,6 @@ const ProjectTask = () => {
     };
 
     const addNewTask = () => {
-        if (!newTaskName || !newTaskStart || !newTaskEnd) {
-            console.error("New task is missing required information");
-            return;
-        }
-
         const newTask = {
             start: new Date(newTaskStart),
             end: new Date(newTaskEnd),

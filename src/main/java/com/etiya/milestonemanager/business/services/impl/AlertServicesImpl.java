@@ -17,7 +17,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Log4j2
-
 @Service
 public class AlertServicesImpl implements IAlertServices<AlertDto, AlertEntity> {
 
@@ -26,7 +25,18 @@ public class AlertServicesImpl implements IAlertServices<AlertDto, AlertEntity> 
 
     @Override
     public AlertDto entityToDto(AlertEntity alertEntity) {
-        return modelMapperBean.getModelMapperMethod().map(alertEntity, AlertDto.class);
+        AlertDto alertDto = modelMapperBean.getModelMapperMethod().map(alertEntity, AlertDto.class);
+
+        // If there is an associated task, set the taskID in the DTO
+        if (alertEntity.getTask() != null) {
+            alertDto.setTaskID(alertEntity.getTask().getTaskID());
+        } else {
+            log.warn("Alert with ID " + alertEntity.getAlertID() + " does not have a valid TaskEntity");
+            // Optional: You can set a default value or leave taskID as null
+            alertDto.setTaskID(null);  // Or assign a default value like -1
+        }
+
+        return alertDto;
     }
 
     @Override
@@ -42,7 +52,7 @@ public class AlertServicesImpl implements IAlertServices<AlertDto, AlertEntity> 
     @Override
     @Transactional
     public AlertDto alertServiceCreate(AlertDto alertDto) {
-        if(alertDto != null){
+        if (alertDto != null) {
             AlertEntity alertEntity = dtoToEntity(alertDto);
             alertDto.setAlertDate(alertEntity.getAlertDate());
             alertDto.setMessage(alertEntity.getMessage());
@@ -55,7 +65,7 @@ public class AlertServicesImpl implements IAlertServices<AlertDto, AlertEntity> 
     public List<AlertDto> alertServiceList() {
         Iterable<AlertEntity> alertEntities = iAlertRepository.findAll();
         List<AlertDto> alertDtoList = new ArrayList<>();
-        for(AlertEntity e: alertEntities){
+        for (AlertEntity e : alertEntities) {
             AlertDto alertDto = entityToDto(e);
             alertDtoList.add(alertDto);
         }
@@ -65,7 +75,7 @@ public class AlertServicesImpl implements IAlertServices<AlertDto, AlertEntity> 
     @Override
     public AlertDto alertServiceFindById(Long id) {
         AlertEntity alertEntity = null;
-        if(id != null){
+        if (id != null) {
             alertEntity = iAlertRepository.findById(id)
                     .orElseThrow(() -> new Auth404Exception(id + " bulunamadı!"));
         } else {
@@ -78,7 +88,7 @@ public class AlertServicesImpl implements IAlertServices<AlertDto, AlertEntity> 
     @Transactional
     public AlertDto alertServiceUpdateById(Long id, AlertDto alertDto) {
         AlertDto updateAlertDto = alertServiceFindById(id);
-        if(updateAlertDto != null){
+        if (updateAlertDto != null) {
             AlertEntity alertEntity = dtoToEntity(updateAlertDto);
             alertEntity.setAlertDate(alertDto.getAlertDate());
             alertEntity.setMessage(alertDto.getMessage());
@@ -92,7 +102,7 @@ public class AlertServicesImpl implements IAlertServices<AlertDto, AlertEntity> 
     @Transactional
     public AlertDto alertServiceDeleteById(Long id) {
         AlertDto alertDto = alertServiceFindById(id);
-        if(alertDto != null){
+        if (alertDto != null) {
             iAlertRepository.deleteById(id);
             return alertDto;
         }

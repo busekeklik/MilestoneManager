@@ -49,7 +49,7 @@ const TaskForm = () => {
 
     const validateForm = () => {
         if (severity === null) {
-            alert('Ciddilik derecesi seçin!');
+            alert('Önem derecesi seçin!');
             return false;
         }
         if (parseInt(analysisDuration) < 0 || parseInt(developmentDuration) < 0) {

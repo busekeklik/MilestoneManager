@@ -71,6 +71,11 @@
     display: block;
     border-radius: 20px;
     margin: 5px 0;
+    text-decoration: none; /* Removes underline from the link */
+}
+
+.nav-link:hover {
+    background-color: #D4A15C; /* Optional: Add a hover effect */
 }
 
 .close-btn {
@@ -108,4 +113,5 @@
     border-radius: 10px;
     width: 100px;
     text-align: center;
+    text-decoration: none; /* Removes underline from the logout link */
 }
