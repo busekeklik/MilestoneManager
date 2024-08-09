@@ -9,10 +9,12 @@ import PopupModal from './Components/PopupModal/PopupModal';
 import TeamsPage from "./Components/TeamsPage/TeamsPage";
 import ProjectsPage from "./Components/ProjectsPage/ProjectsPage";
 import RequireAuth from './Components/RequireAuth';
+import ProjectTask from "./Components/ProjectTask/ProjectTask";
 
 const App = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem('user');
         return storedUser ? JSON.parse(storedUser) : null;
@@ -34,12 +36,23 @@ const App = () => {
         setShowNotifications(!showNotifications);
     };
 
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    const isLoggedIn = !!user;
+
+    const handleLoginSuccess = (user) => {
+        setUser(user);
+        setShowModal(true); // Show modal after login
+        localStorage.setItem('user', JSON.stringify(user)); // Save user to localStorage
+    };
 
     return (
         <Router>
             <Routes>
-                <Route path="/login" element={<LoginPage setUser={setUser} />} />
-                <Route path="/" element={<Navigate to="/dashboard" />} />
+                <Route path="/login" element={<LoginPage setUser={handleLoginSuccess} />} />
+                <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="*" element={<Navigate to="/login" />} />
                 <Route path="/" element={
                     <RequireAuth user={user}>
@@ -59,8 +72,8 @@ const App = () => {
                     <Route path="teampage" element={<TeamPage />} />
                     <Route path="teamspage" element={<TeamsPage />} />
                     <Route path="projects" element={<ProjectsPage />} />
+                    <Route path="tasks" element={<ProjectTask/>} />
                 </Route>
-
             </Routes>
         </Router>
     );

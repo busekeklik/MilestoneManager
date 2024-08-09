@@ -23,7 +23,7 @@ import java.util.List;
 public class TaskServicesImpl implements ITaskServices<TaskDto, TaskEntity> {
     private final ModelMapperBean modelMapperBean;
     private final ITaskRepository iTaskRepository;
-    private final IProjectRepository projectRepository;  // Inject the ProjectRepository
+    private final IProjectRepository projectRepository;
 
     @Override
     public TaskDto entityToDto(TaskEntity taskEntity) {

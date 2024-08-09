@@ -181,7 +181,7 @@ public class MainRunner {
             task1.setEndDate(endDate);
             task1.setManDays(10);
             task1.setCost(1000);
-            task1.setSeverity("High");
+            task1.setSeverity(3);  // High
             task1.setProgress(50.0);
             task1.setProject(project1);
             task1.setUsers(Collections.singletonList(user1));
@@ -192,7 +192,7 @@ public class MainRunner {
             task2.setEndDate(endDate);
             task2.setManDays(20);
             task2.setCost(2000);
-            task2.setSeverity("Medium");
+            task2.setSeverity(2);  // Medium
             task2.setProgress(75.0);
             task2.setProject(project2);
             task2.setUsers(Collections.singletonList(user2));
@@ -203,7 +203,7 @@ public class MainRunner {
             task3.setEndDate(endDate);
             task3.setManDays(15);
             task3.setCost(1500);
-            task3.setSeverity("Critical");
+            task3.setSeverity(4);  // Critical/Extreme
             task3.setProgress(60.0);
             task3.setProject(project3);
             task3.setUsers(Collections.singletonList(user3));
@@ -214,7 +214,7 @@ public class MainRunner {
             task4.setEndDate(endDate);
             task4.setManDays(25);
             task4.setCost(2500);
-            task4.setSeverity("High");
+            task4.setSeverity(3);  // High
             task4.setProgress(40.0);
             task4.setProject(project4);
             task4.setUsers(Collections.singletonList(user4));
@@ -225,7 +225,7 @@ public class MainRunner {
             task5.setEndDate(endDate);
             task5.setManDays(10);
             task5.setCost(1000);
-            task5.setSeverity("High");
+            task5.setSeverity(3);  // High
             task5.setProgress(50.0);
             task5.setProject(project1);
             task5.setUsers(Collections.singletonList(user1));

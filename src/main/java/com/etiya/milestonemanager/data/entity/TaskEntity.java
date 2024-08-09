@@ -40,7 +40,7 @@ public class TaskEntity implements Serializable {
     private long cost;
 
     @Column(name = "severity", nullable = false)
-    private String severity;
+    private int severity;  // Changed to int
 
     @Column(name = "progress", nullable = false)
     private double progress;

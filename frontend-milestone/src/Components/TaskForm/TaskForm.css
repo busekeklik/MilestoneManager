@@ -78,3 +78,24 @@ button {
         grid-column: span 1;
     }
 }
+
+.toast-success {
+    background-color: #28a745 !important; /* Success green */
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.toast-error {
+    background-color: #dc3545 !important; /* Error red */
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.toast-body {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+.toast-progress {
+    background-color: #ffc107 !important; /* Customize the progress bar color */
+}

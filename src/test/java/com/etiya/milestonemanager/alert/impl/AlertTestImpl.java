@@ -43,7 +43,7 @@ public class AlertTestImpl implements IAlertTest {
         taskEntity.setEndDate(new Date());
         taskEntity.setManDays(5);
         taskEntity.setCost(1000);
-        taskEntity.setSeverity("Medium");
+        taskEntity.setSeverity(3); // Changed to int, e.g., 3 for High
         taskEntity.setProgress(50.0);
         taskRepository.save(taskEntity);
 

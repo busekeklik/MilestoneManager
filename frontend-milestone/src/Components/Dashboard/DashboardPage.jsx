@@ -7,6 +7,7 @@ const DashboardPage = () => {
     const [tasks, setTasks] = useState([]);
     const [members, setMembers] = useState([]);
     const [userTasks, setUserTasks] = useState([]);
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
     useEffect(() => {
         // Fetch tasks from the API
@@ -49,10 +50,15 @@ const DashboardPage = () => {
         return 'Unknown';
     };
 
+    const processedTasks = tasks.map(task => ({
+        ...task,
+        memberName: getMemberName(task.taskID),
+    }));
+
     const calculateTaskCounts = () => {
         const taskCounts = {};
-        tasks.forEach(task => {
-            const memberName = getMemberName(task.taskID);
+        processedTasks.forEach(task => {
+            const memberName = task.memberName;
             if (taskCounts[memberName]) {
                 taskCounts[memberName]++;
             } else {
@@ -74,22 +80,60 @@ const DashboardPage = () => {
         pieHole: 0.4,
     };
 
+    const handleSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const sortedTasks = [...processedTasks].sort((a, b) => {
+        if (sortConfig.key) {
+            if (sortConfig.direction === 'ascending') {
+                if (sortConfig.key === 'taskName' || sortConfig.key === 'memberName') {
+                    return a[sortConfig.key].localeCompare(b[sortConfig.key]);
+                }
+                return a[sortConfig.key] - b[sortConfig.key];
+            } else {
+                if (sortConfig.key === 'taskName' || sortConfig.key === 'memberName') {
+                    return b[sortConfig.key].localeCompare(a[sortConfig.key]);
+                }
+                return b[sortConfig.key] - a[sortConfig.key];
+            }
+        }
+        return 0;
+    });
+
+    const getHeaderIcon = (key) => {
+        if (sortConfig.key === key) {
+            return sortConfig.direction === 'ascending' ? '▲' : '▼';
+        }
+        return '~'; // Small dash when no sorting
+    };
+
     return (
         <main className="dashboard-main">
             <section className="task-table">
                 <table>
                     <thead>
                     <tr>
-                        <th>Tasklar</th>
-                        <th>Ekip Üyesi</th>
-                        <th>Önem Derecesi</th>
+                        <th onClick={() => handleSort('taskName')}>
+                            Tasklar {getHeaderIcon('taskName')}
+                        </th>
+                        <th onClick={() => handleSort('memberName')}>
+                            Ekip Üyesi {getHeaderIcon('memberName')}
+                        </th>
+                        <th onClick={() => handleSort('severity')}>
+                            Önem Derecesi {getHeaderIcon('severity')}
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
-                    {tasks.map(task => (
+                    {sortedTasks.map(task => (
                         <tr key={task.taskID}>
                             <td>{task.taskName}</td>
-                            <td>{getMemberName(task.taskID)}</td>
+                            <td>{task.memberName}</td>
                             <td>{task.severity}</td>
                         </tr>
                     ))}

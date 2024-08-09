@@ -1,5 +1,3 @@
-// TaskTestImpl
-
 package com.etiya.milestonemanager.task.impl;
 
 import com.etiya.milestonemanager.business.dto.TaskDto;
@@ -45,7 +43,7 @@ public class TaskTestImpl implements ITaskTest {
         taskEntity.setEndDate(new Date());
         taskEntity.setManDays(3);
         taskEntity.setCost(1500);
-        taskEntity.setSeverity("Medium");
+        taskEntity.setSeverity(2); // Changed to int, e.g., 2 for Moderate
         taskEntity.setProgress(0.0);
         taskRepository.save(taskEntity);
     }
@@ -61,7 +59,7 @@ public class TaskTestImpl implements ITaskTest {
         taskDto.setEndDate(new Date());
         taskDto.setManDays(5);
         taskDto.setCost(3000);
-        taskDto.setSeverity("High");
+        taskDto.setSeverity(3); // Changed to int, e.g., 3 for High
         taskDto.setProgress(25.0);
         TaskDto createdTask = taskServices.taskServiceCreate(taskDto);
         assertNotNull(createdTask);

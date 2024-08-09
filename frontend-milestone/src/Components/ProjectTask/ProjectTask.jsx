@@ -25,7 +25,11 @@ const ProjectTask = () => {
     useEffect(() => {
         const loadTasks = async () => {
             const taskData = await fetchTasks();
-            setTasks(taskData);
+            if (taskData.every(task => task.start && task.end)) {
+                setTasks(taskData);
+            } else {
+                console.error("Some tasks are missing start or end dates", taskData);
+            }
         };
 
         loadTasks();
@@ -39,21 +43,24 @@ const ProjectTask = () => {
     }
 
     const handleTaskChange = (task) => {
+        if (!task || !task.start || !task.end) {
+            console.error("Task is missing start or end dates:", task);
+            return;
+        }
+
         let newTasks = tasks.map((t) => (t.id === task.id ? task : t));
+
         if (task.project) {
             const [start, end] = getStartEndDateForProject(newTasks, task.project);
-            const project =
-                newTasks[newTasks.findIndex((t) => t.id === task.project)];
-            if (
-                project.start.getTime() !== start.getTime() ||
-                project.end.getTime() !== end.getTime()
-            ) {
+            const projectIndex = newTasks.findIndex((t) => t.id === task.project);
+            const project = newTasks[projectIndex];
+
+            if (project && (project.start.getTime() !== start.getTime() || project.end.getTime() !== end.getTime())) {
                 const changedProject = { ...project, start, end };
-                newTasks = newTasks.map((t) =>
-                    t.id === task.project ? changedProject : t
-                );
+                newTasks[projectIndex] = changedProject;
             }
         }
+
         setTasks(newTasks);
     };
 
@@ -82,6 +89,11 @@ const ProjectTask = () => {
     };
 
     const addNewTask = () => {
+        if (!newTaskName || !newTaskStart || !newTaskEnd) {
+            console.error("New task is missing required information");
+            return;
+        }
+
         const newTask = {
             start: new Date(newTaskStart),
             end: new Date(newTaskEnd),
