@@ -109,6 +109,8 @@ public class MainRunner {
             user1.setActive(true);
             user1.setTeam(team1);
             user1.setRole(RoleType.SOFTWARE_ARCHITECT);
+            user1.setRole(RoleType.TEAM_MEMBER);
+
 
             UserEntity user2 = new UserEntity();
             user2.setUserName("Mehmet Emin");
@@ -117,6 +119,8 @@ public class MainRunner {
             user2.setActive(true);
             user2.setTeam(team2);
             user2.setRole(RoleType.SOLUTION_ARCHITECT);
+            user2.setRole(RoleType.TEAM_MEMBER);
+
 
             UserEntity user3 = new UserEntity();
             user3.setUserName("Erdem Onal");
@@ -125,6 +129,7 @@ public class MainRunner {
             user3.setActive(true);
             user3.setTeam(team3);
             user3.setRole(RoleType.ANALYST);
+            user3.setRole(RoleType.TEAM_MEMBER);
 
             UserEntity user4 = new UserEntity();
             user4.setUserName("Buse Keklik");
@@ -133,8 +138,18 @@ public class MainRunner {
             user4.setActive(true);
             user4.setTeam(team4);
             user4.setRole(RoleType.BACKEND);
+            user4.setRole(RoleType.TEAM_LEADER);
 
-            iUserRepository.saveAll(List.of(user1, user2, user3, user4));
+            UserEntity user5 = new UserEntity();
+            user5.setUserName("Enes Kasım");
+            user5.setPassword("enes123");
+            user5.setEmail("enes.kasim@etiya.com");
+            user5.setActive(true);
+            user5.setTeam(team4);
+            user5.setRole(RoleType.TEAM_LEADER);
+
+
+            iUserRepository.saveAll(List.of(user1, user2, user3, user4, user5));
 
             // Permissions
             PermissionEntity permission1 = new PermissionEntity();

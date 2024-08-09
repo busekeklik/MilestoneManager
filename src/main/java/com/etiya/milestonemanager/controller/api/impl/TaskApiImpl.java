@@ -18,7 +18,7 @@ import java.util.List;
 
 // API
 @RestController
-@CrossOrigin(origins = " http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/task/api/v1")
 public class TaskApiImpl implements ITaskApi<TaskDto> {
 
@@ -31,9 +31,9 @@ public class TaskApiImpl implements ITaskApi<TaskDto> {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create")
-    public ResponseEntity<?> taskApiCreate(TaskDto taskDto) {
+    public ResponseEntity<?> taskApiCreate(@RequestBody TaskDto taskDto) {
         return ResponseEntity.ok(iTaskServices.taskServiceCreate(taskDto));
     }
 
@@ -58,6 +58,6 @@ public class TaskApiImpl implements ITaskApi<TaskDto> {
     @Override
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> taskApiDeleteById(Long id) {
-        return new ResponseEntity<>(iTaskServices.taskServiceDeleteById(id),HttpStatus.OK);
+        return new ResponseEntity<>(iTaskServices.taskServiceDeleteById(id), HttpStatus.OK);
     }
 }

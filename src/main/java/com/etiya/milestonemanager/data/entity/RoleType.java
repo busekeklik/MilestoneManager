@@ -8,5 +8,7 @@ public enum RoleType {
     ANALYST,
     DEVOPS,
     IOS,
-    ANDROID
+    ANDROID,
+    TEAM_LEADER,
+    TEAM_MEMBER
 }

@@ -46,10 +46,10 @@ const TaskForm = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:3307/task/api/v1/create/', {
+            const response = await fetch('http://localhost:3307/task/api/v1/create', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(taskData)
             });
@@ -57,7 +57,6 @@ const TaskForm = () => {
             if (response.ok) {
                 const result = await response.json();
                 console.log('Task successfully saved:', result);
-                // Optionally, you can reset the form or show a success message here
             } else {
                 console.error('Failed to save task:', response.statusText);
             }
