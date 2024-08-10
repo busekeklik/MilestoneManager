@@ -1,7 +1,7 @@
+import React from 'react';
 import './teamspage.css';
 import Title from "./Title/Title";
 import Myteam from "./Myteam/Myteam";
-import Teams from "./Teams/Teams";
 
 function TeamsPage() {
     return (
@@ -13,9 +13,10 @@ function TeamsPage() {
                 <div className='desktop-myteam'>
                     <Myteam/>
                 </div>
-                <div className='desktop-teams'>
+                {/* Remove or comment out the Teams component */}
+                {/* <div className='desktop-teams'>
                     <Teams/>
-                </div>
+                </div> */}
             </div>
         </div>
     );
