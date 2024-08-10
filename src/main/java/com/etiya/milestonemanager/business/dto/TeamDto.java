@@ -12,16 +12,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Log4j2
-
 public class TeamDto implements Serializable {
 
-    public static final Long serialVersionUID=1L;
+    public static final Long serialVersionUID = 1L;
 
     private Long teamID;
-
     private String teamName;
-
     private String description;
-
     private List<Long> projectIds;
+    private List<UserDto> members; // Add this to include team members
 }

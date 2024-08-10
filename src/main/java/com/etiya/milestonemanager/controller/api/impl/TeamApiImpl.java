@@ -3,6 +3,7 @@ package com.etiya.milestonemanager.controller.api.impl;
 import com.etiya.milestonemanager.business.dto.TeamDto;
 import com.etiya.milestonemanager.business.services.ITeamServices;
 import com.etiya.milestonemanager.controller.api.ITeamApi;
+import com.etiya.milestonemanager.data.entity.TeamEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,13 +22,19 @@ import java.util.List;
 @RequestMapping("/team/api/v1")
 public class TeamApiImpl implements ITeamApi<TeamDto> {
 
-    private final ITeamServices iTeamServices;
+    private final ITeamServices<TeamDto, TeamEntity> iTeamServices;
 
     @Override
     @DeleteMapping(value = "/delete/all")
     public ResponseEntity<String> teamApiAllDelete() {
         iTeamServices.teamServiceDeleteAllData();
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/team-with-members/{id}")
+    public ResponseEntity<?> teamApiFindByIdWithMembers(@PathVariable(name = "id") Long id) {
+        TeamDto teamDto = iTeamServices.teamServiceFindById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(teamDto);
     }
 
     @Override

@@ -3,8 +3,12 @@ import Select from 'react-select';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './TaskForm.css';
+import { useLocation } from 'react-router-dom';  // Import useLocation to access the state
 
 const TaskForm = () => {
+    const location = useLocation();  // Use useLocation hook to get the state
+    const { projectName } = location.state || {};  // Extract projectName from state
+
     const [taskName, setTaskName] = useState('');
     const [analysts, setAnalysts] = useState([]);
     const [solutionArchitects, setSolutionArchitects] = useState([]);
@@ -129,7 +133,7 @@ const TaskForm = () => {
     return (
         <div className="task-form-container">
             <div className="task-form-header">
-                <h1>Proje A</h1>
+                <h1>{projectName || 'Proje Adı'}</h1> {/* Display dynamic project name */}
             </div>
             <div className="task-form">
                 <form>

@@ -6,7 +6,7 @@ import { ViewSwitcher } from "./ViewSwitcher/ViewSwitcher";
 import Button from "./Button/Button";
 import TaskFormModal from "./TaskFormModal/TaskFormModal";
 import Modal from "react-modal";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
@@ -19,7 +19,9 @@ const ProjectTask = () => {
     const [newTaskEnd, setNewTaskEnd] = useState("");
     const [isFormVisible, setIsFormVisible] = useState(false);
 
-    const navigate = useNavigate();  // Correctly use the useNavigate hook
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { projectName } = location.state || {};  // Get projectName from state
 
     let columnWidth = 60;
     if (view === ViewMode.Month) {
@@ -87,7 +89,7 @@ const ProjectTask = () => {
         <div>
             <div className='tasks-title-wrapper'>
                 <div className='tasks-title-bar'>
-                    <div className='tasks-title'>Görevler</div>
+                    <div className='tasks-title'>{projectName}</div> {/* Display projectName */}
                 </div>
             </div>
             <ViewSwitcher
@@ -107,7 +109,9 @@ const ProjectTask = () => {
                 listCellWidth={isChecked ? "155px" : ""}
                 columnWidth={columnWidth}
             />
-            <Button onClick={() => navigate('/taskform')}>Add New Task</Button>
+            <Button onClick={() => navigate('/taskform', { state: { projectName } })}>
+                Add New Task
+            </Button> {/* Pass projectName when navigating */}
             <TaskFormModal
                 isOpen={isFormVisible}
                 onRequestClose={() => setIsFormVisible(false)}

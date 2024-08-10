@@ -2,9 +2,11 @@ package com.etiya.milestonemanager.business.services.impl;
 
 import com.etiya.milestonemanager.bean.ModelMapperBean;
 import com.etiya.milestonemanager.business.dto.TeamDto;
+import com.etiya.milestonemanager.business.dto.UserDto;
 import com.etiya.milestonemanager.business.services.ITeamServices;
 import com.etiya.milestonemanager.data.entity.ProjectEntity;
 import com.etiya.milestonemanager.data.entity.TeamEntity;
+import com.etiya.milestonemanager.data.entity.UserEntity;
 import com.etiya.milestonemanager.data.repository.IProjectRepository;
 import com.etiya.milestonemanager.data.repository.ITeamRepository;
 import com.etiya.milestonemanager.exception.Auth404Exception;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//lombok
+// LOMBOK
 @RequiredArgsConstructor
 @Log4j2
 
@@ -32,13 +34,26 @@ public class TeamServicesImpl implements ITeamServices<TeamDto, TeamEntity> {
     @Override
     public TeamDto entityToDto(TeamEntity teamEntity) {
         TeamDto teamDto = modelMapperBean.getModelMapperMethod().map(teamEntity, TeamDto.class);
+
         if (teamEntity.getProjects() != null) {
             List<Long> projectIds = teamEntity.getProjects().stream()
                     .map(ProjectEntity::getProjectId)
                     .collect(Collectors.toList());
             teamDto.setProjectIds(projectIds);
         }
+
+        if (teamEntity.getUsers() != null) {
+            List<UserDto> members = teamEntity.getUsers().stream()
+                    .map(this::userEntityToDto) // Use the correct method reference
+                    .collect(Collectors.toList());
+            teamDto.setMembers(members);
+        }
+
         return teamDto;
+    }
+
+    public UserDto userEntityToDto(UserEntity userEntity) {
+        return modelMapperBean.getModelMapperMethod().map(userEntity, UserDto.class);
     }
 
     @Override
