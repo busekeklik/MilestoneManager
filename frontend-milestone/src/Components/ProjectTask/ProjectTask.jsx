@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Chart } from "react-google-charts";
-import { useHistory } from "react-router-dom";
 import './projecttask.css';
-import { fetchTasks } from "./Data";
+import { fetchTasks } from "./Data/Data";
+import { ViewSwitcher } from "./ViewSwitcher/ViewSwitcher";
 
 const ProjectTask = () => {
     const [tasks, setTasks] = useState([]);
     const [isChecked, setIsChecked] = useState(true);
-    const history = useHistory();
 
     useEffect(() => {
         const loadTasks = async () => {
@@ -47,10 +46,6 @@ const ProjectTask = () => {
         },
     };
 
-    const handleButtonClick = () => {
-        history.push("/TaskForm");
-    };
-
     return (
         <div>
             <div className='tasks-title-wrapper'>
@@ -58,9 +53,10 @@ const ProjectTask = () => {
                     <div className='tasks-title'>Görevler</div>
                 </div>
             </div>
-            <button className="redirect-button" onClick={handleButtonClick}>
-                Yeni Görev Ekle
-            </button>
+            <ViewSwitcher
+                onViewListChange={setIsChecked}
+                isChecked={isChecked}
+            />
             <Chart
                 chartType="Gantt"
                 width="100%"
