@@ -146,15 +146,6 @@ const DashboardPage = () => {
                     </tbody>
                 </table>
 
-                {/* Centered Buttons for CSV and JSON download */}
-                <div className="download-buttons">
-                    <CSVLink data={sortedTasks} filename={"tasks.csv"} className="download-button">
-                        <FaFileCsv /> CSV
-                    </CSVLink>
-                    <button onClick={downloadJSON} className="download-button">
-                        <FaFileDownload /> JSON
-                    </button>
-                </div>
             </section>
             <section className="chart">
                 <div className="chart-container">
@@ -178,6 +169,15 @@ const DashboardPage = () => {
                         ))}
                     </ul>
                 </div>
+
+            </section>
+            <section className="download-buttons">
+                <CSVLink data={sortedTasks} filename={"tasks.csv"} className="download-button">
+                    <FaFileCsv/> CSV
+                </CSVLink>
+                <button onClick={downloadJSON} className="download-button">
+                    <FaFileDownload/> JSON
+                </button>
             </section>
         </main>
     );
