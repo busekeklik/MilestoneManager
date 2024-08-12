@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
 import axios from 'axios';
+import { CSVLink } from "react-csv";
+import { FaFileCsv, FaFileDownload } from 'react-icons/fa'; // Import icons
 import './DashboardPage.css';
 
 const DashboardPage = () => {
@@ -10,30 +12,24 @@ const DashboardPage = () => {
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
     useEffect(() => {
-        // Fetch tasks from the API
         axios.get('http://localhost:3307/task/api/v1/list')
             .then(response => {
-                console.log("Tasks:", response.data);  // Log the API response
                 setTasks(response.data);
             })
             .catch(error => {
                 console.error('Error fetching tasks:', error);
             });
 
-        // Fetch team members from the API
         axios.get('http://localhost:3307/user/api/v1/list')
             .then(response => {
-                console.log("Members:", response.data);  // Log the API response
                 setMembers(response.data);
             })
             .catch(error => {
                 console.error('Error fetching members:', error);
             });
 
-        // Fetch user-task mappings from the API
         axios.get('http://localhost:3307/user_task/api/v1/list')
             .then(response => {
-                console.log("UserTasks:", response.data);  // Log the API response
                 setUserTasks(response.data);
             })
             .catch(error => {
@@ -109,7 +105,17 @@ const DashboardPage = () => {
         if (sortConfig.key === key) {
             return sortConfig.direction === 'ascending' ? '▲' : '▼';
         }
-        return '~'; // Small dash when no sorting
+        return '~';
+    };
+
+    const downloadJSON = () => {
+        const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
+            JSON.stringify(sortedTasks)
+        )}`;
+        const link = document.createElement("a");
+        link.href = jsonString;
+        link.download = "tasks.json";
+        link.click();
     };
 
     return (
@@ -139,6 +145,16 @@ const DashboardPage = () => {
                     ))}
                     </tbody>
                 </table>
+
+                {/* Centered Buttons for CSV and JSON download */}
+                <div className="download-buttons">
+                    <CSVLink data={sortedTasks} filename={"tasks.csv"} className="download-button">
+                        <FaFileCsv /> CSV
+                    </CSVLink>
+                    <button onClick={downloadJSON} className="download-button">
+                        <FaFileDownload /> JSON
+                    </button>
+                </div>
             </section>
             <section className="chart">
                 <div className="chart-container">
