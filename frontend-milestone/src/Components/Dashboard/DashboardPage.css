@@ -29,7 +29,6 @@
     justify-content: flex-start;
     padding: 10px 0;
     padding-left: 180px;
-
 }
 
 .download-button {
@@ -37,7 +36,7 @@
     height: 40px;
     margin: 0 5px;
     padding: 0px 10px;
-    margin-bottom: 150px;
+    margin-top: 10px;
     background-color: #1e3a8a;
     color: white;
     border: none;
@@ -59,6 +58,11 @@
     width: 16px;
     height: 16px;
 }
+.download-button:hover {
+    background-color: #213ea3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .task-table th,
 .task-table td {
     border: 1px solid #fff;
