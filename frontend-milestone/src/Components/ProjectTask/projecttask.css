@@ -1,0 +1,53 @@
+.tasks-title-wrapper {
+    height: 94px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tasks-title-bar {
+    background: linear-gradient(180deg, rgba(255, 231.01, 213.64, 0.69) 43%, rgb(244.25, 187.63, 146.63) 71.5%);
+    border-radius: 15px;
+    height: 79px;
+    position: relative;
+    width: 463px;
+}
+
+.tasks-title {
+    color: #102660d9;
+    font-family: "Poppins-Medium", Helvetica;
+    font-size: 60px;
+    font-weight: 500;
+    height: 21px;
+    left: 76px;
+    letter-spacing: 0.5px;
+    line-height: 24px;
+    position: absolute;
+    top: 29px;
+    white-space: nowrap;
+    width: 308px;
+}
+
+.redirect-button {
+    background-color: #4285F4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.redirect-button:hover {
+    background-color: #357AE8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.gantt-chart-container {
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 20px;
+}
