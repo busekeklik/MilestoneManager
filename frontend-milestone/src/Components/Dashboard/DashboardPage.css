@@ -28,7 +28,7 @@
     display: flex;
     justify-content: flex-start;
     padding: 10px 0;
-    padding-left: 20px;
+    padding-left: 180px;
 
 }
 
@@ -37,7 +37,7 @@
     height: 40px;
     margin: 0 5px;
     padding: 0px 10px;
-    margin-bottom:150px;
+    margin-bottom: 150px;
     background-color: #1e3a8a;
     color: white;
     border: none;
@@ -49,6 +49,9 @@
     font-size: 16px;
     text-align: center;
     line-height: 1;
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    text-decoration: none;
 }
 
 .download-button svg {
