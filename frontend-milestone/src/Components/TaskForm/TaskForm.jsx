@@ -3,28 +3,29 @@ import Select from 'react-select';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './TaskForm.css';
-import { useLocation } from 'react-router-dom';  // Import useLocation to access the state
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const TaskForm = () => {
-    const location = useLocation();  // Use useLocation hook to get the state
-    const { projectName } = location.state || {};  // Extract projectName from state
+    const location = useLocation();
+    const { projectId, projectName } = location.state || {};
 
     const [taskName, setTaskName] = useState('');
     const [analysts, setAnalysts] = useState([]);
     const [solutionArchitects, setSolutionArchitects] = useState([]);
     const [softwareArchitects, setSoftwareArchitects] = useState([]);
+    const [dependencies, setDependencies] = useState([]);
     const [analysisDuration, setAnalysisDuration] = useState('');
     const [developmentDuration, setDevelopmentDuration] = useState('');
     const [startDate, setStartDate] = useState('');
     const [deliveryDate, setDeliveryDate] = useState('');
-    const [severity, setSeverity] = useState(null);
+    const [severity, setSeverity] = useState({ value: 0, label: 'None (0)' });
     const [cost, setCost] = useState('');
 
     const [analystOptions, setAnalystOptions] = useState([]);
     const [solutionArchitectOptions, setSolutionArchitectOptions] = useState([]);
     const [softwareArchitectOptions, setSoftwareArchitectOptions] = useState([]);
-
-    const defaultProjectId = 1;
+    const [dependencyOptions, setDependencyOptions] = useState([]);
 
     const severityOptions = [
         { value: 0, label: 'None (0)' },
@@ -37,11 +38,20 @@ const TaskForm = () => {
     useEffect(() => {
         const fetchRoleUsers = async (role) => {
             try {
-                const response = await fetch(`http://localhost:3307/user/api/v1/role/${role}`);
-                const data = await response.json();
-                return data.map(user => ({ value: user.userID, label: user.userName }));
+                const response = await axios.get(`http://localhost:3307/user/api/v1/role/${role}`);
+                return response.data.map(user => ({ value: user.userID, label: user.userName }));
             } catch (error) {
                 console.error(`Error fetching ${role} users:`, error);
+                return [];
+            }
+        };
+
+        const fetchTasks = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3307/task/api/v1/list/project/${projectId}`);
+                return response.data.map(task => ({ value: task.taskID, label: task.taskName }));
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
                 return [];
             }
         };
@@ -49,7 +59,8 @@ const TaskForm = () => {
         fetchRoleUsers('ANALYST').then(data => setAnalystOptions(data));
         fetchRoleUsers('SOLUTION_ARCHITECT').then(data => setSolutionArchitectOptions(data));
         fetchRoleUsers('SOFTWARE_ARCHITECT').then(data => setSoftwareArchitectOptions(data));
-    }, []);
+        fetchTasks().then(data => setDependencyOptions(data));
+    }, [projectId]);
 
     const validateForm = () => {
         if (severity === null) {
@@ -89,29 +100,24 @@ const TaskForm = () => {
             cost: parseInt(cost),
             severity: severity.value,
             progress: 0,
-            projectId: defaultProjectId,
-            analysts: analysts.map(a => a.value),
-            solutionArchitects: solutionArchitects.map(sa => sa.value),
-            softwareArchitects: softwareArchitects.map(sa => sa.value),
+            projectId: projectId,
+            analystIds: analysts.map(a => a.value),
+            solutionArchitectIds: solutionArchitects.map(sa => sa.value),
+            softwareArchitectIds: softwareArchitects.map(sa => sa.value),
+            dependencyIds: dependencies.length > 0 ? dependencies.map(d => d.value) : [], // Default to empty array if no dependencies
         };
 
-        try {
-            const response = await fetch('http://localhost:3307/task/api/v1/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(taskData)
-            });
+        console.log('Task data being sent:', taskData); // Log the data being sent for debugging
 
-            if (response.ok) {
-                const result = await response.json();
-                toast.success('Task oluşturuldu!', {
+        try {
+            const response = await axios.post('http://localhost:3307/task/api/v1/create', taskData);
+            if (response.status === 200) {
+                toast.success('Task başarıyla oluşturuldu!', {
                     className: 'toast-success',
                     bodyClassName: 'toast-body',
                     progressClassName: 'toast-progress',
                 });
-                console.log('Task successfully saved:', result);
+                console.log('Task successfully saved:', response.data);
             } else {
                 toast.error('Task kaydedilemedi!', {
                     className: 'toast-error',
@@ -129,6 +135,7 @@ const TaskForm = () => {
             console.error('Error saving task:', error);
         }
     };
+
 
     return (
         <div className="task-form-container">
@@ -197,6 +204,24 @@ const TaskForm = () => {
                                 })
                             }}
                             placeholder=""
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Bağımlı Tasklar:</label>
+                        <Select
+                            isMulti
+                            options={dependencyOptions}
+                            value={dependencies}
+                            onChange={setDependencies}
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    borderRadius: '20px',
+                                    borderColor: '#ccc',
+                                    padding: '5px'
+                                })
+                            }}
+                            placeholder="Bağlı Taskları Seçin"
                         />
                     </div>
                     <div className="form-group">

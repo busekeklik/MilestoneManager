@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
 import axios from 'axios';
 import { CSVLink } from "react-csv";
-import { FaFileCsv, FaFileDownload } from 'react-icons/fa'; // Import icons
+import { FaFileCsv, FaFileDownload } from 'react-icons/fa';
 import './DashboardPage.css';
 
 const DashboardPage = () => {
     const [tasks, setTasks] = useState([]);
     const [members, setMembers] = useState([]);
-    const [userTasks, setUserTasks] = useState([]);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
     useEffect(() => {
         axios.get('http://localhost:3307/task/api/v1/list')
             .then(response => {
+                console.log('Tasks:', response.data);
                 setTasks(response.data);
             })
             .catch(error => {
@@ -22,46 +22,64 @@ const DashboardPage = () => {
 
         axios.get('http://localhost:3307/user/api/v1/list')
             .then(response => {
+                console.log('Members:', response.data);
                 setMembers(response.data);
             })
             .catch(error => {
                 console.error('Error fetching members:', error);
             });
-
-        axios.get('http://localhost:3307/user_task/api/v1/list')
-            .then(response => {
-                setUserTasks(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching user-task mappings:', error);
-            });
     }, []);
 
-    const getMemberName = (taskId) => {
-        const userTask = userTasks.find(ut => ut.taskID === taskId);
-        if (userTask) {
-            const member = members.find(member => member.userID === userTask.userID);
-            return member ? member.userName : 'Unknown';
-        }
-        return 'Unknown';
+    const getMemberNames = (task) => {
+        const memberIds = [
+            ...(task.analystIds || []).map(id => ({ id, role: 'A' })),
+            ...(task.solutionArchitectIds || []).map(id => ({ id, role: 'ÇM' })),
+            ...(task.softwareArchitectIds || []).map(id => ({ id, role: 'YM' }))
+        ];
+
+        const memberNames = memberIds.map(({ id, role }) => {
+            const member = members.find(member => member.userID === id);
+            return member ? `${member.userName} (${role})` : 'Unknown';
+        });
+
+        // Remove duplicates
+        const uniqueMemberNames = [...new Set(memberNames)];
+
+        return uniqueMemberNames.length ? uniqueMemberNames.join(', ') : 'Unknown';
     };
 
     const processedTasks = tasks.map(task => ({
         ...task,
-        memberName: getMemberName(task.taskID),
+        memberNames: getMemberNames(task),
     }));
 
     const calculateTaskCounts = () => {
         const taskCounts = {};
+
         processedTasks.forEach(task => {
-            const memberName = task.memberName;
-            if (taskCounts[memberName]) {
-                taskCounts[memberName]++;
-            } else {
-                taskCounts[memberName] = 1;
-            }
+            const uniqueMembers = new Set([
+                ...(task.analystIds || []),
+                ...(task.solutionArchitectIds || []),
+                ...(task.softwareArchitectIds || [])
+            ]);
+
+            uniqueMembers.forEach(id => {
+                const member = members.find(member => member.userID === id);
+                if (member) {
+                    const memberNameWithRole = `${member.userName} (${getRoleById(id, task)})`;
+                    taskCounts[memberNameWithRole] = (taskCounts[memberNameWithRole] || 0) + 1;
+                }
+            });
         });
+
         return taskCounts;
+    };
+
+    const getRoleById = (id, task) => {
+        if (task.analystIds.includes(id)) return 'A';
+        if (task.solutionArchitectIds.includes(id)) return 'ÇM';
+        if (task.softwareArchitectIds.includes(id)) return 'YM';
+        return '';
     };
 
     const taskCounts = calculateTaskCounts();
@@ -87,12 +105,12 @@ const DashboardPage = () => {
     const sortedTasks = [...processedTasks].sort((a, b) => {
         if (sortConfig.key) {
             if (sortConfig.direction === 'ascending') {
-                if (sortConfig.key === 'taskName' || sortConfig.key === 'memberName') {
+                if (sortConfig.key === 'taskName' || sortConfig.key === 'memberNames') {
                     return a[sortConfig.key].localeCompare(b[sortConfig.key]);
                 }
                 return a[sortConfig.key] - b[sortConfig.key];
             } else {
-                if (sortConfig.key === 'taskName' || sortConfig.key === 'memberName') {
+                if (sortConfig.key === 'taskName' || sortConfig.key === 'memberNames') {
                     return b[sortConfig.key].localeCompare(a[sortConfig.key]);
                 }
                 return b[sortConfig.key] - a[sortConfig.key];
@@ -127,8 +145,8 @@ const DashboardPage = () => {
                         <th onClick={() => handleSort('taskName')}>
                             Tasklar {getHeaderIcon('taskName')}
                         </th>
-                        <th onClick={() => handleSort('memberName')}>
-                            Ekip Üyesi {getHeaderIcon('memberName')}
+                        <th onClick={() => handleSort('memberNames')}>
+                            Ekip Üyesi {getHeaderIcon('memberNames')}
                         </th>
                         <th onClick={() => handleSort('severity')}>
                             Önem Derecesi {getHeaderIcon('severity')}
@@ -139,13 +157,12 @@ const DashboardPage = () => {
                     {sortedTasks.map(task => (
                         <tr key={task.taskID}>
                             <td>{task.taskName}</td>
-                            <td>{task.memberName}</td>
+                            <td>{task.memberNames}</td>
                             <td>{task.severity}</td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
-
             </section>
             <section className="chart">
                 <div className="chart-container">
@@ -161,15 +178,14 @@ const DashboardPage = () => {
                         <span>Görev Sayısı</span>
                     </div>
                     <ul className="member-task-list">
-                        {Object.entries(taskCounts).map(([memberName, taskCount]) => (
-                            <li key={memberName}>
-                                <span>{memberName}</span>
+                        {Object.entries(taskCounts).map(([memberNames, taskCount]) => (
+                            <li key={memberNames}>
+                                <span>{memberNames}</span>
                                 <span>{taskCount}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
-
             </section>
             <section className="download-buttons">
                 <CSVLink data={sortedTasks} filename={"tasks.csv"} className="download-button">

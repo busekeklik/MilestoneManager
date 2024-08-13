@@ -22,6 +22,7 @@ public class SecurityConfig {
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/task/api/v1/**").permitAll()
+                        .requestMatchers("/task/api/v1/{id}").permitAll()
                         .requestMatchers("/task/api/v1/create").permitAll()
                         .requestMatchers("/user/api/v1/**").permitAll()
                         .requestMatchers("/user_task/api/v1/**").permitAll()

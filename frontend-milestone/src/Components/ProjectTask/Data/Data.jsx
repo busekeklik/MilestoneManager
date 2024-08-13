@@ -1,51 +1,19 @@
-import axios from 'axios';
-
-export const fetchTasks = async () => {
+export const fetchTasks = async (projectId) => {  // projectId parametresi ekleniyor
     try {
-        const response = await axios.get('http://localhost:3307/task/api/v1/list');
-        const taskData = response.data.map(task => ({
-            start: new Date(task.startDate),
-            end: new Date(task.endDate),
-            name: task.name,
-            id: task.id,
-            progress: task.progress,
-            type: task.type,
-            project: task.project,
-            dependencies: task.dependencies ? task.dependencies.split(',') : []
+        const response = await fetch(`http://localhost:3307/task/api/v1/list?projectId=${projectId}`); // projectId parametresi ile API çağrısı
+        const data = await response.json();
+
+        const formattedTasks = data.map(task => ({
+            taskID: task.taskID,
+            taskName: `${task.taskName} (${new Date(task.startDate).toLocaleDateString()} - ${new Date(task.endDate).toLocaleDateString()})`,
+            startDate: new Date(task.startDate),
+            endDate: new Date(task.endDate),
+            progress: task.progress
         }));
-        return taskData;
+
+        return formattedTasks;
     } catch (error) {
-        console.error('Error fetching tasks:', error);
+        console.error('Veri çekme hatası:', error);
         return [];
     }
-};
-
-export const getStartEndDateForProject = (tasks, projectId) => {
-    const projectTasks = tasks.filter((t) => t.project === projectId);
-    let start = projectTasks[0].start;
-    let end = projectTasks[0].end;
-
-    for (let i = 0; i < projectTasks.length; i++) {
-        const task = projectTasks[i];
-        if (start.getTime() > task.start.getTime()) {
-            start = task.start;
-        }
-        if (end.getTime() < task.end.getTime()) {
-            end = task.end;
-        }
-    }
-    return [start, end];
-};
-
-export const initTasks = () => {
-    return [
-        {
-            start: new Date(),
-            end: new Date(),
-            name: "Initial Task",
-            id: "Task 1",
-            progress: 50,
-            type: "task",
-        },
-    ];
 };
