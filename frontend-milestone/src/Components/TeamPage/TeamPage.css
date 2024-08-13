@@ -93,9 +93,24 @@
 .team-table td:nth-child(4) {
     width: 80px;
 }
+
 .weekend {
     background-color:#D38E60;
 }
+
+.team-table .today {
+    border-left: 2px solid red;
+    border-right: 2px solid red;
+}
+
+.team-table th.today {
+    border-top: 2px solid red;
+}
+
+.team-table tr:last-child td.today {
+    border-bottom: 2px solid red;
+}
+
 @media (max-width: 768px) {
     .team-page {
         flex-direction: column;
