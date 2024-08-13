@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addDays, format, startOfWeek, subDays, isWeekend } from 'date-fns';
+import { addDays, format, startOfWeek, subDays, isWeekend, isSameDay, startOfDay } from 'date-fns';
 import './TeamPage.css';
 import { tr } from 'date-fns/locale';
 
@@ -16,11 +16,13 @@ const TeamPage = () => {
 
     const renderHeader = () => {
         const days = [];
+        const today = startOfDay(new Date());
         for (let i = 0; i < 14; i++) {
             const date = addDays(startDate, i);
             const weekendClass = isWeekend(date) ? 'weekend' : '';
+            const todayClass = isSameDay(date, today) ? 'today' : '';
             days.push(
-                <th key={i} className={weekendClass}>
+                <th key={i} className={`${weekendClass} ${todayClass}`}>
                     {format(date, 'MMM d', { locale: tr })}
                 </th>
             );
@@ -29,13 +31,14 @@ const TeamPage = () => {
     };
 
     const renderCustomRowCells = (ranges) => {
+        const today = startOfDay(new Date());
         return Array.from({ length: 14 }, (_, i) => {
             const date = addDays(startDate, i);
             const weekendClass = isWeekend(date) ? 'weekend' : '';
+            const todayClass = isSameDay(date, today) ? 'today' : '';
             const isActive = ranges.some(range => i >= range.start && i <= range.end);
             const style = isActive ? { backgroundColor: '#5E83C2' } : {};
-
-            return <td key={i} className={weekendClass} style={style}></td>;
+            return <td key={i} className={`${weekendClass} ${todayClass}`} style={style}></td>;
         });
     };
 
@@ -88,6 +91,7 @@ const TeamPage = () => {
                         <td>Devam Ediyor</td>
                         {renderCustomRowCells([{start: 7, end: 10}])}
                     </tr>
+
                     </tbody>
                 </table>
             </div>
