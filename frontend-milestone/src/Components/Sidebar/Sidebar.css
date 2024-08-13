@@ -53,11 +53,28 @@
 .nav-list {
     list-style: none;
     padding: 0 20px;
-}
 
+}
+.nav-link-logout{
+    background: linear-gradient(to right, #FFEADA, #BC6D33);
+    border: none;
+    color: #102660;
+    text-align: center;
+    cursor: pointer;
+    font-size: 18px;
+    display: block;
+    border-radius: 20px;
+    margin: 5px 20px;
+    text-decoration: none;
+    width: 150px;
+    padding: 10px;
+
+
+}
 .nav-item {
     margin: 10px 0;
 }
+
 
 .nav-link {
     background: linear-gradient(to right, #FFEADA, #BC6D33);
@@ -71,13 +88,8 @@
     display: block;
     border-radius: 20px;
     margin: 5px 0;
-    text-decoration: none; /* Removes underline from the link */
+    text-decoration: none;
 }
-
-.nav-link:hover {
-    background-color: #D4A15C; /* Optional: Add a hover effect */
-}
-
 .close-btn {
     background: none;
     border: none;
@@ -101,17 +113,12 @@
     align-items: center;
     justify-content: center;
 }
-
-.nav-item.logout {
-    display: flex;
-    justify-content: center;
+.dropdown {
+    list-style: none;
+    padding-left: 20px;
 }
 
-.nav-item.logout .nav-link {
+.dropdown .nav-link {
     padding: 5px 10px;
-    font-size: 14px;
-    border-radius: 10px;
-    width: 100px;
-    text-align: center;
-    text-decoration: none; /* Removes underline from the logout link */
+    width: 150px;
 }

@@ -2,14 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Chart } from "react-google-charts";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
+import Modal from 'react-modal'; // Import Modal
 import 'react-toastify/dist/ReactToastify.css';
 import './projecttask.css';
-import { fetchTasks, updateTaskProgress } from "./Data";
+import { fetchTasks, updateTask, fetchUsers } from "./Data"; // Updated to import fetchUsers
 
 const ProjectTask = () => {
     const [tasks, setTasks] = useState([]);
+    const [users, setUsers] = useState([]); // State to store users
     const [selectedTask, setSelectedTask] = useState(null); // Track the selected task
-    const [newProgress, setNewProgress] = useState(0); // Track the new progress
+    const [updatedTask, setUpdatedTask] = useState({}); // Track the updated task fields
+    const [modalIsOpen, setModalIsOpen] = useState(false); // State to control modal visibility
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -21,7 +24,12 @@ const ProjectTask = () => {
                 const fetchedTasks = await fetchTasks(projectId);
                 setTasks(fetchedTasks);
             };
+            const loadUsers = async () => {
+                const fetchedUsers = await fetchUsers();
+                setUsers(fetchedUsers);
+            };
             loadTasks();
+            loadUsers(); // Load users
         }
     }, [projectId]);
 
@@ -29,25 +37,42 @@ const ProjectTask = () => {
         const taskID = parseInt(e.target.value);
         const task = tasks.find(task => task.taskID === taskID);
         setSelectedTask(task);
-        setNewProgress(task.progress); // Set the current progress as the initial value
+        setUpdatedTask(task); // Initialize the updatedTask state with the selected task's data
     };
 
-    const handleProgressChange = (e) => {
-        setNewProgress(parseInt(e.target.value));
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+
+        // Convert date fields back to Date objects
+        const updatedValue = (name === 'startDate' || name === 'endDate') ? new Date(value) : value;
+
+        setUpdatedTask(prevTask => ({
+            ...prevTask,
+            [name]: updatedValue
+        }));
     };
 
-    const saveProgress = async () => {
+    const handleUserChange = (e, role) => {
+        const selectedIds = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+        setUpdatedTask(prevTask => ({
+            ...prevTask,
+            [role]: selectedIds
+        }));
+    };
+
+    const saveTask = async () => {
         if (selectedTask) {
             try {
-                await updateTaskProgress(selectedTask.taskID, newProgress);
+                await updateTask(selectedTask.taskID, updatedTask);
                 setTasks(prevTasks =>
                     prevTasks.map(task =>
-                        task.taskID === selectedTask.taskID ? { ...task, progress: newProgress } : task
+                        task.taskID === selectedTask.taskID ? { ...task, ...updatedTask } : task
                     )
                 );
-                toast.success('İlerleme başarıyla güncellendi!');
+                setModalIsOpen(false); // Close the modal after saving
+                toast.success('Görev başarıyla güncellendi!');
             } catch (error) {
-                toast.error('Güncelleme yapılamadı.');
+                toast.error('Görev güncellenemedi.');
                 console.error(error);
             }
         }
@@ -121,33 +146,121 @@ const ProjectTask = () => {
                 data={data}
                 options={options}
             />
-            <div className="task-progress-editor">
-                <h3>Task İlerlemesi Düzenleme</h3>
-                <div className="task-progress-controls">
-                    <select value={selectedTask?.taskID || ''} onChange={handleTaskSelect}>
-                        <option value="" disabled>Task Seçin</option>
-                        {tasks.map(task => (
-                            <option key={task.taskID} value={task.taskID}>
-                                {task.taskName}
-                            </option>
-                        ))}
-                    </select>
-                    {selectedTask && (
-                        <>
-                            <input
-                                type="number"
-                                value={newProgress}
-                                onChange={handleProgressChange}
-                                min="0"
-                                max="100"
-                            />
-                            <button onClick={saveProgress}>
-                                Kaydet
-                            </button>
-                        </>
-                    )}
-                </div>
+            <div className="task-editor">
+                <h3>Görev Düzenleme</h3>
+                <select value={selectedTask?.taskID || ''} onChange={handleTaskSelect}>
+                    <option value="" disabled>Görev Seçin</option>
+                    {tasks.map(task => (
+                        <option key={task.taskID} value={task.taskID}>
+                            {task.taskName}
+                        </option>
+                    ))}
+                </select>
+                {selectedTask && (
+                    <button onClick={() => setModalIsOpen(true)}>
+                        Düzenle
+                    </button>
+                )}
             </div>
+
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                className="small-modal"
+                overlayClassName="overlay"
+            >
+                <h2 className="modal-header">Görev Düzenleme</h2>
+                <div className="modal-body">
+                    <input
+                        type="text"
+                        name="taskName"
+                        value={updatedTask.taskName || ''}
+                        onChange={handleInputChange}
+                        placeholder="Görev Adı"
+                    />
+                    <input
+                        type="date"
+                        name="startDate"
+                        value={updatedTask.startDate ? updatedTask.startDate.toISOString().split('T')[0] : ''}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="date"
+                        name="endDate"
+                        value={updatedTask.endDate ? updatedTask.endDate.toISOString().split('T')[0] : ''}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="number"
+                        name="progress"
+                        value={updatedTask.progress || 0}
+                        onChange={handleInputChange}
+                        min="0"
+                        max="100"
+                        placeholder="İlerleme (%)"
+                    />
+                    <input
+                        type="number"
+                        name="severity"
+                        value={updatedTask.severity || 1}
+                        onChange={handleInputChange}
+                        min="1"
+                        max="5"
+                        placeholder="Önem Derecesi"
+                    />
+                    <div className="user-selectors">
+                        <div className="form-group">
+                            <label>Analistler:</label>
+                            <select
+                                name="analystIds"
+                                multiple
+                                value={updatedTask.analystIds || []}
+                                onChange={(e) => handleUserChange(e, "analystIds")}
+                            >
+                                {users.map(user => (
+                                    <option key={user.userID} value={user.userID}>
+                                        {user.userName}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label>Çözüm Mimarları:</label>
+                            <select
+                                name="solutionArchitectIds"
+                                multiple
+                                value={updatedTask.solutionArchitectIds || []}
+                                onChange={(e) => handleUserChange(e, "solutionArchitectIds")}
+                            >
+                                {users.map(user => (
+                                    <option key={user.userID} value={user.userID}>
+                                        {user.userName}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label>Yazılım Mimarları:</label>
+                            <select
+                                name="softwareArchitectIds"
+                                multiple
+                                value={updatedTask.softwareArchitectIds || []}
+                                onChange={(e) => handleUserChange(e, "softwareArchitectIds")}
+                            >
+                                {users.map(user => (
+                                    <option key={user.userID} value={user.userID}>
+                                        {user.userName}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <button className="save-button" onClick={saveTask}>
+                        Kaydet
+                    </button>
+                </div>
+                <button className="close-button" onClick={() => setModalIsOpen(false)}>Kapat</button>
+            </Modal>
             <ToastContainer />
         </div>
     );

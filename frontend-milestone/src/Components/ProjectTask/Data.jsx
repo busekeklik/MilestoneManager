@@ -1,4 +1,5 @@
 // Data.js
+
 export const fetchTasks = async (projectId) => {
     try {
         const response = await fetch(`http://localhost:3307/task/api/v1/list/project/${projectId}`);
@@ -6,11 +7,14 @@ export const fetchTasks = async (projectId) => {
 
         const formattedTasks = data.map(task => ({
             taskID: task.taskID,
-            taskName: `${task.taskName} (${new Date(task.startDate).toLocaleDateString()} - ${new Date(task.endDate).toLocaleDateString()})`,
+            taskName: task.taskName,
             startDate: new Date(task.startDate),
             endDate: new Date(task.endDate),
             progress: task.progress,
-            severity: task.severity,  // Severity alanını ekliyoruz
+            severity: task.severity,
+            analystIds: task.analystIds,
+            solutionArchitectIds: task.solutionArchitectIds,
+            softwareArchitectIds: task.softwareArchitectIds,
             dependencies: task.dependencyIds.length ? task.dependencyIds.join(',') : null
         }));
 
@@ -21,24 +25,38 @@ export const fetchTasks = async (projectId) => {
     }
 };
 
-// Add this function to update task progress
-export const updateTaskProgress = async (taskID, progress) => {
+export const updateTask = async (taskID, updatedTask) => {
     try {
         const response = await fetch(`http://localhost:3307/task/api/v1/update/${taskID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ progress }),  // Updating only the progress field
+            body: JSON.stringify(updatedTask),
         });
 
         if (!response.ok) {
-            throw new Error('Failed to update task progress');
+            throw new Error('Failed to update task');
         }
 
         return await response.json();
     } catch (error) {
-        console.error('Error updating task progress:', error);
+        console.error('Error updating task:', error);
         throw error;
+    }
+};
+
+export const fetchUsers = async () => {
+    try {
+        const response = await fetch(`http://localhost:3307/user/api/v1/list`);
+        const data = await response.json();
+
+        return data.map(user => ({
+            userID: user.userID,
+            userName: user.userName
+        }));
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        return [];
     }
 };

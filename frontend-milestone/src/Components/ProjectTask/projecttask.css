@@ -1,146 +1,127 @@
+/* General Layout and Button Styles */
 .tasks-title-wrapper {
-    height: 94px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tasks-title-bar {
+    width: 80%;
+    text-align: center;
+    background-color: #FFD0AE;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tasks-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #102660;
+}
+
+.redirect-button, .close-button {
+    display: block;
+    margin: 20px auto;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #BC6D33;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.redirect-button:hover, .close-button:hover {
+    background-color: #A0522D;
+}
+
+.task-editor {
+    width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 15px;
+    background: linear-gradient(to right, #FFD0AE, #FFE7D6);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.task-editor h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #102660;
+}
+
+/* Small Modal Styling */
+.small-modal {
+    background: #fff;
+    padding: 20px;
+    width: 400px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.tasks-title-bar {
-    background: linear-gradient(180deg, rgba(255, 231.01, 213.64, 0.69) 43%, rgb(244.25, 187.63, 146.63) 71.5%);
-    border-radius: 15px;
-    height: 79px;
-    position: relative;
-    width: 463px;
-}
-
-.tasks-title {
-    color: #102660d9;
-    font-family: "Poppins-Medium", Helvetica;
-    font-size: 60px;
-    font-weight: 500;
-    height: 21px;
-    left: 76px;
-    letter-spacing: 0.5px;
-    line-height: 24px;
-    position: absolute;
-    top: 29px;
-    white-space: nowrap;
-    width: 308px;
-}
-
-.redirect-button {
-    background-color: #4285F4;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-bottom: 10px;
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.redirect-button:hover {
-    background-color: #357AE8;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.gantt-chart-container {
-    height: 400px;
-    overflow-y: auto;
-    overflow-x: hidden;
+.modal-header {
+    text-align: center;
     margin-bottom: 20px;
+    font-size: 20px;
+    color: #102660;
 }
 
-.task-progress-editor {
-    margin-top: 10px; /* Bring it closer to the Gantt chart */
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.task-progress-editor h3 {
-    font-family: "Poppins-Medium", Helvetica;
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.task-progress-controls {
+.modal-body {
     display: flex;
-    align-items: center;
-    gap: 15px; /* Space between controls */
+    flex-direction: column;
+    gap: 10px;
 }
 
-.task-progress-controls select,
-.task-progress-controls input[type="number"] {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.3s;
-}
-
-.task-progress-controls select:focus,
-.task-progress-controls input[type="number"]:focus {
-    border-color: #4285F4;
-    outline: none;
-}
-
-.task-progress-controls button {
-    background-color: #34A853;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.task-progress-controls button:hover {
-    background-color: #2c8c4f;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.gantt-container {
-    padding-bottom: 10px; /* Adjust as needed */
-}
-
-.edit-task-progress-container {
-    margin-top: -20px; /* Bring it closer */
-}
-.edit-task-progress-container {
-    background-color: #f0f8ff; /* Matching the background to a light blue */
-}
-
-.save-button {
-    background-color: #4682B4; /* Matching the button to the dark blue of the Gantt chart */
-    color: white;
-}
-
-.task-select, .progress-input {
-    background-color: #d3e2f1; /* Light blue shade */
-    border: 1px solid #4682B4; /* Border color to match the Gantt chart */
-}
-.edit-task-progress-container {
-    border: 1px solid #c3cbd3;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.modal-body input,
+.modal-body select {
     padding: 10px;
-    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.user-selectors .form-group {
+    margin-bottom: 10px;
 }
 
 .save-button {
-    padding: 8px 16px;
-    border-radius: 4px;
+    background-color: #FFD0AE;
+    color: black;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
     font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
 }
+
+.save-button:hover {
+    background-color: #FFE7D6;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-    .edit-task-progress-container {
-        margin-top: -10px; /* Less negative margin for smaller screens */
-    }
-    .save-button {
-        width: 100%; /* Make the button full width on smaller screens */
-        margin-top: 10px;
+    .small-modal {
+        width: 90%;
     }
 }
