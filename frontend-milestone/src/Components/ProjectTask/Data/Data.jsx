@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
-
-export const fetchTasks = async () => {
+export const fetchTasks = async (projectId) => {  // projectId parametresi ekleniyor
     try {
-        const response = await fetch('http://localhost:3307/task/api/v1/list');
+        const response = await fetch(`http://localhost:3307/task/api/v1/list?projectId=${projectId}`); // projectId parametresi ile API çağrısı
         const data = await response.json();
 
         const formattedTasks = data.map(task => ({
@@ -18,21 +16,4 @@ export const fetchTasks = async () => {
         console.error('Veri çekme hatası:', error);
         return [];
     }
-};
-
-export const getStartEndDateForProject = (tasks, projectId) => {
-    const projectTasks = tasks.filter((t) => t.projectId === projectId);
-    let start = projectTasks[0]?.startDate;
-    let end = projectTasks[0]?.endDate;
-
-    for (let i = 1; i < projectTasks.length; i++) {
-        const task = projectTasks[i];
-        if (start.getTime() > task.startDate.getTime()) {
-            start = task.startDate;
-        }
-        if (end.getTime() < task.endDate.getTime()) {
-            end = task.endDate;
-        }
-    }
-    return [start, end];
 };

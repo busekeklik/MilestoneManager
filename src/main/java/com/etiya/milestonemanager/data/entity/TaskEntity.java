@@ -40,7 +40,7 @@ public class TaskEntity implements Serializable {
     private long cost;
 
     @Column(name = "severity", nullable = false)
-    private int severity;  // Changed to int
+    private int severity;
 
     @Column(name = "progress", nullable = false)
     private double progress;
@@ -49,14 +49,35 @@ public class TaskEntity implements Serializable {
     @JoinColumn(name = "project_id", nullable = false)
     private ProjectEntity project;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private List<AlertEntity> alerts;
+    @ManyToMany
+    @JoinTable(
+            name = "task_dependencies",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "dependent_task_id")
+    )
+    private List<TaskEntity> dependencies;
 
     @ManyToMany
     @JoinTable(
-            name = "user_task",
+            name = "task_analysts",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<UserEntity> users;
+    private List<UserEntity> analysts;
+
+    @ManyToMany
+    @JoinTable(
+            name = "task_solution_architects",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserEntity> solutionArchitects;
+
+    @ManyToMany
+    @JoinTable(
+            name = "task_software_architects",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserEntity> softwareArchitects;
 }

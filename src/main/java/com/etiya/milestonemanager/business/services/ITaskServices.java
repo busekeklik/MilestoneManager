@@ -2,26 +2,31 @@ package com.etiya.milestonemanager.business.services;
 
 import java.util.List;
 
-public interface ITaskServices<D,E> {
-    public D entityToDto(E e);
-    public E dtoToEntity(D d);
+public interface ITaskServices<D, E> {
+    // Method to convert Entity to DTO
+    D entityToDto(E e);
 
-    public void taskServiceDeleteAllData();
+    // Method to convert DTO to Entity
+    E dtoToEntity(D d);
 
-    // CRUD
-    // CREATE
-    public D taskServiceCreate(D d);
+    // Delete all tasks
+    void taskServiceDeleteAllData();
 
-    // LIST
-    public List<D> taskServiceList();
+    // Create a new task
+    D taskServiceCreate(D d);
 
-    // FIND
-    public D taskServiceFindById(Long id);
+    // List all tasks
+    List<D> taskServiceList();
 
-    // UPDATE
-    public D taskServiceUpdateById(Long id,D d);
+    // Find a task by its ID
+    D taskServiceFindById(Long id);
 
-    // DELETE
-    public D taskServiceDeleteById(Long id);
+    // Update a task by its ID
+    D taskServiceUpdateById(Long id, D d);
 
+    // Delete a task by its ID
+    D taskServiceDeleteById(Long id);
+
+    // New Method: List tasks by Project ID
+    List<D> taskServiceListByProjectId(Long projectId);  // Add this method
 }

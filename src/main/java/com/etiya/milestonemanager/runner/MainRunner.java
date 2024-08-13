@@ -8,12 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Configuration
@@ -47,6 +42,7 @@ public class MainRunner {
             calendar.set(Calendar.DAY_OF_MONTH, 30);
             Date endDate = calendar.getTime();
 
+            // Create and save projects
             ProjectEntity project1 = new ProjectEntity();
             project1.setProjectName("Backend");
             project1.setStartDate(startDate);
@@ -73,6 +69,7 @@ public class MainRunner {
 
             iProjectRepository.saveAll(List.of(project1, project2, project3, project4));
 
+            // Create and save teams
             TeamEntity team1 = new TeamEntity();
             team1.setTeamName("Team Pulsar");
             team1.setDescription("Pulsar omni");
@@ -95,13 +92,14 @@ public class MainRunner {
 
             iTeamRepository.saveAll(List.of(team1, team2, team3, team4));
 
+            // Create and save users
             UserEntity user1 = new UserEntity();
             user1.setUserName("Sude Gokce");
             user1.setPassword("sude123");
             user1.setEmail("sude.gokcen@etiya.com");
             user1.setActive(true);
             user1.setTeam(team1);
-            user1.setRoles(new HashSet<>(Set.of(RoleType.SOFTWARE_ARCHITECT, RoleType.TEAM_MEMBER)));
+            user1.setRoles(Set.of(RoleType.SOFTWARE_ARCHITECT, RoleType.TEAM_MEMBER));
 
             UserEntity user2 = new UserEntity();
             user2.setUserName("Mehmet Emin");
@@ -109,7 +107,7 @@ public class MainRunner {
             user2.setEmail("mehmet.emin@etiya.com");
             user2.setActive(true);
             user2.setTeam(team2);
-            user2.setRoles(new HashSet<>(Set.of(RoleType.SOLUTION_ARCHITECT, RoleType.TEAM_MEMBER)));
+            user2.setRoles(Set.of(RoleType.SOLUTION_ARCHITECT, RoleType.TEAM_MEMBER));
 
             UserEntity user3 = new UserEntity();
             user3.setUserName("Erdem Onal");
@@ -117,7 +115,7 @@ public class MainRunner {
             user3.setEmail("erdem.onal@etiya.com");
             user3.setActive(true);
             user3.setTeam(team3);
-            user3.setRoles(new HashSet<>(Set.of(RoleType.ANALYST, RoleType.TEAM_MEMBER)));
+            user3.setRoles(Set.of(RoleType.ANALYST, RoleType.TEAM_MEMBER));
 
             UserEntity user4 = new UserEntity();
             user4.setUserName("Buse Keklik");
@@ -125,7 +123,7 @@ public class MainRunner {
             user4.setEmail("buse.keklik@etiya.com");
             user4.setActive(true);
             user4.setTeam(team4);
-            user4.setRoles(new HashSet<>(Set.of(RoleType.BACKEND, RoleType.TEAM_LEADER)));
+            user4.setRoles(Set.of(RoleType.BACKEND, RoleType.TEAM_LEADER));
 
             UserEntity user5 = new UserEntity();
             user5.setUserName("Enes Kasım");
@@ -133,48 +131,11 @@ public class MainRunner {
             user5.setEmail("enes.kasim@etiya.com");
             user5.setActive(true);
             user5.setTeam(team4);
-            user5.setRoles(new HashSet<>(Set.of(RoleType.TEAM_LEADER)));
+            user5.setRoles(Set.of(RoleType.TEAM_LEADER));
 
             iUserRepository.saveAll(List.of(user1, user2, user3, user4, user5));
 
-            PermissionEntity permission1 = new PermissionEntity();
-            permission1.setPermissionName("READ");
-            permission1.setDescription("Read permission");
-            permission1.setRole(RoleType.ANALYST);
-
-            PermissionEntity permission2 = new PermissionEntity();
-            permission2.setPermissionName("WRITE");
-            permission2.setDescription("Write permission");
-            permission2.setRole(RoleType.BACKEND);
-
-            PermissionEntity permission3 = new PermissionEntity();
-            permission3.setPermissionName("DELETE");
-            permission3.setDescription("Delete permission");
-            permission3.setRole(RoleType.SOFTWARE_ARCHITECT);
-
-            PermissionEntity permission4 = new PermissionEntity();
-            permission4.setPermissionName("EXECUTE");
-            permission4.setDescription("Execute permission");
-            permission4.setRole(RoleType.SOLUTION_ARCHITECT);
-
-            iPermissionRepository.saveAll(List.of(permission1, permission2, permission3, permission4));
-
-            AbsenceEntity absence1 = new AbsenceEntity();
-            absence1.setStartDate(startDate);
-            absence1.setEndDate(endDate);
-            absence1.setType("Sick Leave");
-            absence1.setDescription("Sick leave");
-            absence1.setUser(user1);
-
-            AbsenceEntity absence2 = new AbsenceEntity();
-            absence2.setStartDate(startDate);
-            absence2.setEndDate(endDate);
-            absence2.setType("Vacation");
-            absence2.setDescription("Vacation");
-            absence2.setUser(user2);
-
-            iAbsenceRepository.saveAll(List.of(absence1, absence2));
-
+            // Create and save tasks with associated users
             TaskEntity task1 = new TaskEntity();
             task1.setTaskName("Develop backend");
             task1.setStartDate(startDate);
@@ -184,7 +145,7 @@ public class MainRunner {
             task1.setSeverity(3);  // High
             task1.setProgress(50.0);
             task1.setProject(project1);
-            task1.setUsers(Collections.singletonList(user1));
+            task1.setSoftwareArchitects(Collections.singletonList(user1));  // Assign user1 as a software architect
 
             TaskEntity task2 = new TaskEntity();
             task2.setTaskName("Develop frontend");
@@ -195,7 +156,7 @@ public class MainRunner {
             task2.setSeverity(2);  // Medium
             task2.setProgress(75.0);
             task2.setProject(project2);
-            task2.setUsers(Collections.singletonList(user2));
+            task2.setSolutionArchitects(Collections.singletonList(user2));  // Assign user2 as a solution architect
 
             TaskEntity task3 = new TaskEntity();
             task3.setTaskName("Design architecture");
@@ -206,7 +167,7 @@ public class MainRunner {
             task3.setSeverity(4);  // Critical/Extreme
             task3.setProgress(60.0);
             task3.setProject(project3);
-            task3.setUsers(Collections.singletonList(user3));
+            task3.setAnalysts(Collections.singletonList(user3));  // Assign user3 as an analyst
 
             TaskEntity task4 = new TaskEntity();
             task4.setTaskName("Optimize database");
@@ -217,10 +178,10 @@ public class MainRunner {
             task4.setSeverity(3);  // High
             task4.setProgress(40.0);
             task4.setProject(project4);
-            task4.setUsers(Collections.singletonList(user4));
+            task4.setSoftwareArchitects(Collections.singletonList(user4));  // Assign user4 as a software architect
 
             TaskEntity task5 = new TaskEntity();
-            task5.setTaskName("Devops");
+            task5.setTaskName("DevOps");
             task5.setStartDate(startDate);
             task5.setEndDate(endDate);
             task5.setManDays(10);
@@ -228,13 +189,14 @@ public class MainRunner {
             task5.setSeverity(3);  // High
             task5.setProgress(50.0);
             task5.setProject(project1);
-            task5.setUsers(Collections.singletonList(user1));
+            task5.setSoftwareArchitects(Collections.singletonList(user1));  // Assign user1 as a software architect again
 
             iTaskRepository.saveAll(List.of(task1, task2, task3, task4, task5));
 
+            // Create and save alerts
             AlertEntity alert1 = new AlertEntity();
             alert1.setAlertDate(new Date());
-            alert1.setMessage("Task deadline");
+            alert1.setMessage("Task deadline approaching");
             alert1.setTask(task1);
 
             AlertEntity alert2 = new AlertEntity();
