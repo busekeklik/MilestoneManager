@@ -20,7 +20,7 @@
     color: #102660;
 }
 
-.redirect-button, .close-button {
+.redirect-button, .close-button, .task-button {
     display: block;
     margin: 20px auto;
     padding: 15px 30px;
@@ -35,24 +35,35 @@
     text-align: center;
 }
 
-.redirect-button:hover, .close-button:hover {
+.task-button.delete-button {
+    background-color: #e64a19;
+}
+
+.redirect-button:hover, .close-button:hover, .task-button:hover {
     background-color: #A0522D;
 }
 
 .task-editor {
-    width: 1000px;
+    width: 80%;
     margin: 20px auto;
     padding: 20px;
     border-radius: 15px;
     background: linear-gradient(to right, #FFD0AE, #FFE7D6);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
+    text-align: center;
 }
 
 .task-editor h3 {
     text-align: center;
     margin-bottom: 20px;
     color: #102660;
+}
+
+.task-action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 /* Small Modal Styling */
@@ -91,6 +102,12 @@
     gap: 10px;
 }
 
+.delete-confirm-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
 .modal-body input,
 .modal-body select {
     padding: 10px;
@@ -103,25 +120,27 @@
     margin-bottom: 10px;
 }
 
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center; /* This centers the contents horizontally */
+}
+
 .save-button {
     background-color: #FFD0AE;
     color: black;
     border: none;
     border-radius: 10px;
-    padding: 10px;
+    padding: 10px 20px; /* Add padding to make the button visually balanced */
     font-size: 16px;
     cursor: pointer;
     margin-top: 15px;
     transition: background-color 0.3s;
+    text-align: center; /* Ensure text is centered within the button */
 }
 
 .save-button:hover {
     background-color: #FFE7D6;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .small-modal {
-        width: 90%;
-    }
-}
