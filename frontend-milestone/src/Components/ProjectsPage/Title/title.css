@@ -1,15 +1,39 @@
-.tasks-title-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-    color: #102660;
+.group {
+    height: 79px;
+    left: 428px;
+    position: absolute;
+    top: 96px;
+    width: 465px;
 }
 
-
-.tasks-title-wrapper h1 {
-    font-size: 24px;
+.overlap-group-2 {
     background: linear-gradient(to right, #F4BC93, #FFE7D6);
-    padding: 10px 80px;
-    border-radius: 10px;
-    text-align: center;
+    height: 94px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.text-wrapper-5 {
+    color: #102660d9;
+    font-family: "Poppins-Medium", Helvetica;
+    font-size: 24px;
+    font-weight: 500;
+    height: 21px;
+    left: 76px;
+    letter-spacing: 0.5px;
+    line-height: 24px;
+    position: absolute;
+    top: 29px;
+    white-space: nowrap;
+    width: 308px;
+}
+
+.desktop-title {
+    height: 94px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
 }

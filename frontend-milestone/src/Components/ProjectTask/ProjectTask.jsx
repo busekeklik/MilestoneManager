@@ -172,6 +172,14 @@ const ProjectTask = () => {
         return `${d.getFullYear()}-${month}-${day}`;
     };
 
+    const severityColors = {
+        0: '#d9edf7', // None (default)
+        1: '#5bc0de', // Low
+        2: '#f0ad4e', // Moderate
+        3: '#d9534f', // High
+        4: '#d43f3a'  // Extreme
+    };
+
     const data = [
         [
             { type: "string", label: "Task ID" },
@@ -182,6 +190,7 @@ const ProjectTask = () => {
             { type: "number", label: "Duration" },
             { type: "number", label: "Percent Complete" },
             { type: "string", label: "Dependencies" },
+            { type: "string", label: "Color" },
         ],
         ...tasks.map((task) => [
             task.taskID.toString(),
@@ -191,9 +200,12 @@ const ProjectTask = () => {
             new Date(task.endDate),
             null,
             task.progress,
-            Array.isArray(task.dependencyIds) ? task.dependencyIds.join(', ') : '', // Ensure dependencies are shown correctly
+            Array.isArray(task.dependencyIds) ? task.dependencyIds.join(', ') : '',
+            severityColors[task.severity]
         ]),
     ];
+
+    const today = new Date();
 
     const options = {
         height: 500,
@@ -216,6 +228,10 @@ const ProjectTask = () => {
                 stroke: "#90caf9",
                 strokeWidth: 2,
             },
+            todayMarker: {
+                color: '#ff0000', // Bugünü gösteren çizgi için kırmızı renk
+                thickness: 2, // Çizginin kalınlığı
+            },
         },
         hAxis: {
             format: 'MMM d, yyyy',
@@ -234,14 +250,6 @@ const ProjectTask = () => {
                     <div className='tasks-title'>{projectName || 'Unknown Project'}</div>
                 </div>
             </div>
-
-            <Chart
-                chartType="Gantt"
-                width="100%"
-                height="500px"
-                data={data}
-                options={options}
-            />
 
             <div className="task-editor">
                 <h3>Görev Düzenleme</h3>
@@ -270,6 +278,15 @@ const ProjectTask = () => {
                     </div>
                 )}
             </div>
+
+            <Chart
+                chartType="Gantt"
+                width="100%"
+                height="500px"
+                data={data}
+                options={options}
+            />
+
 
             <Modal
                 isOpen={modalIsOpen}
@@ -329,7 +346,7 @@ const ProjectTask = () => {
                     <Select
                         isMulti
                         name="analystIds"
-                        options={users.map(user => ({ value: user.userID, label: user.userName }))}
+                        options={users.map(user => ({value: user.userID, label: user.userName}))}
                         value={updatedTask.analystIds}
                         onChange={(selected) => handleSelectChange(selected, 'analystIds')}
                         placeholder="Analistleri Seçin"
@@ -337,7 +354,7 @@ const ProjectTask = () => {
                     <Select
                         isMulti
                         name="solutionArchitectIds"
-                        options={users.map(user => ({ value: user.userID, label: user.userName }))}
+                        options={users.map(user => ({value: user.userID, label: user.userName}))}
                         value={updatedTask.solutionArchitectIds}
                         onChange={(selected) => handleSelectChange(selected, 'solutionArchitectIds')}
                         placeholder="Çözüm Mimarlarını Seçin"
@@ -345,7 +362,7 @@ const ProjectTask = () => {
                     <Select
                         isMulti
                         name="softwareArchitectIds"
-                        options={users.map(user => ({ value: user.userID, label: user.userName }))}
+                        options={users.map(user => ({value: user.userID, label: user.userName}))}
                         value={updatedTask.softwareArchitectIds}
                         onChange={(selected) => handleSelectChange(selected, 'softwareArchitectIds')}
                         placeholder="Yazılım Mimarlarını Seçin"
@@ -353,7 +370,7 @@ const ProjectTask = () => {
                     <Select
                         isMulti
                         name="dependencies"
-                        options={tasks.map(task => ({ value: task.taskID, label: task.taskName }))}
+                        options={tasks.map(task => ({value: task.taskID, label: task.taskName}))}
                         value={updatedTask.dependencies}
                         onChange={(selected) => handleSelectChange(selected, 'dependencies')}
                         placeholder="Bağlı Taskları Seçin"
@@ -388,7 +405,7 @@ const ProjectTask = () => {
                 </div>
             </Modal>
 
-            <ToastContainer />
+            <ToastContainer/>
         </div>
     );
 };
