@@ -3,10 +3,8 @@ import './title.css';
 
 const Title = ()=> {
     return (
-        <div className="group">
-            <div className="overlap-group-2">
-                <div className="text-wrapper-5">EKİPLER</div>
-            </div>
+        <div className="teams-title-wrapper">
+                <h1>EKİPLER</h1>
         </div>
     )
 };
