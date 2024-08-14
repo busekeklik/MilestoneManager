@@ -25,5 +25,7 @@ public class AbsenceDto implements Serializable {
     private Date endDate;
     private String type;
     private String description;
+    private Long userId; // Add this line to include the userId
+
 
 }

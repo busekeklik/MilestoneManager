@@ -30,8 +30,8 @@ public class MainRunner {
     @Bean
     public CommandLineRunner milestone() {
         return args -> {
-            log.info("projects");
-            System.out.println("users");
+            log.info("Initializing data for OMNI project and associated entities");
+            System.out.println("Running milestone setup...");
 
             Calendar calendar = Calendar.getInstance();
             calendar.clear();
@@ -42,169 +42,182 @@ public class MainRunner {
             calendar.set(Calendar.DAY_OF_MONTH, 30);
             Date endDate = calendar.getTime();
 
-            // Create and save projects
-            ProjectEntity project1 = new ProjectEntity();
-            project1.setProjectName("Backend");
-            project1.setStartDate(startDate);
-            project1.setEndDate(endDate);
-            project1.setStatus("in progress");
+            // Create and save single project
+            ProjectEntity project = new ProjectEntity();
+            project.setProjectName("OMNI");
+            project.setStartDate(startDate);
+            project.setEndDate(endDate);
+            project.setStatus("in progress");
+            iProjectRepository.save(project);
 
-            ProjectEntity project2 = new ProjectEntity();
-            project2.setProjectName("Frontend");
-            project2.setStartDate(startDate);
-            project2.setEndDate(endDate);
-            project2.setStatus("completed");
-
-            ProjectEntity project3 = new ProjectEntity();
-            project3.setProjectName("Mobile App");
-            project3.setStartDate(startDate);
-            project3.setEndDate(endDate);
-            project3.setStatus("in progress");
-
-            ProjectEntity project4 = new ProjectEntity();
-            project4.setProjectName("Database Optimization");
-            project4.setStartDate(startDate);
-            project4.setEndDate(endDate);
-            project4.setStatus("in progress");
-
-            iProjectRepository.saveAll(List.of(project1, project2, project3, project4));
-
-            // Create and save teams
-            TeamEntity team1 = new TeamEntity();
-            team1.setTeamName("Team Pulsar");
-            team1.setDescription("Pulsar omni");
-            team1.setProjects(Collections.singletonList(project1));
-
-            TeamEntity team2 = new TeamEntity();
-            team2.setTeamName("Team Milestone");
-            team2.setDescription("Milestone omni");
-            team2.setProjects(Collections.singletonList(project2));
-
-            TeamEntity team3 = new TeamEntity();
-            team3.setTeamName("Team Mobile");
-            team3.setDescription("Mobile Development Team");
-            team3.setProjects(Collections.singletonList(project3));
-
-            TeamEntity team4 = new TeamEntity();
-            team4.setTeamName("Team Database");
-            team4.setDescription("Database Optimization Team");
-            team4.setProjects(Collections.singletonList(project4));
-
-            iTeamRepository.saveAll(List.of(team1, team2, team3, team4));
+            // Create and save team associated with the project
+            TeamEntity team = new TeamEntity();
+            team.setTeamName("Team Pulsar");
+            team.setDescription("Pulsar omni");
+            team.setProjects(Collections.singletonList(project));
+            iTeamRepository.save(team);
 
             // Create and save users
             UserEntity user1 = new UserEntity();
-            user1.setUserName("Sude Gokce");
-            user1.setPassword("sude123");
-            user1.setEmail("sude.gokcen@etiya.com");
+            user1.setUserName("Buse Keklik");
+            user1.setPassword("buse123");
+            user1.setEmail("buse.keklik@etiya.com");
             user1.setActive(true);
-            user1.setTeam(team1);
-            user1.setRoles(Set.of(RoleType.SOFTWARE_ARCHITECT, RoleType.TEAM_MEMBER));
+            user1.setTeam(team);
+            user1.setRoles(Set.of(RoleType.BACKEND, RoleType.TEAM_LEADER));
+            iUserRepository.save(user1);
 
             UserEntity user2 = new UserEntity();
-            user2.setUserName("Mehmet Emin");
-            user2.setPassword("emin123");
-            user2.setEmail("mehmet.emin@etiya.com");
+            user2.setUserName("Erdem Önal");
+            user2.setPassword("erdem123");
+            user2.setEmail("erdem.onal@etiya.com");
             user2.setActive(true);
-            user2.setTeam(team2);
-            user2.setRoles(Set.of(RoleType.SOLUTION_ARCHITECT, RoleType.TEAM_MEMBER));
+            user2.setTeam(team);
+            user2.setRoles(Set.of(RoleType.FRONTEND));
+            iUserRepository.save(user2);
 
             UserEntity user3 = new UserEntity();
-            user3.setUserName("Erdem Onal");
-            user3.setPassword("erdem123");
-            user3.setEmail("erdem.onal@etiya.com");
+            user3.setUserName("Sude Gökçen");
+            user3.setPassword("sude123");
+            user3.setEmail("sude.gokcen@etiya.com");
             user3.setActive(true);
-            user3.setTeam(team3);
-            user3.setRoles(Set.of(RoleType.ANALYST, RoleType.TEAM_MEMBER));
+            user3.setTeam(team);
+            user3.setRoles(Set.of(RoleType.BACKEND));
+            iUserRepository.save(user3);
 
             UserEntity user4 = new UserEntity();
-            user4.setUserName("Buse Keklik");
-            user4.setPassword("buse123");
-            user4.setEmail("buse.keklik@etiya.com");
+            user4.setUserName("Enes Kasım");
+            user4.setPassword("enes123");
+            user4.setEmail("enes.kasim@etiya.com");
             user4.setActive(true);
-            user4.setTeam(team4);
-            user4.setRoles(Set.of(RoleType.BACKEND, RoleType.TEAM_LEADER));
+            user4.setTeam(team);
+            user4.setRoles(Set.of(RoleType.DEVOPS));
+            iUserRepository.save(user4);
 
             UserEntity user5 = new UserEntity();
-            user5.setUserName("Enes Kasım");
-            user5.setPassword("enes123");
-            user5.setEmail("enes.kasim@etiya.com");
+            user5.setUserName("Mehmet Emin");
+            user5.setPassword("mehmet123");
+            user5.setEmail("mehmet.emin@etiya.com");
             user5.setActive(true);
-            user5.setTeam(team4);
-            user5.setRoles(Set.of(RoleType.TEAM_LEADER));
-
-            iUserRepository.saveAll(List.of(user1, user2, user3, user4, user5));
+            user5.setTeam(team);
+            user5.setRoles(Set.of(RoleType.BACKEND));
+            iUserRepository.save(user5);
 
             // Create and save tasks with associated users
             TaskEntity task1 = new TaskEntity();
-            task1.setTaskName("Develop backend");
+            task1.setTaskName("Develop backend services for OMNI");
             task1.setStartDate(startDate);
             task1.setEndDate(endDate);
             task1.setManDays(10);
             task1.setCost(1000);
             task1.setSeverity(3);  // High
             task1.setProgress(50.0);
-            task1.setProject(project1);
-            task1.setSoftwareArchitects(Collections.singletonList(user1));  // Assign user1 as a software architect
+            task1.setProject(project);
+            task1.setSoftwareArchitects(Collections.singletonList(user1));  // Assign Buse Keklik as a software architect
+            iTaskRepository.save(task1);
 
             TaskEntity task2 = new TaskEntity();
-            task2.setTaskName("Develop frontend");
+            task2.setTaskName("Design frontend UI for OMNI");
             task2.setStartDate(startDate);
             task2.setEndDate(endDate);
-            task2.setManDays(20);
-            task2.setCost(2000);
+            task2.setManDays(8);
+            task2.setCost(800);
             task2.setSeverity(2);  // Medium
-            task2.setProgress(75.0);
-            task2.setProject(project2);
-            task2.setSolutionArchitects(Collections.singletonList(user2));  // Assign user2 as a solution architect
+            task2.setProgress(40.0);
+            task2.setProject(project);
+            task2.setSoftwareArchitects(Collections.singletonList(user2));  // Assign Erdem Önal as a software architect
+            iTaskRepository.save(task2);
 
             TaskEntity task3 = new TaskEntity();
-            task3.setTaskName("Design architecture");
+            task3.setTaskName("Integrate API for OMNI");
             task3.setStartDate(startDate);
             task3.setEndDate(endDate);
-            task3.setManDays(15);
-            task3.setCost(1500);
-            task3.setSeverity(4);  // Critical/Extreme
+            task3.setManDays(12);
+            task3.setCost(1200);
+            task3.setSeverity(3);  // High
             task3.setProgress(60.0);
-            task3.setProject(project3);
-            task3.setAnalysts(Collections.singletonList(user3));  // Assign user3 as an analyst
+            task3.setProject(project);
+            task3.setSoftwareArchitects(Collections.singletonList(user3));  // Assign Sude Gökçen as a software architect
+            iTaskRepository.save(task3);
 
             TaskEntity task4 = new TaskEntity();
-            task4.setTaskName("Optimize database");
+            task4.setTaskName("Setup CI/CD pipeline for OMNI");
             task4.setStartDate(startDate);
             task4.setEndDate(endDate);
-            task4.setManDays(25);
-            task4.setCost(2500);
-            task4.setSeverity(3);  // High
-            task4.setProgress(40.0);
-            task4.setProject(project4);
-            task4.setSoftwareArchitects(Collections.singletonList(user4));  // Assign user4 as a software architect
+            task4.setManDays(5);
+            task4.setCost(500);
+            task4.setSeverity(1);  // Low
+            task4.setProgress(70.0);
+            task4.setProject(project);
+            task4.setSoftwareArchitects(Collections.singletonList(user4));  // Assign Enes Kasım as a software architect
+            iTaskRepository.save(task4);
 
             TaskEntity task5 = new TaskEntity();
-            task5.setTaskName("DevOps");
+            task5.setTaskName("Database design for OMNI");
             task5.setStartDate(startDate);
             task5.setEndDate(endDate);
-            task5.setManDays(10);
-            task5.setCost(1000);
-            task5.setSeverity(3);  // High
-            task5.setProgress(50.0);
-            task5.setProject(project1);
-            task5.setSoftwareArchitects(Collections.singletonList(user1));  // Assign user1 as a software architect again
+            task5.setManDays(7);
+            task5.setCost(700);
+            task5.setSeverity(2);  // Medium
+            task5.setProgress(80.0);
+            task5.setProject(project);
+            task5.setSoftwareArchitects(Collections.singletonList(user5));  // Assign Mehmet Emin as a software architect
+            iTaskRepository.save(task5);
 
-            iTaskRepository.saveAll(List.of(task1, task2, task3, task4, task5));
+            // Create and save specific absences per user
+            // Absences for Buse Keklik
+            createAbsenceForUser(user1, 3, 7);
+            createAbsenceForUser(user1, 14, 18);
+            createAbsenceForUser(user1, 21, 25);
+
+            // Absences for Erdem Önal
+            createAbsenceForUser(user2, 5, 9);
+            createAbsenceForUser(user2, 12, 16);
+            createAbsenceForUser(user2, 19, 23);
+
+            // Absences for Sude Gökçen
+            createAbsenceForUser(user3, 7, 11);
+            createAbsenceForUser(user3, 14, 18);
+            createAbsenceForUser(user3, 21, 25);
+
+            // Absences for Enes Kasım
+            createAbsenceForUser(user4, 4, 8);
+            createAbsenceForUser(user4, 11, 15);
+            createAbsenceForUser(user4, 18, 22);
+
+            // Absences for Mehmet Emin
+            createAbsenceForUser(user5, 6, 10);
+            createAbsenceForUser(user5, 13, 17);
+            createAbsenceForUser(user5, 20, 24);
 
             // Create and save alerts
-            AlertEntity alert1 = new AlertEntity();
-            alert1.setAlertDate(new Date());
-            alert1.setMessage("Task deadline approaching");
-            alert1.setTask(task1);
-
-            AlertEntity alert2 = new AlertEntity();
-            alert2.setAlertDate(new Date());
-            alert2.setMessage("New task assigned");
-            alert2.setTask(task2);
-
-            iAlertRepository.saveAll(List.of(alert1, alert2));
+            AlertEntity alert = new AlertEntity();
+            alert.setAlertDate(new Date());
+            alert.setMessage("Task deadline approaching for OMNI project");
+            alert.setTask(task1);  // Example alert for the first task
+            iAlertRepository.save(alert);
         };
     }
+
+    private void createAbsenceForUser(UserEntity user, int startDay, int endDay) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.YEAR, 2024);
+        calendar.set(Calendar.MONTH, Calendar.JULY);
+
+        calendar.set(Calendar.DAY_OF_MONTH, startDay);
+        Date absenceStartDate = calendar.getTime();
+        calendar.set(Calendar.DAY_OF_MONTH, endDay);
+        Date absenceEndDate = calendar.getTime();
+
+        AbsenceEntity absence = new AbsenceEntity();
+        absence.setStartDate(absenceStartDate);
+        absence.setEndDate(absenceEndDate);
+        absence.setDescription("Personal leave");
+        absence.setType("Paid");
+        absence.setUser(user);
+        iAbsenceRepository.save(absence);
+    }
 }
+
+

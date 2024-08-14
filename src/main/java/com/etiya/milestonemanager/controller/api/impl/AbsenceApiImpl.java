@@ -11,17 +11,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// LOMBOK
 @RequiredArgsConstructor
 @Log4j2
-
-// API
 @RestController
-@CrossOrigin(origins = " http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/absence/api/v1")
 public class AbsenceApiImpl implements IAbsenceApi<AbsenceDto> {
 
     private final IAbsenceServices iAbsenceServices;
+
     @Override
     @DeleteMapping(value = "delete/all")
     public ResponseEntity<String> absenceApiAllDelete() {
@@ -31,31 +29,31 @@ public class AbsenceApiImpl implements IAbsenceApi<AbsenceDto> {
 
     @Override
     @PostMapping("/create")
-    public ResponseEntity<?> absenceApiCreate(AbsenceDto absenceDto) {
+    public ResponseEntity<?> absenceApiCreate(@RequestBody AbsenceDto absenceDto) {
         return ResponseEntity.ok(iAbsenceServices.absenceServiceCreate(absenceDto));
     }
 
     @Override
-    @GetMapping(value ="/list")
+    @GetMapping(value = "/list")
     public ResponseEntity<List<AbsenceDto>> absenceApiList() {
         return ResponseEntity.status(HttpStatus.OK).body(iAbsenceServices.absenceServiceList());
     }
 
     @Override
-    @GetMapping(value="/find/{id}")
+    @GetMapping(value = "/find/{id}")
     public ResponseEntity<?> absenceApiFindById(@PathVariable(name = "id") Long id) {
         return ResponseEntity.status(200).body(iAbsenceServices.absenceServiceFindById(id));
     }
 
     @Override
-    @PutMapping(value="/update/{id}")
-    public ResponseEntity<?> absenceApiUpdate(Long id, AbsenceDto absenceDto) {
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<?> absenceApiUpdate(@PathVariable Long id, @RequestBody AbsenceDto absenceDto) {
         return ResponseEntity.ok().body(iAbsenceServices.absenceServiceUpdateById(id, absenceDto));
     }
 
     @Override
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<?> absenceApiDeleteById(Long id) {
+    public ResponseEntity<?> absenceApiDeleteById(@PathVariable Long id) {
         return new ResponseEntity<>(iAbsenceServices.absenceServiceDeleteById(id), HttpStatus.OK);
     }
 }
