@@ -208,29 +208,29 @@ const ProjectTask = () => {
     const today = new Date();
 
     const options = {
-        height: 500,
+        height: 350,
         gantt: {
-            trackHeight: 40,
+            trackHeight: 60,
             criticalPathEnabled: true,
             criticalPathStyle: {
                 stroke: "#e64a19",
                 strokeWidth: 5,
             },
             arrow: {
-                angle: 100,
-                width: 5,
-                color: "green",
-                radius: 0,
+                angle: 999,
+                width: 1,
+                color: "red",
+                radius: 999,
             },
             innerGridTrack: { fill: "#e3f2fd" },
             innerGridDarkTrack: { fill: "#bbdefb" },
             innerGridHorizLine: {
                 stroke: "#90caf9",
-                strokeWidth: 2,
+                strokeWidth:5,
             },
             todayMarker: {
                 color: '#ff0000', // Bugünü gösteren çizgi için kırmızı renk
-                thickness: 2, // Çizginin kalınlığı
+                thickness: 1, // Çizginin kalınlığı
             },
         },
         hAxis: {
@@ -251,6 +251,18 @@ const ProjectTask = () => {
                 </div>
             </div>
 
+            {/* Gantt Chart Section */}
+            <div className="chart-wrapper">
+                <Chart
+                    chartType="Gantt"
+                    width="100%"
+                    height="350px"
+                    data={data}
+                    options={options}
+                />
+            </div>
+
+            {/* Task Editor Section */}
             <div className="task-editor">
                 <h3>Görev Düzenleme</h3>
                 <select value={selectedTask?.taskID || ''} onChange={handleTaskSelect}>
@@ -279,15 +291,7 @@ const ProjectTask = () => {
                 )}
             </div>
 
-            <Chart
-                chartType="Gantt"
-                width="100%"
-                height="500px"
-                data={data}
-                options={options}
-            />
-
-
+            {/* Modals for Editing and Deleting Tasks */}
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}
@@ -296,6 +300,7 @@ const ProjectTask = () => {
             >
                 <h2 className="modal-header">Görev Düzenleme</h2>
                 <div className="modal-body">
+                    {/* Form Inputs */}
                     <input
                         type="text"
                         name="taskName"
@@ -408,6 +413,6 @@ const ProjectTask = () => {
             <ToastContainer/>
         </div>
     );
-};
+}
 
-export default ProjectTask;
+    export default ProjectTask;

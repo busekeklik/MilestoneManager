@@ -9,7 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import java.io.Serializable;
 import java.util.Set;
 
-// lombok
+// Lombok annotations for generating boilerplate code
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,4 +29,7 @@ public class UserDto implements Serializable {
     private boolean isActive;
 
     private Set<RoleType> roles;
+
+    // Add this field to store the team ID
+    private Long teamId;
 }

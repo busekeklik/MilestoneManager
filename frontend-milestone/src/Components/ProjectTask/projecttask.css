@@ -6,7 +6,7 @@
 }
 
 .tasks-title-bar {
-    width: 80%;
+    width: 30%;
     text-align: center;
     background-color: #FFD0AE;
     padding: 10px;
@@ -22,16 +22,16 @@
 
 .redirect-button, .close-button, .task-button {
     display: block;
-    margin: 20px auto;
-    padding: 15px 30px;
-    font-size: 18px;
+    margin: 10px auto; /* Reduced margin for more compact spacing */
+    padding: 12px 25px; /* Slightly reduced padding for a neater look */
+    font-size: 16px; /* Adjusted font size */
     font-weight: bold;
     color: #fff;
     background-color: #BC6D33;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px; /* Reduced border radius for a sleeker button */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform for button interaction */
     text-align: center;
 }
 
@@ -41,13 +41,14 @@
 
 .redirect-button:hover, .close-button:hover, .task-button:hover {
     background-color: #A0522D;
+    transform: translateY(-2px); /* Slight upward movement on hover */
 }
 
 .task-editor {
-    width: 80%;
-    margin: 20px auto;
+    width: 60%; /* Reduced width for a more compact appearance */
+    margin: 0 auto 20px; /* Reduced margin between sections */
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 10px; /* Reduced border radius for a more modern look */
     background: linear-gradient(to right, #FFD0AE, #FFE7D6);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
@@ -58,12 +59,31 @@
     text-align: center;
     margin-bottom: 20px;
     color: #102660;
+    font-size: 20px; /* Adjusted font size */
+}
+
+.task-editor select {
+    width: 40%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border-radius: 10px; /* Rounded select box */
+    border: 2px solid #BC6D33; /* Border matching the button color */
+    background-color: #FFE7D6;
+    color: #102660;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.task-editor select:focus {
+    border-color: #A0522D; /* Darker border on focus */
+    background-color: #FFD0AE; /* Background change on focus */
+    outline: none;
 }
 
 .task-action-buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 15px; /* Increased gap for better spacing */
 }
 
 /* Small Modal Styling */
@@ -71,7 +91,7 @@
     background: #fff;
     padding: 20px;
     width: 400px;
-    border-radius: 20px;
+    border-radius: 10px; /* Reduced border radius for a cleaner look */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     overflow: auto;
 }
@@ -99,13 +119,14 @@
 .modal-body {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px; /* Increased gap for better spacing */
+    align-items: center;
 }
 
 .delete-confirm-buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 15px; /* Increased gap for better spacing */
 }
 
 .modal-body input,
@@ -114,17 +135,11 @@
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 10px;
+    width: 100%; /* Ensure full width */
 }
 
 .user-selectors .form-group {
     margin-bottom: 10px;
-}
-
-.modal-body {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center; /* This centers the contents horizontally */
 }
 
 .save-button {
@@ -132,15 +147,44 @@
     color: black;
     border: none;
     border-radius: 10px;
-    padding: 10px 20px; /* Add padding to make the button visually balanced */
+    padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     margin-top: 15px;
     transition: background-color 0.3s;
-    text-align: center; /* Ensure text is centered within the button */
+    text-align: center;
 }
 
 .save-button:hover {
     background-color: #FFE7D6;
 }
 
+/* Chart Wrapper */
+.chart-wrapper {
+    margin-bottom: 0px; /* Removed margin to bring sections closer */
+    padding: 0px; /* Removed padding */
+    background-color: transparent; /* Removed background color */
+    border-radius: 0px; /* Removed border radius */
+    box-shadow: none; /* Removed box shadow */
+}
+
+/* Gantt Chart Specific Styles */
+.google-visualization-ganttchart-table {
+    border: none; /* Removed border around Gantt chart */
+}
+
+.google-visualization-ganttchart-row {
+    background-color: transparent; /* Transparent background for rows */
+}
+
+.google-visualization-ganttchart-bar {
+    stroke-width: 0; /* Removed bar borders */
+}
+
+.google-visualization-ganttchart-critical-path {
+    stroke-width: 0; /* Removed critical path line border */
+}
+
+.google-visualization-ganttchart-legend {
+    display: none; /* Hide the legend if unnecessary */
+}

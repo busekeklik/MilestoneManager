@@ -1,0 +1,110 @@
+/* Modal Background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensures the modal is on top of other elements */
+}
+
+/* Modal Container */
+.popup-container {
+    background: linear-gradient(to right, #FFD0AE, #FFE7D6);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    max-width: 90%;
+    z-index: 1001; /* Ensure it's above the overlay */
+}
+
+/* Form Header */
+.popup-form-header h1 {
+    text-align: center;
+    color: black;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Form Fields */
+.popup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group .react-select__control {
+    padding: 2px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.popup-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: #314B8E;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.popup-buttons button:hover {
+    background-color: #1e3a8a;
+}
+
+.popup-buttons button:nth-child(2) {
+    background-color: #FF6347;
+}
+
+.popup-buttons button:nth-child(2):hover {
+    background-color: #FF4500;
+}
+
+.popup-buttons button:nth-child(3) {
+    background-color: #ccc;
+    color: black;
+}
+
+.popup-buttons button:nth-child(3):hover {
+    background-color: #bbb;
+}

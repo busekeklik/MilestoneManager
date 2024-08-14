@@ -3,21 +3,24 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    align-items: center;
+    background-color: #F9F9F9;
 }
 
 .team-page-header {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: #102660;
 }
 
 .team-page-header h1 {
-    font-size: 24px;
+    font-size: 32px;
     background: linear-gradient(to right, #F4BC93, #FFE7D6);
-    padding: 10px 80px;
+    padding: 15px 100px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .navigation-buttons {
@@ -30,42 +33,44 @@
     background-color: #1e3a8a;
     color: white;
     border: none;
-    padding: 5px;
-    width: 50px;
+    padding: 5px 10px; /* Button width */
     margin: 0 5px;
-    border-radius: 20px;
+    border-radius: 50px;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 18px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .navigation-buttons button:hover {
     background-color: #314B8E;
+    transform: scale(1.05);
 }
 
 .team-table-container {
+    width: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     border-radius: 20px;
     overflow-x: auto;
 }
 
 .team-table {
-    width: 100%;
-    min-width: 800px;
+    width: 90%;
     border-collapse: collapse;
     background-color: #FFD5B6;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-size: 18px;
     table-layout: fixed;
+    overflow: hidden;
 }
 
 .team-table th, .team-table td {
     border: 1px solid #fff;
-    padding: 5px;
-    text-align: left;
-    height: 80px;
+    padding: 15px;
+    text-align: center;
+    height: 60px;
 }
 
 .team-table th {
@@ -74,58 +79,168 @@
     font-weight: bold;
 }
 
+.weekend {
+    background-color: #D38E60 !important;
+}
+
 .team-table th:nth-child(1),
 .team-table td:nth-child(1) {
-    width: 150px;
+    width: 200px;
+    text-align: left;
 }
 
 .team-table th:nth-child(2),
 .team-table td:nth-child(2) {
-    width: 100px;
+    width: 150px;
+    text-align: left;
 }
 
 .team-table th:nth-child(3),
 .team-table td:nth-child(3) {
-    width: 200px;
+    width: 250px;
+    text-align: left;
 }
 
 .team-table th:nth-child(4),
 .team-table td:nth-child(4) {
-    width: 80px;
+    width: 100px;
 }
 
-.weekend {
-    background-color:#D38E60;
+.status-icon {
+    font-size: 24px;
+    border-radius: 50%; /* Rounded icon background */
+    padding: 5px;
 }
 
-.team-table .today {
-    border-left: 2px solid red;
-    border-right: 2px solid red;
+.status-icon.active {
+    color: #ffffff;
+    background-color: #5E83C2; /* Blue background for active status */
 }
 
-.team-table th.today {
-    border-top: 2px solid red;
-}
-
-.team-table tr:last-child td.today {
-    border-bottom: 2px solid red;
+.status-icon.inactive {
+    color: #ffffff;
+    background-color: #F08080; /* Coral background for inactive status */
 }
 
 @media (max-width: 768px) {
-    .team-page {
-        flex-direction: column;
-        align-items: center;
+    .team-table-container {
+        width: 100%;
+        padding: 0 10px;
     }
 
     .team-table {
-        width: 100%;
         min-width: 1200px;
     }
-
-    .team-table-container {
-        width: 100%;
-        overflow-x: auto;
-        padding: 0 10px;
-        margin-bottom: 20px;
-    }
 }
+
+.team-page-footer {
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.team-page-footer button {
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.team-page-footer button:hover {
+    background-color: #314B8E;
+    transform: scale(1.05);
+}
+
+.user-select {
+    width: 200px;
+    margin: 10px;
+}
+
+.user-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.user-popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.user-popup-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"], /* Added password input style */
+.form-group input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.popup-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.popup-buttons button:hover {
+    background-color: #ddd;
+}
+
+td button {
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #FFA500;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+td button:hover {
+    background-color: #FF8C00;
+}
+
+

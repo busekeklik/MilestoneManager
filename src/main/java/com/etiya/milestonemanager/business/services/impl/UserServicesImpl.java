@@ -4,7 +4,9 @@ import com.etiya.milestonemanager.bean.ModelMapperBean;
 import com.etiya.milestonemanager.business.dto.UserDto;
 import com.etiya.milestonemanager.business.services.IUserServices;
 import com.etiya.milestonemanager.data.entity.RoleType;
+import com.etiya.milestonemanager.data.entity.TeamEntity;
 import com.etiya.milestonemanager.data.entity.UserEntity;
+import com.etiya.milestonemanager.data.repository.ITeamRepository;
 import com.etiya.milestonemanager.data.repository.IUserRepository;
 import com.etiya.milestonemanager.exception.Auth404Exception;
 import com.etiya.milestonemanager.exception.GeneralException;
@@ -26,16 +28,23 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
 
     private final ModelMapperBean modelMapperBean;
     private final IUserRepository iUserRepository;
+    private final ITeamRepository iTeamRepository;  // Add this to fetch teams
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto entityToDto(UserEntity userEntity) {
-        return modelMapperBean.getModelMapperMethod().map(userEntity, UserDto.class);
+        UserDto userDto = modelMapperBean.getModelMapperMethod().map(userEntity, UserDto.class);
+        userDto.setTeamId(userEntity.getTeam().getTeamID());
+        return userDto;
     }
 
     @Override
     public UserEntity dtoToEntity(UserDto userDto) {
-        return modelMapperBean.getModelMapperMethod().map(userDto, UserEntity.class);
+        UserEntity userEntity = modelMapperBean.getModelMapperMethod().map(userDto, UserEntity.class);
+        TeamEntity teamEntity = iTeamRepository.findById(userDto.getTeamId())
+                .orElseThrow(() -> new GeneralException("Team not found with ID: " + userDto.getTeamId()));
+        userEntity.setTeam(teamEntity);
+        return userEntity;
     }
 
     @Override
@@ -47,8 +56,15 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
     @Transactional
     public UserDto userServiceCreate(UserDto userDto) {
         if (userDto != null) {
+            // Set default team_id if not provided
+            if (userDto.getTeamId() == null) {
+                userDto.setTeamId(1L);
+            }
+
             UserEntity userEntity = dtoToEntity(userDto);
-            userEntity.setPassword(passwordEncoder.encode(userDto.getPassword())); // Hash the password
+
+            // Hash the password
+            userEntity.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
             // Handle multiple roles
             Set<RoleType> roles = new HashSet<>(userDto.getRoles());
@@ -84,13 +100,13 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
 
     @Override
     public UserDto userServiceFindById(Long id) {
-        UserEntity userEntity = null;
-        if (id != null) {
-            userEntity = iUserRepository.findById(id)
-                    .orElseThrow(() -> new Auth404Exception(id + " nolu veri yoktur"));
-        } else {
+        if (id == null) {
             throw new GeneralException("user id null");
         }
+
+        UserEntity userEntity = iUserRepository.findById(id)
+                .orElseThrow(() -> new Auth404Exception(id + " nolu veri yoktur"));
+
         return entityToDto(userEntity);
     }
 
@@ -100,14 +116,26 @@ public class UserServicesImpl implements IUserServices<UserDto, UserEntity> {
         UserDto updateUserDto = userServiceFindById(id);
         if (updateUserDto != null) {
             UserEntity userEntity = dtoToEntity(updateUserDto);
+
             userEntity.setUserName(userDto.getUserName());
             userEntity.setEmail(userDto.getEmail());
-            userEntity.setPassword(passwordEncoder.encode(userDto.getPassword())); // Hash the password
+
+            if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+                userEntity.setPassword(passwordEncoder.encode(userDto.getPassword())); // Hash the password
+            }
+
             userEntity.setActive(userDto.isActive());
 
             // Update roles
             Set<RoleType> roles = new HashSet<>(userDto.getRoles());
             userEntity.setRoles(roles);
+
+            // Set team_id, ensuring it doesn't get overwritten to null
+            if (userDto.getTeamId() != null) {
+                TeamEntity teamEntity = iTeamRepository.findById(userDto.getTeamId())
+                        .orElseThrow(() -> new GeneralException("Team not found with ID: " + userDto.getTeamId()));
+                userEntity.setTeam(teamEntity);
+            }
 
             iUserRepository.save(userEntity);
             return entityToDto(userEntity);

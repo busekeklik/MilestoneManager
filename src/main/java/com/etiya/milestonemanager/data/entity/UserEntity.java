@@ -36,7 +36,7 @@ public class UserEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "team_id", nullable = false)
-    private TeamEntity team;
+    private TeamEntity team;  // Maps to team_id
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AbsenceEntity> absences;
