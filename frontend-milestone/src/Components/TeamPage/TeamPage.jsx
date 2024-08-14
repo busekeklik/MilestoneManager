@@ -1,44 +1,101 @@
-import React, { useState } from 'react';
-import { addDays, format, startOfWeek, subDays, isWeekend, isSameDay, startOfDay } from 'date-fns';
-import './TeamPage.css';
+import React, { useEffect, useState } from 'react';
+import { addDays, format, startOfWeek, subDays, isWeekend } from 'date-fns';
 import { tr } from 'date-fns/locale';
+import './TeamPage.css';
 
 const TeamPage = () => {
     const [startDate, setStartDate] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
+    const [teams, setTeams] = useState([]);
 
-    const handlePrevWeek = () => {
-        setStartDate(subDays(startDate, 14));
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [teamResponse, userResponse, absenceResponse, taskResponse] = await Promise.all([
+                    fetch('http://localhost:3307/team/api/v1/list'),
+                    fetch('http://localhost:3307/user/api/v1/list'),
+                    fetch('http://localhost:3307/absence/api/v1/list'),
+                    fetch('http://localhost:3307/task/api/v1/list')
+                ]);
 
-    const handleNextWeek = () => {
-        setStartDate(addDays(startDate, 14));
-    };
+                const teamsData = await teamResponse.json();
+                const usersData = await userResponse.json();
+                const absencesData = await absenceResponse.json();
+                const tasksData = await taskResponse.json();
 
-    const renderHeader = () => {
-        const days = [];
-        const today = startOfDay(new Date());
-        for (let i = 0; i < 14; i++) {
-            const date = addDays(startDate, i);
-            const weekendClass = isWeekend(date) ? 'weekend' : '';
-            const todayClass = isSameDay(date, today) ? 'today' : '';
-            days.push(
-                <th key={i} className={`${weekendClass} ${todayClass}`}>
-                    {format(date, 'MMM d', { locale: tr })}
-                </th>
+                // Map tasks and absences to users
+                const teamsWithTasksAndAbsences = teamsData.map(team => {
+                    const updatedMembers = team.members.map(member => {
+                        const userTasks = tasksData.filter(task => {
+                            return task.softwareArchitectIds.includes(member.userID);
+                        }).map(task => ({
+                            taskName: task.taskName,
+                            progress: task.progress
+                        }));
+
+                        // Filter absences specifically for this member
+                        const userAbsences = absencesData
+                            .filter(absence => absence.userId === member.userID) // Ensure absences are specific to the user
+                            .map(absence => ({
+                                start: new Date(absence.startDate),
+                                end: new Date(absence.endDate),
+                                status: true
+                            }));
+
+                        return {
+                            ...member,
+                            tasks: userTasks,
+                            activeRanges: userAbsences
+                        };
+                    });
+
+                    return {
+                        ...team,
+                        members: updatedMembers
+                    };
+                });
+
+                setTeams(teamsWithTasksAndAbsences);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [startDate]); // Add startDate as a dependency to refetch data when it changes
+
+    const handlePrevWeek = () => setStartDate(prevDate => subDays(prevDate, 7));
+    const handleNextWeek = () => setStartDate(prevDate => addDays(prevDate, 7));
+
+    const renderWeekDaysHeader = () => [...Array(7)].map((_, i) => (
+        <th key={i} className={isWeekend(addDays(startDate, i)) ? 'weekend' : ''}>
+            {format(addDays(startDate, i), 'EEE, dd MMM', { locale: tr })}
+        </th>
+    ));
+
+    const renderCustomRowCells = (member) => {
+        return [...Array(7)].map((_, i) => {
+            const day = addDays(startDate, i);
+
+            // Check if the day is a weekend
+            const isDayWeekend = isWeekend(day);
+
+            // Check if the day falls on or within any absence period (including the start date)
+            const isDayInAbsenceRange = member.activeRanges && member.activeRanges.some(range => {
+                return day >= range.start && day <= range.end;
+            });
+
+            // If it's a weekend or within an absence range, mark as Inactive
+            const isActive = !isDayWeekend && !isDayInAbsenceRange;
+
+            return (
+                <td
+                    key={i}
+                    className={isDayWeekend ? 'weekend' : ''}
+                    style={{ backgroundColor: isActive ? '#5E83C2' : '#F08080' }} // Active: Blue, Inactive: Light Coral
+                >
+                    {isActive ? 'Active' : 'Inactive'}
+                </td>
             );
-        }
-        return days;
-    };
-
-    const renderCustomRowCells = (ranges) => {
-        const today = startOfDay(new Date());
-        return Array.from({ length: 14 }, (_, i) => {
-            const date = addDays(startDate, i);
-            const weekendClass = isWeekend(date) ? 'weekend' : '';
-            const todayClass = isSameDay(date, today) ? 'today' : '';
-            const isActive = ranges.some(range => i >= range.start && i <= range.end);
-            const style = isActive ? { backgroundColor: '#5E83C2' } : {};
-            return <td key={i} className={`${weekendClass} ${todayClass}`} style={style}></td>;
         });
     };
 
@@ -46,55 +103,35 @@ const TeamPage = () => {
         <div className="team-page">
             <div className="team-page-header">
                 <h1>EKİBİM</h1>
+                <div className="navigation-buttons">
+                    <button onClick={handlePrevWeek}>&#8592;</button>
+                    <button onClick={handleNextWeek}>&#8594;</button>
+                </div>
             </div>
-            <div className="navigation-buttons">
-                <button onClick={handlePrevWeek}>&#8592;</button>
-                <button onClick={handleNextWeek}>&#8594;</button>
-            </div>
-            <div className="team-table-container">
-                <table className="team-table">
-                    <thead>
-                    <tr>
-                        <th>Ekip Üyeleri</th>
-                        <th>Rolü</th>
-                        <th>Task</th>
-                        <th>Task İlerleyiş</th>
-                        {renderHeader()}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>Sude Yenidünya</td>
-                        <td>Frontend Dev</td>
-                        <td>Task A</td>
-                        <td>Devam Ediyor</td>
-                        {renderCustomRowCells([{start: 0, end: 3}])}
-                    </tr>
-                    <tr>
-                        <td>Buse Keklik</td>
-                        <td>Backend Dev</td>
-                        <td>Task B</td>
-                        <td>Devam Ediyor</td>
-                        {renderCustomRowCells([{start: 8, end: 10}])}
-                    </tr>
-                    <tr>
-                        <td>Erdem Önal</td>
-                        <td>Backend Dev</td>
-                        <td>Task C</td>
-                        <td>Devam Ediyor</td>
-                        {renderCustomRowCells([{start: 2, end: 4}])}
-                    </tr>
-                    <tr>
-                        <td>Mehmet Emin Emre</td>
-                        <td>Frontend Dev</td>
-                        <td>Task D</td>
-                        <td>Devam Ediyor</td>
-                        {renderCustomRowCells([{start: 7, end: 10}])}
-                    </tr>
-
-                    </tbody>
-                </table>
-            </div>
+            <table className="team-table">
+                <thead>
+                <tr>
+                    <th>Ekip Üyeleri</th>
+                    <th>Rolü</th>
+                    <th>Task</th>
+                    <th>Task İlerleyiş</th>
+                    {renderWeekDaysHeader()}
+                </tr>
+                </thead>
+                <tbody>
+                {teams.length > 0 ? teams.map(team =>
+                    team.members.map((member, index) => (
+                        <tr key={index}>
+                            <td>{member.userName}</td>
+                            <td>{member.roles.join(', ')}</td>
+                            <td>{member.tasks.map(task => task.taskName).join(', ')}</td>
+                            <td>{member.tasks.map(task => `${task.progress}%`).join(', ')}</td>
+                            {renderCustomRowCells(member)}
+                        </tr>
+                    ))
+                ) : <tr><td colSpan="11">Loading team data...</td></tr>}
+                </tbody>
+            </table>
         </div>
     );
 };
