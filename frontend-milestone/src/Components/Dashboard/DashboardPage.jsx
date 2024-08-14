@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
 import axios from 'axios';
-import { CSVLink } from "react-csv";
-import { FaFileCsv, FaFileDownload } from 'react-icons/fa';
+import { FaFileExcel, FaFileDownload } from 'react-icons/fa';
+import { writeFile, utils } from 'xlsx';
 import './DashboardPage.css';
 
 const DashboardPage = () => {
@@ -136,6 +136,35 @@ const DashboardPage = () => {
         link.click();
     };
 
+    const downloadExcel = () => {
+        // Map IDs to their corresponding names for each role in the task and remove projectId and dependencyIds
+        const exportData = sortedTasks.map(task => ({
+            taskID: task.taskID,
+            taskName: task.taskName,
+            startDate: task.startDate,
+            endDate: task.endDate,
+            manDays: task.manDays,
+            cost: task.cost,
+            severity: task.severity,
+            progress: task.progress,
+            analystNames: (task.analystIds || []).map(id => getMemberNameById(id)).join(','), // Convert IDs to names
+            solutionArchitectNames: (task.solutionArchitectIds || []).map(id => getMemberNameById(id)).join(','), // Convert IDs to names
+            softwareArchitectNames: (task.softwareArchitectIds || []).map(id => getMemberNameById(id)).join(',') // Convert IDs to names
+            // Note: projectId and dependencyIds are not included
+        }));
+
+        const worksheet = utils.json_to_sheet(exportData);
+        const workbook = utils.book_new();
+        utils.book_append_sheet(workbook, worksheet, "Tasks");
+        writeFile(workbook, "tasks.xlsx");
+    };
+
+    // Helper function to get member name by ID
+    const getMemberNameById = (id) => {
+        const member = members.find(member => member.userID === id);
+        return member ? member.userName : 'Unknown';
+    };
+
     return (
         <main className="dashboard-main">
             <section className="task-table">
@@ -188,11 +217,11 @@ const DashboardPage = () => {
                 </div>
             </section>
             <section className="download-buttons">
-                <CSVLink data={sortedTasks} filename={"tasks.csv"} className="download-button">
-                    <FaFileCsv/> CSV
-                </CSVLink>
+                <button onClick={downloadExcel} className="download-button">
+                    <FaFileExcel /> Excel
+                </button>
                 <button onClick={downloadJSON} className="download-button">
-                    <FaFileDownload/> JSON
+                    <FaFileDownload /> JSON
                 </button>
             </section>
         </main>
