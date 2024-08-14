@@ -3,11 +3,9 @@ import './title.css';
 
 const Title = () => {
     return (
-        <div className="group">
-            <div className="overlap-group-2">
-                <div className="text-wrapper-5">PROJELER</div>
+            <div className='tasks-title-wrapper'>
+                    <h1>Projeler</h1>
             </div>
-        </div>
     );
 };
 
