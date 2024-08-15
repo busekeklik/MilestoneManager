@@ -44,3 +44,16 @@
     font-size: 1.2em;
     font-family: Calibri;
 }
+
+.close-button {
+    position: absolute;
+    top: 10px;  /* Adjust as needed for visual alignment */
+    right: 10px;  /* Adjust as needed for visual alignment */
+    border: none;
+    background: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #0c0c0c;  /* Ensure this color contrasts well with the background for visibility */
+    padding: 5px;
+}
+
