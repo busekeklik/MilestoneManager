@@ -8,6 +8,10 @@
     transition: padding-left 0.3s ease;
 }
 
+body {
+    background-color: #FFF5ED;
+}
+
 .task-table {
     flex: 2;
     background-color: #51618FFF;
@@ -21,6 +25,24 @@
 .task-table table {
     width: 100%;
     border-collapse: collapse;
+}
+
+.task-table th {
+    background-color: #1e3a8a;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 24px; /* Tasklar başlığını büyüttüm */
+    padding: 12px;
+    text-align: left;
+}
+
+.task-table td {
+    background-color: #51618FFF;
+    color: white;
+    font-size: 16px;
+    border: 1px solid #fff;
+    padding: 12px;
+    text-align: left;
 }
 
 .download-buttons {
@@ -58,28 +80,10 @@
     width: 16px;
     height: 16px;
 }
+
 .download-button:hover {
     background-color: #213ea3;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.task-table th,
-.task-table td {
-    border: 1px solid #fff;
-    padding: 12px;
-    text-align: left;
-}
-
-.task-table th {
-    background-color: #1e3a8a;
-    color: #ffffff;
-    font-weight: bold;
-}
-
-.task-table td {
-    background-color: #51618FFF;
-    color: #000000;
-    font-size: 16px;
 }
 
 .chart {
@@ -101,15 +105,21 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 0 10px;
+    background-color: #BC6D33;
+    border-radius: 20px;
+    padding: 15px 10px;
     margin-bottom: 10px;
     font-weight: bold;
 }
 
 .member-task-list {
     list-style-type: none;
-    padding: 0;
     width: 100%;
+    margin-top: -2px;
+    background-color:#FFEADA;
+    padding: 15px 10px;
+    color: black;
+    border-radius: 20px;
     text-align: left;
 }
 

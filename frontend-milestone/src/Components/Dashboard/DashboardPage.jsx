@@ -82,8 +82,14 @@ const DashboardPage = () => {
     ];
 
     const options = {
-        title: 'Tasklar',
         pieHole: 0.4,
+        backgroundColor: 'transparent', // Arka plan rengini şeffaf yapıyoruz
+        chartArea: { left: 20, top: 20, right: 20, bottom: 20 }, // Grafik alanı kenar boşlukları
+        legend: {
+            textStyle: {
+                color: '#333', // Legend metin rengi
+            },
+        },
     };
 
     const handleSort = (key) => {
