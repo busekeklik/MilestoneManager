@@ -11,6 +11,7 @@ import { fetchTasks, updateTask, fetchUsers } from "./Data"; // Import your data
 const ProjectTask = () => {
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
+    const [deletedTasks, setDeletedTasks] = useState([]); // Track deleted tasks locally
     const [selectedTask, setSelectedTask] = useState(null);
     const [updatedTask, setUpdatedTask] = useState({});
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -158,8 +159,13 @@ const ProjectTask = () => {
             toast.error('Yanlış görev adı girdiniz. Lütfen tekrar deneyin.');
             return;
         }
-        setTasks(prevTasks => prevTasks.filter(task => task.taskID !== selectedTask.taskID));
+
+        // Mark the task as deleted locally
+        setDeletedTasks(prevDeletedTasks => [...prevDeletedTasks, selectedTask.taskID]);
+
+        // Optionally, you can also clear the selectedTask state
         setSelectedTask(null);
+
         setConfirmModalIsOpen(false);
         toast.success('Görev başarıyla silindi!');
     };
@@ -192,17 +198,19 @@ const ProjectTask = () => {
             { type: "string", label: "Dependencies" },
             { type: "string", label: "Color" },
         ],
-        ...tasks.map((task) => [
-            task.taskID.toString(),
-            task.taskName,
-            null,
-            new Date(task.startDate),
-            new Date(task.endDate),
-            null,
-            task.progress,
-            Array.isArray(task.dependencyIds) ? task.dependencyIds.join(', ') : '',
-            severityColors[task.severity]
-        ]),
+        ...tasks
+            .filter(task => !deletedTasks.includes(task.taskID)) // Exclude deleted tasks
+            .map((task) => [
+                task.taskID.toString(),
+                task.taskName,
+                null,
+                new Date(task.startDate),
+                new Date(task.endDate),
+                null,
+                task.progress,
+                Array.isArray(task.dependencyIds) ? task.dependencyIds.join(', ') : '',
+                severityColors[task.severity]
+            ]),
     ];
 
     const today = new Date();
@@ -267,11 +275,13 @@ const ProjectTask = () => {
                 <h3>Görev Düzenleme</h3>
                 <select value={selectedTask?.taskID || ''} onChange={handleTaskSelect}>
                     <option value="" disabled>Görev Seçin</option>
-                    {tasks.map(task => (
-                        <option key={task.taskID} value={task.taskID}>
-                            {task.taskName}
-                        </option>
-                    ))}
+                    {tasks
+                        .filter(task => !deletedTasks.includes(task.taskID)) // Exclude deleted tasks
+                        .map(task => (
+                            <option key={task.taskID} value={task.taskID}>
+                                {task.taskName}
+                            </option>
+                        ))}
                 </select>
 
                 {!selectedTask && (
@@ -415,4 +425,4 @@ const ProjectTask = () => {
     );
 }
 
-    export default ProjectTask;
+export default ProjectTask;

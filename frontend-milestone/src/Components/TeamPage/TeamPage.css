@@ -89,15 +89,21 @@
     text-align: left;
 }
 
+.team-table th:nth-child(1),
+.team-table td:nth-child(1) {
+    width: 110px;
+    text-align: left;
+}
+
 .team-table th:nth-child(2),
 .team-table td:nth-child(2) {
-    width: 150px;
+    width: 210px;
     text-align: left;
 }
 
 .team-table th:nth-child(3),
 .team-table td:nth-child(3) {
-    width: 250px;
+    width: 220px;
     text-align: left;
 }
 
@@ -119,7 +125,20 @@
 
 .status-icon.inactive {
     color: #ffffff;
-    background-color: #F08080; /* Coral background for inactive status */
+    background-color: #FF0000FF; /* Coral background for inactive status */
+}
+
+.team-table .today {
+    border-left: 2px solid red;
+    border-right: 2px solid red;
+}
+
+.team-table th.today {
+    border-top: 2px solid red;
+}
+
+.team-table tr:last-child td.today {
+    border-bottom: 2px solid red;
 }
 
 @media (max-width: 768px) {
@@ -242,5 +261,3 @@ td button {
 td button:hover {
     background-color: #FF8C00;
 }
-
-

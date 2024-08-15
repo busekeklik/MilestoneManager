@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { addDays, format, startOfWeek, subDays, isWeekend } from 'date-fns';
+import { addDays, format, startOfWeek, subDays, isWeekend, isSameDay, startOfDay } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import Select from 'react-select';  // Import React Select component
@@ -116,24 +116,39 @@ const TeamPage = () => {
 
     const closePopup = () => setIsPopupOpen(false);
 
-    const renderWeekDaysHeader = () => [...Array(7)].map((_, i) => (
-        <th key={i} className={isWeekend(addDays(startDate, i)) ? 'weekend' : ''}>
-            {format(addDays(startDate, i), 'EEE, dd MMM', { locale: tr })}
-        </th>
-    ));
+    const renderWeekDaysHeader = () => {
+        const today = startOfDay(new Date());
+        return [...Array(7)].map((_, i) => {
+            const day = addDays(startDate, i);
+            const isToday = isSameDay(day, today);
+            const weekendClass = isWeekend(day) ? 'weekend' : '';
+            const todayClass = isToday ? 'today' : '';
 
-    const renderCustomRowCells = (member) => [...Array(7)].map((_, i) => {
-        const day = addDays(startDate, i);
-        const isDayWeekend = isWeekend(day);
-        const isDayInAbsenceRange = member.activeRanges && member.activeRanges.some(range => day >= range.start && day <= range.end);
-        const isActive = !isDayWeekend && !isDayInAbsenceRange;
+            return (
+                <th key={i} className={`${weekendClass} ${todayClass}`}>
+                    {format(day, 'EEE, dd MMM', { locale: tr })}
+                </th>
+            );
+        });
+    };
 
-        return (
-            <td key={i} className={isDayWeekend ? 'weekend' : ''}>
-                {isActive ? <FaCheckCircle className="status-icon active" /> : <FaTimesCircle className="status-icon inactive" />}
-            </td>
-        );
-    });
+    const renderCustomRowCells = (member) => {
+        const today = startOfDay(new Date());
+        return [...Array(7)].map((_, i) => {
+            const day = addDays(startDate, i);
+            const isDayWeekend = isWeekend(day);
+            const isDayInAbsenceRange = member.activeRanges && member.activeRanges.some(range => day >= range.start && day <= range.end);
+            const isActive = !isDayWeekend && !isDayInAbsenceRange;
+            const isToday = isSameDay(day, today);
+            const todayClass = isToday ? 'today' : '';
+
+            return (
+                <td key={i} className={`${isDayWeekend ? 'weekend' : ''} ${todayClass}`}>
+                    {isActive ? <FaCheckCircle className="status-icon active" /> : <FaTimesCircle className="status-icon inactive" />}
+                </td>
+            );
+        });
+    };
 
     return (
         <div className="team-page">

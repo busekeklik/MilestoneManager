@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './PopupModal.css';
 
 const PopupModal = ({ isOpen, onClose }) => {
     const [alert, setAlert] = useState(null); // State to hold the first alert
+    const navigate = useNavigate(); // Initialize the useNavigate hook
 
     useEffect(() => {
         if (isOpen) {
             const fetchAlert = async () => {
                 try {
-                    const response = await fetch('http://localhost:3307/alert/api/v1/list'); // Replace with your API base URL
+                    const response = await fetch('http://localhost:3307/alert/api/v1/list');
                     const data = await response.json();
 
                     if (data.length > 0) {
@@ -31,6 +33,11 @@ const PopupModal = ({ isOpen, onClose }) => {
         }
     }, [isOpen]);
 
+    const handleGoToTask = () => {
+        onClose();  // Close the modal before navigating
+        navigate('/projects'); // Navigate to the tasks page
+    };
+
     if (!isOpen || !alert) return null;
 
     return (
@@ -40,7 +47,7 @@ const PopupModal = ({ isOpen, onClose }) => {
                 <h2>{alert.message}</h2>
                 <p>{new Date(alert.alertDate).toLocaleString()}</p>
                 <p><strong>İlişkili olduğu Task:</strong> {alert.taskName}</p>
-                <button onClick={onClose} className="popup-button">
+                <button onClick={handleGoToTask} className="popup-button">
                     Task'a git
                 </button>
             </div>

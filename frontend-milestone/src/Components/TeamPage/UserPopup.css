@@ -1,3 +1,4 @@
+
 /* Modal Background */
 .modal-overlay {
     position: fixed;
@@ -28,7 +29,7 @@
     text-align: center;
     color: black;
     margin-bottom: 20px;
-    font-size: 24px;
+    font-size: 30px;
 }
 
 /* Form Fields */
@@ -47,7 +48,7 @@
     margin-bottom: 5px;
     color: black;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 24px;
 }
 
 .form-group input[type="text"],
@@ -88,12 +89,15 @@
     transition: background-color 0.3s ease;
 }
 
-.popup-buttons button:hover {
+.popup-buttons button:nth-child(1){
     background-color: #1e3a8a;
+}
+.popup-buttons button:nth-child(1):hover{
+    background-color: #37509c;
 }
 
 .popup-buttons button:nth-child(2) {
-    background-color: #FF6347;
+    background-color: red;
 }
 
 .popup-buttons button:nth-child(2):hover {
@@ -108,3 +112,4 @@
 .popup-buttons button:nth-child(3):hover {
     background-color: #bbb;
 }
+ 

@@ -32,17 +32,17 @@ const DashboardPage = () => {
 
     const getMemberNames = (task) => {
         const memberIds = [
-            ...(task.analystIds || []).map(id => ({ id, role: 'A' })),
-            ...(task.solutionArchitectIds || []).map(id => ({ id, role: 'ÇM' })),
-            ...(task.softwareArchitectIds || []).map(id => ({ id, role: 'YM' }))
+            ...(task.analystIds || []),
+            ...(task.solutionArchitectIds || []),
+            ...(task.softwareArchitectIds || [])
         ];
 
-        const memberNames = memberIds.map(({ id, role }) => {
+        const memberNames = memberIds.map((id) => {
             const member = members.find(member => member.userID === id);
-            return member ? `${member.userName} (${role})` : 'Unknown';
+            return member ? member.userName : 'Unknown';
         });
 
-        // Remove duplicates
+        // Remove duplicates (ignoring roles)
         const uniqueMemberNames = [...new Set(memberNames)];
 
         return uniqueMemberNames.length ? uniqueMemberNames.join(', ') : 'Unknown';
@@ -66,20 +66,12 @@ const DashboardPage = () => {
             uniqueMembers.forEach(id => {
                 const member = members.find(member => member.userID === id);
                 if (member) {
-                    const memberNameWithRole = `${member.userName} (${getRoleById(id, task)})`;
-                    taskCounts[memberNameWithRole] = (taskCounts[memberNameWithRole] || 0) + 1;
+                    taskCounts[member.userName] = (taskCounts[member.userName] || 0) + 1;
                 }
             });
         });
 
         return taskCounts;
-    };
-
-    const getRoleById = (id, task) => {
-        if (task.analystIds.includes(id)) return 'A';
-        if (task.solutionArchitectIds.includes(id)) return 'ÇM';
-        if (task.softwareArchitectIds.includes(id)) return 'YM';
-        return '';
     };
 
     const taskCounts = calculateTaskCounts();

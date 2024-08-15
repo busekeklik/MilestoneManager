@@ -82,7 +82,7 @@ public class MainRunner {
             user3.setEmail("sude.gokcen@etiya.com");
             user3.setActive(true);
             user3.setTeam(team);
-            user3.setRoles(Set.of(RoleType.BACKEND));
+            user3.setRoles(Set.of(RoleType.BACKEND,RoleType.ANALYST));
             iUserRepository.save(user3);
 
             UserEntity user4 = new UserEntity();
@@ -91,7 +91,7 @@ public class MainRunner {
             user4.setEmail("enes.kasim@etiya.com");
             user4.setActive(true);
             user4.setTeam(team);
-            user4.setRoles(Set.of(RoleType.DEVOPS));
+            user4.setRoles(Set.of(RoleType.DEVOPS,RoleType.SOFTWARE_ARCHITECT));
             iUserRepository.save(user4);
 
             UserEntity user5 = new UserEntity();
@@ -100,7 +100,7 @@ public class MainRunner {
             user5.setEmail("mehmet.emin@etiya.com");
             user5.setActive(true);
             user5.setTeam(team);
-            user5.setRoles(Set.of(RoleType.BACKEND));
+            user5.setRoles(Set.of(RoleType.BACKEND,RoleType.SOLUTION_ARCHITECT));
             iUserRepository.save(user5);
 
             // Create and save tasks with associated users

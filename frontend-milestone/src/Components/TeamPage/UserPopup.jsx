@@ -58,11 +58,11 @@ const UserPopup = ({ isOpen, onClose, userToEdit, onSave, onDelete }) => {
         <div className="modal-overlay">
             <div className="popup-container">
                 <div className="popup-form-header">
-                    <h1>{userID ? 'Edit User' : 'Add New User'}</h1>
+                    <h1>{userID ? 'Edit User' : 'Yeni Üye Ekle'}</h1>
                 </div>
                 <form className="popup-form">
                     <div className="form-group">
-                        <label>Name</label>
+                        <label>İsim</label>
                         <input
                             type="text"
                             value={userName}
@@ -70,7 +70,7 @@ const UserPopup = ({ isOpen, onClose, userToEdit, onSave, onDelete }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Password</label>
+                        <label>Şifre</label>
                         <input
                             type="password"
                             value={password}
@@ -86,7 +86,7 @@ const UserPopup = ({ isOpen, onClose, userToEdit, onSave, onDelete }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Roles</label>
+                        <label>Rol</label>
                         <Select
                             isMulti
                             options={roleOptions}
@@ -112,9 +112,9 @@ const UserPopup = ({ isOpen, onClose, userToEdit, onSave, onDelete }) => {
                         </label>
                     </div>
                     <div className="popup-buttons">
-                        <button onClick={handleSave}>Save</button>
+                        <button onClick={handleSave}>Kaydet</button>
                         {userID && <button onClick={() => onDelete(userID)}>Delete</button>}
-                        <button onClick={onClose}>Cancel</button>
+                        <button onClick={onClose}>İptal</button>
                     </div>
                 </form>
             </div>
