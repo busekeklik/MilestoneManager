@@ -3,8 +3,8 @@ import './title.css';
 
 const Title = ()=> {
     return (
-        <div className="teams-title-wrapper">
-                <h1>EKİPLER</h1>
+        <div className="teams-page-header">
+            <h1>Ekipler</h1>
         </div>
     )
 };
