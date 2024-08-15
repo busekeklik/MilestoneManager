@@ -1,27 +1,15 @@
-.desktop-title .group {
-    height: 79px;
-    position: absolute;
-    width: 465px;
-    color: rgba(16, 38, 96, 0.85);
-    font-family: Poppins;
-    font-size: 60px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 24px;
-    letter-spacing: 0.5px;
-}
-
-.group .overlap-group-2 {
-    height: 94px;
+.teams-page-header {
     display: flex;
-    align-items: center;
     justify-content: center;
     margin-bottom: 10px;
-
+    color: #102660;
 }
 
-.group .text-wrapper-5 {
-    font-size: 24px;
+.teams-page-header h1 {
+    font-size: 32px;
+    background: linear-gradient(to right, #F4BC93, #FFE7D6);
+    padding: 15px 100px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
