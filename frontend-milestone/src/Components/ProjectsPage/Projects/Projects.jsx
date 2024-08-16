@@ -48,9 +48,8 @@ const Projects = () => {
     };
 
     const handleProjectClick = (projectId, projectName) => {
-        navigate(`/tasks`, { state: { projectId, projectName } });  // Pass projectName as well
+        navigate(`/tasks`, { state: { projectId, projectName } });
     };
-
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
@@ -61,8 +60,7 @@ const Projects = () => {
                 <div
                     className="projects-item"
                     key={index}
-                    onClick={() => handleProjectClick(project.projectId, project.projectName)} // Pass projectName
-                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleProjectClick(project.projectId, project.projectName)}
                 >
                     <div className="projects-rectangle">
                         <div className='projects-wrapper'>
