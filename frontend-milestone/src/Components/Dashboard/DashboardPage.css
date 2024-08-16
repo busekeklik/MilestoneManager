@@ -6,12 +6,12 @@
     padding: 0 10px;
     padding-left: 100px;
     transition: padding-left 0.3s ease;
+
 }
 
 body {
     background-color: #FFF5ED;
 }
-
 .task-table {
     flex: 2;
     background-color: #51618FFF;
@@ -21,44 +21,91 @@ body {
     margin-bottom: 20px;
     font-size: 18px;
 }
+
 .task-table table {
     width: 100%;
     border-collapse: collapse;
+}
+
+.download-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 0;
+    padding-left: 180px;
+}
+
+.download-button {
+    width: 100px;
+    height: 40px;
+    margin: 0 5px;
+    padding: 0px 10px;
+    margin-top: -40px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    text-align: center;
+    line-height: 1;
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.download-button svg {
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+}
+.download-button:hover {
+    background-color: #213ea3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.task-table th,
+.task-table td {
+    border: 1px solid #fff;
+    padding: 12px;
+    text-align: left;
 }
 
 .task-table th {
     background-color: #1e3a8a;
     color: #ffffff;
     font-weight: bold;
-    font-size: 24px; /* Tasklar başlığını büyüttüm */
-    padding: 12px;
-    text-align: left;
 }
 
 .task-table td {
     background-color: #51618FFF;
     color: white;
     font-size: 16px;
-    border: 1px solid #fff;
-    padding: 12px;
-    text-align: left;
-}
-
-.download-buttons {
-    width: 100%;
-    display: flex;
-    width: 16px;
-    height: 16px;
-}
-
-.download-button:hover {
-    background-color: #213ea3;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .chart {
     flex: 1;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.chart-container {
+    margin-top: -40px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+
+
+.member-task-titles {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -78,4 +125,44 @@ body {
     color: black;
     border-radius: 20px;
     text-align: left;
+}
+
+.member-task-list li {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.member-task-list li span:first-child {
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .dashboard-main {
+        flex-direction: column;
+        align-items: center;
+        padding-left: 20px;
+    }
+
+    .task-table {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .chart {
+        width: 100%;
+    }
+
+    .chart-container {
+        width: 100%;
+        padding: 0 10px;
+
+    }
+
+    .chart-placeholder {
+        width: 100%;
+        height: auto;
+    }
 }

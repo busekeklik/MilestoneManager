@@ -87,7 +87,7 @@ const DashboardPage = () => {
         chartArea: { left: 20, top: 20, right: 20, bottom: 20 },
         legend: {
             textStyle: {
-                color: '#333',
+                color: '#333', // Legend metin rengi
             },
         },
     };
