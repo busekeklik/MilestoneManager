@@ -228,13 +228,13 @@ const TeamPage = () => {
                 </table>
             </div>
             <div className="team-page-footer">
-                <button onClick={() => openPopup()}>Add New User</button>
+                <button onClick={() => openPopup()}>Yeni Kullanıcı Ekle</button>
                 <Select
                     className="user-select"
                     options={userOptions}
                     value={selectedUser}
                     onChange={setSelectedUser}
-                    placeholder="Select User to Edit"
+                    placeholder="Kullanıcı Seçin    "
                     menuPortalTarget={document.body}  // Render the dropdown in the portal
                     styles={{
                         menuPortal: base => ({ ...base, zIndex: 9999 }),  // Ensure it stays on top
@@ -253,8 +253,7 @@ const TeamPage = () => {
                     onClick={() => openPopup(selectedUser ? selectedUser.user : null)}
                     disabled={!selectedUser}
                 >
-                    Edit User
-                </button>
+Kullanıcı Düzenle                </button>
             </div>
             <UserPopup
                 isOpen={isPopupOpen}

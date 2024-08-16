@@ -93,7 +93,6 @@ public class TaskServicesImpl implements ITaskServices<TaskDto, TaskEntity> {
         if (updateTaskDto != null) {
             TaskEntity taskEntity = dtoToEntity(updateTaskDto);
 
-            // Ensure that the task name, start date, and end date are not null
             if (taskDto.getTaskName() != null) {
                 taskEntity.setTaskName(taskDto.getTaskName());
             }
@@ -109,7 +108,9 @@ public class TaskServicesImpl implements ITaskServices<TaskDto, TaskEntity> {
             taskEntity.setSeverity(taskDto.getSeverity());
             taskEntity.setProgress(taskDto.getProgress());
 
-            // Ensure non-null lists for user associations
+            // Set the deleted flag if provided
+            taskEntity.setDeleted(taskDto.isDeleted());
+
             List<UserEntity> analysts = taskDto.getAnalystIds() != null
                     ? iUserRepository.findAllById(taskDto.getAnalystIds())
                     : new ArrayList<>();
@@ -126,7 +127,6 @@ public class TaskServicesImpl implements ITaskServices<TaskDto, TaskEntity> {
             taskEntity.setSolutionArchitects(solutionArchitects);
             taskEntity.setSoftwareArchitects(softwareArchitects);
 
-            // Handle task dependencies
             List<TaskEntity> dependencies = taskDto.getDependencyIds() != null
                     ? StreamSupport.stream(iTaskRepository.findAllById(taskDto.getDependencyIds()).spliterator(), false)
                     .collect(Collectors.toList())
@@ -138,6 +138,7 @@ public class TaskServicesImpl implements ITaskServices<TaskDto, TaskEntity> {
         }
         return null;
     }
+
 
 
 
@@ -172,7 +173,7 @@ public class TaskServicesImpl implements ITaskServices<TaskDto, TaskEntity> {
 
     @Override
     public List<TaskDto> taskServiceListByProjectId(Long projectId) {
-        List<TaskEntity> taskEntities = iTaskRepository.findByProject_ProjectId(projectId);
+        List<TaskEntity> taskEntities = iTaskRepository.findByProject_ProjectIdAndDeletedFalse(projectId);
         List<TaskDto> taskDtoList = new ArrayList<>();
         for (TaskEntity taskEntity : taskEntities) {
             TaskDto taskDto = entityToDto(taskEntity);

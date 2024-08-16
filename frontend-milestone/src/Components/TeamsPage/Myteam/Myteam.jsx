@@ -5,7 +5,6 @@ const Myteam = () => {
     const [teams, setTeams] = useState([]);
 
     useEffect(() => {
-        // Fetch all teams
         fetch('http://localhost:3307/team/api/v1/list')
             .then(response => response.json())
             .then(data => {
@@ -14,7 +13,6 @@ const Myteam = () => {
                         .then(response => response.json())
                 );
 
-                // Wait for all team details to be fetched
                 Promise.all(teamDetailsPromises)
                     .then(setTeams)
                     .catch(error => console.error('Error fetching team details:', error));
@@ -24,30 +22,41 @@ const Myteam = () => {
 
     if (teams.length === 0) return <div>Loading...</div>;
 
-    const myTeam = teams[0]; // Assuming the first team is your own team
+    const myTeam = teams[0];
 
     return (
         <div className="teams-container">
-            <div className="myteam">
-                <div className="title-bar">
-                    <div className="title">EKİBİM</div>
+            <div className="left-side">
+                <div className="myteam">
+                    <div className="title-bar">
+                        <div className="title">EKİBİM</div>
+                    </div>
+                    <div className="team-leader">
+                        <div className="team-leader-name">{myTeam.teamName}</div>
+                        <div className="team-leader-special-bar">{myTeam.description}</div>
+                    </div>
+                    <div className="team-members-wrapper">
+                        <div className="team-member-title-wrapper">
+                            <div className="team-member-title">Ekip Üyeleri</div>
+                        </div>
+                        {myTeam.members.map((member, index) => (
+                            <div key={index} className="team-member">
+                                <div className="team-member-name">{member.userName}</div>
+                                <div className="team-member-special">{member.roles.join(', ')}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className="team-info-wrapper">
-                    <div className="team-info-title">Ekip Lideri:</div>
-                    <div className="team-info-content">{myTeam.teamName}</div>
-                </div>
-                <div className="team-info-wrapper">
-                    <div className="team-info-title">Alanı:</div>
-                    <div className="team-special-content">{myTeam.description}</div>
-                </div>
-                <div className="team-info-wrapper">
-                    <div className="team-info-title">Ekip Üyeleri:</div>
-                    <div className="team-info-content"></div>
-                </div>
-                {myTeam.members.map((member, index) => (
-                    <div key={index} className="team-info-wrapper">
-                        <div className="team-info-content">{member.userName}</div>
-                        <div className="team-special-content">{member.roles.join(', ')}</div>
+            </div>
+
+            <div className="right-side">
+                {teams.slice(1).map((team, index) => (
+                    <div key={index} className="team">
+                        <div className="team-title-wrapper">
+                            <div className="team-title">{team.teamName}</div>
+                        </div>
+                        <div className="team-project">{team.description}</div>
+                        <div className="team-leader">Lider: {team.teamLeader}</div>
                     </div>
                 ))}
             </div>

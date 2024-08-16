@@ -34,4 +34,7 @@ public class TaskDto implements Serializable {
 
     // New field for task dependencies
     private List<Long> dependencyIds;
+
+    // New field for the deleted flag
+    private boolean deleted;
 }

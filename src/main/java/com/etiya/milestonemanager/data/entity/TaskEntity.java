@@ -45,6 +45,9 @@ public class TaskEntity implements Serializable {
     @Column(name = "progress", nullable = false)
     private double progress;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false)
     private ProjectEntity project;

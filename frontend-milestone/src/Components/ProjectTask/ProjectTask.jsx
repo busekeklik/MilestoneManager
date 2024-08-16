@@ -21,6 +21,12 @@ const ProjectTask = () => {
 
     const { projectId, projectName } = location.state || {};
 
+    // Function to open the confirmation delete modal
+    const openConfirmDeleteModal = () => {
+        setConfirmationInput(''); // Clear the confirmation input field
+        setConfirmModalIsOpen(true); // Open the confirmation modal
+    };
+
     const severityOptions = [
         { value: 0, label: 'None (0)' },
         { value: 1, label: 'Low (1)' },
@@ -146,11 +152,6 @@ const ProjectTask = () => {
             toast.error('Görev güncellenemedi.');
             console.error(error);
         }
-    };
-
-    const openConfirmDeleteModal = () => {
-        setConfirmationInput('');
-        setConfirmModalIsOpen(true);
     };
 
     const confirmDeleteTask = async () => {
