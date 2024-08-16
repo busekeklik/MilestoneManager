@@ -11,7 +11,6 @@ import { fetchTasks, updateTask, fetchUsers } from "./Data"; // Import your data
 const ProjectTask = () => {
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
-    const [deletedTasks, setDeletedTasks] = useState([]); // Track deleted tasks locally
     const [selectedTask, setSelectedTask] = useState(null);
     const [updatedTask, setUpdatedTask] = useState({});
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -34,7 +33,7 @@ const ProjectTask = () => {
         if (projectId) {
             const loadTasks = async () => {
                 const fetchedTasks = await fetchTasks(projectId);
-                setTasks(fetchedTasks);
+                setTasks(fetchedTasks.filter(task => !task.deleted)); // Filter out deleted tasks
             };
             const loadUsers = async () => {
                 const fetchedUsers = await fetchUsers();
@@ -154,20 +153,29 @@ const ProjectTask = () => {
         setConfirmModalIsOpen(true);
     };
 
-    const confirmDeleteTask = () => {
+    const confirmDeleteTask = async () => {
         if (confirmationInput !== selectedTask.taskName) {
             toast.error('Yanlış görev adı girdiniz. Lütfen tekrar deneyin.');
             return;
         }
 
-        // Mark the task as deleted locally
-        setDeletedTasks(prevDeletedTasks => [...prevDeletedTasks, selectedTask.taskID]);
+        try {
+            // Mark the task as deleted in the database
+            const updatedTaskData = { ...selectedTask, deleted: true };
+            await updateTask(selectedTask.taskID, updatedTaskData);
 
-        // Optionally, you can also clear the selectedTask state
-        setSelectedTask(null);
+            // Remove the task from the list in the frontend
+            setTasks(prevTasks => prevTasks.filter(task => task.taskID !== selectedTask.taskID));
+
+            // Clear the selectedTask state
+            setSelectedTask(null);
+            toast.success('Görev başarıyla silindi!');
+        } catch (error) {
+            toast.error('Görev silinemedi.');
+            console.error(error);
+        }
 
         setConfirmModalIsOpen(false);
-        toast.success('Görev başarıyla silindi!');
     };
 
     const formatDate = (date) => {
@@ -198,19 +206,17 @@ const ProjectTask = () => {
             { type: "string", label: "Dependencies" },
             { type: "string", label: "Color" },
         ],
-        ...tasks
-            .filter(task => !deletedTasks.includes(task.taskID)) // Exclude deleted tasks
-            .map((task) => [
-                task.taskID.toString(),
-                task.taskName,
-                null,
-                new Date(task.startDate),
-                new Date(task.endDate),
-                null,
-                task.progress,
-                Array.isArray(task.dependencyIds) ? task.dependencyIds.join(', ') : '',
-                severityColors[task.severity]
-            ]),
+        ...tasks.map((task) => [
+            task.taskID.toString(),
+            task.taskName,
+            null,
+            new Date(task.startDate),
+            new Date(task.endDate),
+            null,
+            task.progress,
+            Array.isArray(task.dependencyIds) ? task.dependencyIds.join(', ') : '',
+            severityColors[task.severity]
+        ]),
     ];
 
     const today = new Date();
@@ -234,7 +240,7 @@ const ProjectTask = () => {
             innerGridDarkTrack: { fill: "#bbdefb" },
             innerGridHorizLine: {
                 stroke: "#90caf9",
-                strokeWidth:5,
+                strokeWidth: 5,
             },
             todayMarker: {
                 color: '#ff0000', // Bugünü gösteren çizgi için kırmızı renk
@@ -275,13 +281,11 @@ const ProjectTask = () => {
                 <h3>Görev Düzenleme</h3>
                 <select value={selectedTask?.taskID || ''} onChange={handleTaskSelect}>
                     <option value="" disabled>Görev Seçin</option>
-                    {tasks
-                        .filter(task => !deletedTasks.includes(task.taskID)) // Exclude deleted tasks
-                        .map(task => (
-                            <option key={task.taskID} value={task.taskID}>
-                                {task.taskName}
-                            </option>
-                        ))}
+                    {tasks.map(task => (
+                        <option key={task.taskID} value={task.taskID}>
+                            {task.taskName}
+                        </option>
+                    ))}
                 </select>
 
                 {!selectedTask && (
@@ -361,7 +365,7 @@ const ProjectTask = () => {
                     <Select
                         isMulti
                         name="analystIds"
-                        options={users.map(user => ({value: user.userID, label: user.userName}))}
+                        options={users.map(user => ({ value: user.userID, label: user.userName }))}
                         value={updatedTask.analystIds}
                         onChange={(selected) => handleSelectChange(selected, 'analystIds')}
                         placeholder="Analistleri Seçin"
@@ -369,7 +373,7 @@ const ProjectTask = () => {
                     <Select
                         isMulti
                         name="solutionArchitectIds"
-                        options={users.map(user => ({value: user.userID, label: user.userName}))}
+                        options={users.map(user => ({ value: user.userID, label: user.userName }))}
                         value={updatedTask.solutionArchitectIds}
                         onChange={(selected) => handleSelectChange(selected, 'solutionArchitectIds')}
                         placeholder="Çözüm Mimarlarını Seçin"
@@ -377,7 +381,7 @@ const ProjectTask = () => {
                     <Select
                         isMulti
                         name="softwareArchitectIds"
-                        options={users.map(user => ({value: user.userID, label: user.userName}))}
+                        options={users.map(user => ({ value: user.userID, label: user.userName }))}
                         value={updatedTask.softwareArchitectIds}
                         onChange={(selected) => handleSelectChange(selected, 'softwareArchitectIds')}
                         placeholder="Yazılım Mimarlarını Seçin"
@@ -385,7 +389,7 @@ const ProjectTask = () => {
                     <Select
                         isMulti
                         name="dependencies"
-                        options={tasks.map(task => ({value: task.taskID, label: task.taskName}))}
+                        options={tasks.map(task => ({ value: task.taskID, label: task.taskName }))}
                         value={updatedTask.dependencies}
                         onChange={(selected) => handleSelectChange(selected, 'dependencies')}
                         placeholder="Bağlı Taskları Seçin"
@@ -420,7 +424,7 @@ const ProjectTask = () => {
                 </div>
             </Modal>
 
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     );
 }

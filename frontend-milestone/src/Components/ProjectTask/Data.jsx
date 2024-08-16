@@ -7,6 +7,7 @@ export const fetchTasks = async (projectId) => {
 
         const formattedTasks = data.map(task => ({
             taskID: task.taskID,
+            taskIDstr: task.taskIDstr,
             taskName: task.taskName,
             startDate: new Date(task.startDate),
             endDate: new Date(task.endDate),

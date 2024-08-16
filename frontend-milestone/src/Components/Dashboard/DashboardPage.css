@@ -21,6 +21,7 @@ body {
     margin-bottom: 20px;
     font-size: 18px;
 }
+
 .task-table table {
     width: 100%;
     border-collapse: collapse;
@@ -47,6 +48,35 @@ body {
 .download-buttons {
     width: 100%;
     display: flex;
+    justify-content: flex-start;
+    padding: 10px 0;
+    padding-left: 180px;
+}
+
+.download-button {
+    width: 100px;
+    height: 40px;
+    margin: 0 5px;
+    padding: 0px 10px;
+    margin-top: -40px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    text-align: center;
+    line-height: 1;
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.download-button svg {
+    margin-right: 5px;
     width: 16px;
     height: 16px;
 }
@@ -59,6 +89,19 @@ body {
 .chart {
     flex: 1;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart-container {
+    margin-top: -40px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.member-task-titles {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -78,4 +121,43 @@ body {
     color: black;
     border-radius: 20px;
     text-align: left;
+}
+
+.member-task-list li {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.member-task-list li span:first-child {
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .dashboard-main {
+        flex-direction: column;
+        align-items: center;
+        padding-left: 20px;
+    }
+
+    .task-table {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .chart {
+        width: 100%;
+    }
+
+    .chart-container {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .chart-placeholder {
+        width: 100%;
+        height: auto;
+    }
 }

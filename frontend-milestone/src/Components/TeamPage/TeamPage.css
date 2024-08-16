@@ -33,7 +33,7 @@
     background-color: #1e3a8a;
     color: white;
     border: none;
-    padding: 5px 10px; /* Button width */
+    padding: 5px 10px;
     margin: 0 5px;
     border-radius: 50px;
     cursor: pointer;
@@ -114,18 +114,18 @@
 
 .status-icon {
     font-size: 24px;
-    border-radius: 50%; /* Rounded icon background */
+    border-radius: 50%;
     padding: 5px;
 }
 
 .status-icon.active {
     color: #ffffff;
-    background-color: #5E83C2; /* Blue background for active status */
+    background-color: #5E83C2;
 }
 
 .status-icon.inactive {
     color: #ffffff;
-    background-color: #FF0000FF; /* Coral background for inactive status */
+    background-color: #FF0000FF;
 }
 
 .team-table .today {
@@ -139,6 +139,76 @@
 
 .team-table tr:last-child td.today {
     border-bottom: 2px solid red;
+}
+
+.absence-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    background: #f3f4f6;
+    padding: 5px;
+    border-radius: 5px;
+    position: relative;
+    text-align: left; /* Ensure text is left-aligned */
+}
+
+.absence-details span {
+    flex-grow: 1;
+    margin-right: 10px; /* Add space between text and edit icon */
+}
+
+.edit-icon {
+    cursor: pointer;
+    color: #007bff;
+    margin-left: 10px;
+    transition: color 0.3s ease;
+}
+
+.edit-icon:hover {
+    color: #0056b3;
+}
+
+td button {
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #FFA500;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+td button:hover {
+    background-color: #FF8C00;
+}
+
+input[type="date"] {
+    padding: 3px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="date"]:focus {
+    border-color: #007bff;
+}
+
+button.save-button {
+    padding: 5px 10px;
+    margin-left: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.save-button:hover {
+    background-color: #218838;
 }
 
 @media (max-width: 768px) {
@@ -220,7 +290,7 @@
 }
 
 .form-group input[type="text"],
-.form-group input[type="password"], /* Added password input style */
+.form-group input[type="password"],
 .form-group input[type="email"] {
     width: 100%;
     padding: 8px;
@@ -245,19 +315,4 @@
 
 .popup-buttons button:hover {
     background-color: #ddd;
-}
-
-td button {
-    padding: 5px 10px;
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #FFA500;
-    color: white;
-    border: none;
-    transition: background-color 0.3s ease;
-}
-
-td button:hover {
-    background-color: #FF8C00;
 }

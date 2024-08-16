@@ -66,8 +66,12 @@ const Projects = () => {
                 >
                     <div className="projects-rectangle">
                         <div className='projects-wrapper'>
-                            <div className="projects-project">{project.projectName}</div>
-                            <div className="projects-team">{project.teamName}</div>
+                            <div className="projects-project">
+                                <div className="projects-project-text">{project.projectName}</div>
+                            </div>
+                            <div className="projects-team">
+                                <div className="projects-team-text">{project.teamName}</div>
+                            </div>
                         </div>
                     </div>
                 </div>

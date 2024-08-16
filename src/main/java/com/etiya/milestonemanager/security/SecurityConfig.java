@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/team/api/v1/list").permitAll()
                         .requestMatchers("/alert/api/v1/**").permitAll()
                         .requestMatchers("/absence/api/v1/list").permitAll()
+                        .requestMatchers("/absence/api/v1/**").permitAll()
                         .requestMatchers("task/api/v1/find/{id}").permitAll()
                         .requestMatchers("team/api/v1/team-with-members/{id}").permitAll()
                         .anyRequest().authenticated()

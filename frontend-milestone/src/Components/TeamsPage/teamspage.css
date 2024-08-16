@@ -8,17 +8,15 @@
 
 .panel {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     flex: 1;
 }
 
 .desktop-myteam {
-    margin: auto;
-    width: 513px;
     margin-top: 10px;
-
 }
+
 
 .desktop-teams {
     width: 927px;

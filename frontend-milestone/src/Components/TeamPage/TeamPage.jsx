@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { addDays, format, startOfWeek, subDays, isWeekend, isSameDay, startOfDay } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import Select from 'react-select';  // Import React Select component
-import UserPopup from './UserPopup';  // Import the Popup component
+import Select from 'react-select';
+import UserPopup from './UserPopup';
 import './TeamPage.css';
 
 const TeamPage = () => {
@@ -11,8 +11,8 @@ const TeamPage = () => {
     const [teams, setTeams] = useState([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [userToEdit, setUserToEdit] = useState(null);
-    const [userOptions, setUserOptions] = useState([]);  // State for user select options
-    const [selectedUser, setSelectedUser] = useState(null);  // State for selected user
+    const [userOptions, setUserOptions] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
 
     useEffect(() => {
         fetchData();
@@ -41,9 +41,10 @@ const TeamPage = () => {
 
                     const userAbsences = absencesData.filter(absence => absence.userId === member.userID)
                         .map(absence => ({
+                            absenceID: absence.absenceID,
                             start: new Date(absence.startDate),
                             end: new Date(absence.endDate),
-                            status: true
+                            status: true,
                         }));
 
                     return { ...member, tasks: userTasks, activeRanges: userAbsences };
@@ -91,7 +92,7 @@ const TeamPage = () => {
 
             await fetch(url, requestOptions);
             fetchData(); // Refresh data after saving
-            setIsPopupOpen(false); // Close the popup
+            closePopup(); // Close the popup
         } catch (error) {
             console.error('Error saving user:', error);
         }
@@ -103,9 +104,43 @@ const TeamPage = () => {
                 method: 'DELETE',
             });
             fetchData();
-            setIsPopupOpen(false);
+            closePopup();
         } catch (error) {
             console.error('Error deleting user:', error);
+        }
+    };
+
+    const toggleAbsence = async (member, day) => {
+        try {
+            const existingAbsence = member.activeRanges.find(
+                range => day >= range.start && day <= range.end
+            );
+
+            if (existingAbsence) {
+                await fetch(`http://localhost:3307/absence/api/v1/delete/${existingAbsence.absenceID}`, {
+                    method: 'DELETE',
+                });
+            } else {
+                const newAbsence = {
+                    startDate: format(day, 'yyyy-MM-dd'),
+                    endDate: format(day, 'yyyy-MM-dd'),
+                    type: 'Unpaid',
+                    description: 'Auto-generated absence',
+                    userId: member.userID,
+                };
+
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newAbsence),
+                };
+
+                await fetch('http://localhost:3307/absence/api/v1/create', requestOptions);
+            }
+
+            fetchData(); // Refresh data after updating
+        } catch (error) {
+            console.error('Error toggling absence:', error);
         }
     };
 
@@ -114,7 +149,10 @@ const TeamPage = () => {
         setIsPopupOpen(true);
     };
 
-    const closePopup = () => setIsPopupOpen(false);
+    const closePopup = () => {
+        setIsPopupOpen(false);
+        setUserToEdit(null);
+    };
 
     const renderWeekDaysHeader = () => {
         const today = startOfDay(new Date());
@@ -143,7 +181,11 @@ const TeamPage = () => {
             const todayClass = isToday ? 'today' : '';
 
             return (
-                <td key={i} className={`${isDayWeekend ? 'weekend' : ''} ${todayClass}`}>
+                <td
+                    key={i}
+                    className={`${isDayWeekend ? 'weekend' : ''} ${todayClass}`}
+                    onClick={() => toggleAbsence(member, day)}
+                >
                     {isActive ? <FaCheckCircle className="status-icon active" /> : <FaTimesCircle className="status-icon inactive" />}
                 </td>
             );
@@ -198,12 +240,12 @@ const TeamPage = () => {
                         menuPortal: base => ({ ...base, zIndex: 9999 }),  // Ensure it stays on top
                         control: base => ({
                             ...base,
-                            minWidth: 200, // Ensure it doesn't shrink too much
+                            minWidth: 200,
                         }),
                         menu: base => ({
                             ...base,
-                            maxHeight: '200px',  // Prevent the menu from becoming too tall
-                            overflowY: 'auto',  // Add scroll if needed
+                            maxHeight: '200px',
+                            overflowY: 'auto',
                         }),
                     }}
                 />

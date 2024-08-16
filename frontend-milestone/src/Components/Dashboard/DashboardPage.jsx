@@ -83,11 +83,11 @@ const DashboardPage = () => {
 
     const options = {
         pieHole: 0.4,
-        backgroundColor: 'transparent', // Arka plan rengini şeffaf yapıyoruz
-        chartArea: { left: 20, top: 20, right: 20, bottom: 20 }, // Grafik alanı kenar boşlukları
+        backgroundColor: 'transparent',
+        chartArea: { left: 20, top: 20, right: 20, bottom: 20 },
         legend: {
             textStyle: {
-                color: '#333', // Legend metin rengi
+                color: '#333',
             },
         },
     };
